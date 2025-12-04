@@ -1,15 +1,92 @@
 "use client";
 import Link from 'next/link';
-import { useState } from 'react';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useEffect, useState } from 'react';
+import { BrowserProvider, getAddress } from 'ethers';
+
+type Ethereumish = {
+  isMetaMask?: boolean;
+  request: (args: { method: string; params?: any[] | Record<string, any> }) => Promise<any>;
+  on?: (event: string, handler: (...args: any[]) => void) => void;
+  removeListener?: (event: string, handler: (...args: any[]) => void) => void;
+};
+
+type EthWindow = Window & { ethereum?: Ethereumish };
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const { address, isConnected } = useAccount();
-  const { connect, connectors, isPending } = useConnect();
-  const { disconnect } = useDisconnect();
+  const [address, setAddress] = useState<string | null>(null);
+  const [chainId, setChainId] = useState<string | null>(null);
+  const [connecting, setConnecting] = useState(false);
 
-  const injectedConnector = connectors.find(c => c.id === 'injected') ?? connectors[0];
+  // hydrate account on mount
+  useEffect(() => {
+    const eth = (window as EthWindow).ethereum;
+    if (!eth) return;
+    (async () => {
+      try {
+        const accounts: string[] = await eth.request({ method: 'eth_accounts' });
+        if (accounts?.[0]) setAddress(getAddress(accounts[0]));
+        const cid: string = await eth.request({ method: 'eth_chainId' });
+        setChainId(cid);
+      } catch {}
+    })();
+
+    const onAccountsChanged = (accs: string[]) => setAddress(accs[0] ? getAddress(accs[0]) : null);
+    const onChainChanged = (cid: string) => setChainId(cid);
+    eth.on?.('accountsChanged', onAccountsChanged);
+    eth.on?.('chainChanged', onChainChanged);
+    return () => {
+      eth.removeListener?.('accountsChanged', onAccountsChanged);
+      eth.removeListener?.('chainChanged', onChainChanged);
+    };
+  }, []);
+
+  const connect = async () => {
+    const eth = (window as EthWindow).ethereum;
+    if (!eth) {
+      window.open('https://metamask.io/download/', '_blank');
+      return;
+    }
+    try {
+      setConnecting(true);
+      // ensure Sepolia (0xaa36a7)
+      const sepolia = { chainId: '0xaa36a7' };
+      try {
+        await eth.request({ method: 'wallet_switchEthereumChain', params: [sepolia] });
+      } catch (e: any) {
+        if (e?.code === 4902) {
+          await eth.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: '0xaa36a7',
+                chainName: 'Sepolia',
+                nativeCurrency: { name: 'SepoliaETH', symbol: 'ETH', decimals: 18 },
+                rpcUrls: ['https://sepolia.infura.io/v3/' + (process.env.NEXT_PUBLIC_INFURA_API_KEY || '')],
+                blockExplorerUrls: ['https://sepolia.etherscan.io'],
+              },
+            ],
+          });
+        }
+      }
+      const provider = new BrowserProvider(eth as any);
+      const signer = await provider.getSigner();
+      const addr = await signer.getAddress();
+      setAddress(getAddress(addr));
+      const cid: string = await eth.request({ method: 'eth_chainId' });
+      setChainId(cid);
+    } finally {
+      setConnecting(false);
+    }
+  };
+
+  const disconnect = () => {
+    // No standard EIP-1193 disconnect; clear local state
+    setAddress(null);
+  };
+
+  const short = (a: string) => `${a.slice(0, 6)}...${a.slice(-4)}`;
+  const isSepolia = chainId?.toLowerCase() === '0xaa36a7';
 
   return (
     <header className="border-b border-slate-800 bg-slate-950 text-white">
@@ -25,16 +102,18 @@ export default function Header() {
           <Link href="/docs" className="hover:text-blue-400">Docs</Link>
         </nav>
         <div className="flex items-center gap-3">
-          {isConnected ? (
-            <button onClick={() => disconnect()} className="rounded bg-blue-600 px-3 py-1.5 text-sm hover:bg-blue-500">
-              {address?.slice(0, 6)}...{address?.slice(-4)}
-            </button>
+          {address ? (
+            <div className="flex items-center gap-2">
+              {!isSepolia && (
+                <span className="rounded bg-amber-600/30 text-amber-300 px-2 py-1 text-xs">Wrong network</span>
+              )}
+              <button onClick={disconnect} className="rounded bg-blue-600 px-3 py-1.5 text-sm hover:bg-blue-500">
+                {short(address)}
+              </button>
+            </div>
           ) : (
-            <button
-              onClick={() => connect({ connector: injectedConnector })}
-              disabled={!injectedConnector || isPending}
-              className="rounded bg-blue-600 px-3 py-1.5 text-sm hover:bg-blue-500 disabled:opacity-50">
-              {isPending ? 'Connecting...' : 'Connect Wallet'}
+            <button onClick={connect} disabled={connecting} className="rounded bg-blue-600 px-3 py-1.5 text-sm hover:bg-blue-500 disabled:opacity-50">
+              {connecting ? 'Connecting...' : 'Connect Wallet'}
             </button>
           )}
           <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu">
