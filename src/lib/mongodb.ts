@@ -11,10 +11,9 @@ let client: MongoClient | null = null;
 export async function getDb() {
   if (!uri) throw new Error('Missing MONGODB_URI');
   if (!client) {
-    client = new MongoClient(uri);
+    client = new MongoClient(uri, {});
   }
-  if (!client.topology) {
-    await client.connect();
-  }
+  // Ensure connected by calling connect() once; MongoDB driver manages pooling internally
+  await client.connect();
   return client;
 }
