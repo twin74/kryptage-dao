@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-import dynamic from "next/dynamic";
-
-const Web3Providers = dynamic(() => import("@/components/Web3Providers"), { ssr: false });
+import Web3Providers from "@/components/Web3Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

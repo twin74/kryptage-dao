@@ -1,9 +1,16 @@
 "use client";
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const { address, isConnected } = useAccount();
+  const { connect, connectors, isPending } = useConnect();
+  const { disconnect } = useDisconnect();
+
+  const injectedConnector = connectors.find(c => c.id === 'injected') ?? connectors[0];
+
   return (
     <header className="border-b border-slate-800 bg-slate-950 text-white">
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
@@ -18,7 +25,18 @@ export default function Header() {
           <Link href="/docs" className="hover:text-blue-400">Docs</Link>
         </nav>
         <div className="flex items-center gap-3">
-          {/* Connect Wallet button will be rendered in Web3Providers portal */}
+          {isConnected ? (
+            <button onClick={() => disconnect()} className="rounded bg-blue-600 px-3 py-1.5 text-sm hover:bg-blue-500">
+              {address?.slice(0, 6)}...{address?.slice(-4)}
+            </button>
+          ) : (
+            <button
+              onClick={() => connect({ connector: injectedConnector })}
+              disabled={!injectedConnector || isPending}
+              className="rounded bg-blue-600 px-3 py-1.5 text-sm hover:bg-blue-500 disabled:opacity-50">
+              {isPending ? 'Connecting...' : 'Connect Wallet'}
+            </button>
+          )}
           <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu">
             <span className="i-[hamburger]">☰</span>
           </button>
