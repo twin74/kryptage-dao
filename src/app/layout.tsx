@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-import Web3Providers from "@/components/Web3Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,16 +20,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-white`}>
-        <Web3Providers>
-          <Header />
-          <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
-        </Web3Providers>
+        <Header />
+        <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
       </body>
     </html>
   );
