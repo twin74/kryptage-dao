@@ -1,7 +1,6 @@
 "use client";
 import Link from 'next/link';
 import { useState } from 'react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -19,7 +18,7 @@ export default function Header() {
           <Link href="/docs" className="hover:text-blue-400">Docs</Link>
         </nav>
         <div className="flex items-center gap-3">
-          <ConnectButton chainStatus="icon" showBalance={false} accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
+          {/* Connect Wallet button will be rendered in Web3Providers portal */}
           <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu">
             <span className="i-[hamburger]">☰</span>
           </button>

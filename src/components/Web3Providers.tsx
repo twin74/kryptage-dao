@@ -4,7 +4,7 @@ import { WagmiProvider } from "wagmi";
 import { http } from "viem";
 import { sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RainbowKitProvider, darkTheme, getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, darkTheme, getDefaultConfig, ConnectButton } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 
 export default function Web3Providers({ children }: { children: ReactNode }) {
@@ -20,7 +20,7 @@ export default function Web3Providers({ children }: { children: ReactNode }) {
       transports: {
         [sepolia.id]: http(`https://sepolia.infura.io/v3/${infuraKey}`),
       },
-      ssr: true,
+      ssr: false,
     });
   }, [appName, projectId, infuraKey]);
 
@@ -30,6 +30,9 @@ export default function Web3Providers({ children }: { children: ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={darkTheme({ accentColor: "#1d4ed8" })}>
+          <div className="mx-auto max-w-6xl px-4 py-3 flex justify-end">
+            <ConnectButton chainStatus="icon" showBalance={false} accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
+          </div>
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>
