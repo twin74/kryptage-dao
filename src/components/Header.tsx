@@ -101,6 +101,7 @@ export default function Header() {
           <Link href="/dashboard" className="hover:text-blue-400">Dashboard</Link>
           <Link href="/docs" className="hover:text-blue-400">Docs</Link>
           <Link href="/governance" className="hover:text-blue-400">Governance</Link>
+          <Link href="/airdrop" className="hover:text-blue-400">Airdrop</Link>
         </nav>
         <div className="flex items-center gap-3">
           {address ? (
@@ -130,6 +131,7 @@ export default function Header() {
             <Link href="/dashboard" onClick={() => setOpen(false)} className="hover:text-blue-400">Dashboard</Link>
             <Link href="/docs" onClick={() => setOpen(false)} className="hover:text-blue-400">Docs</Link>
             <Link href="/governance" onClick={() => setOpen(false)} className="hover:text-blue-400">Governance</Link>
+            <Link href="/airdrop" onClick={() => setOpen(false)} className="hover:text-blue-400">Airdrop</Link>
           </nav>
         </div>
       )}
