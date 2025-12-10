@@ -191,6 +191,9 @@ export default function FaucetPage() {
         <div className="space-y-2">
           <label className="block text-sm font-medium">Email</label>
           <input
+            id="faucet-email"
+            name="email"
+            autoComplete="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
