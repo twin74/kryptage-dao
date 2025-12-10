@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export default function FaucetPage() {
@@ -8,6 +8,13 @@ export default function FaucetPage() {
   const { disconnect } = useDisconnect();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<string | null>(null);
+  const [verified, setVerified] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const v = params.get("verified");
+    setVerified(v === "1" || v === "true");
+  }, []);
 
   async function register() {
     setStatus("Invio richiesta...");
@@ -22,6 +29,22 @@ export default function FaucetPage() {
       else setStatus(data.error || "Errore");
     } catch (e) {
       setStatus("Errore di rete");
+    }
+  }
+
+  async function claim() {
+    setStatus("Claim in corso...");
+    try {
+      const res = await fetch("/api/faucet/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wallet: address }),
+      });
+      const data = await res.json();
+      if (res.ok) setStatus("Claim eseguito. Controlla il tuo wallet.");
+      else setStatus(data.error || "Errore claim");
+    } catch (e) {
+      setStatus("Errore di rete durante il claim");
     }
   }
 
@@ -51,19 +74,28 @@ export default function FaucetPage() {
         </div>
       )}
 
-      <div className="space-y-2">
-        <label className="block text-sm font-medium">Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          className="w-full rounded-md border px-3 py-2"
-        />
-        <button onClick={register} disabled={!isConnected || !email} className="w-full rounded-md bg-blue-600 text-white py-2 disabled:opacity-50">
-          Registra & Invia conferma
-        </button>
-      </div>
+      {!verified ? (
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="w-full rounded-md border px-3 py-2"
+          />
+          <button onClick={register} disabled={!isConnected || !email} className="w-full rounded-md bg-blue-600 text-white py-2 disabled:opacity-50">
+            Registra & Invia conferma
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <p className="text-sm text-green-700">Email verificata. Puoi procedere al claim.</p>
+          <button onClick={claim} disabled={!isConnected} className="w-full rounded-md bg-emerald-600 text-white py-2 disabled:opacity-50">
+            Esegui Claim
+          </button>
+        </div>
+      )}
 
       {status && <p className="text-sm text-gray-700">{status}</p>}
     </div>
