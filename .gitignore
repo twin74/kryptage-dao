@@ -39,3 +39,25 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Hardhat verify tool vendor deps
+/tools/hardhat-verify/node_modules/
+
+# Build outputs
+/.next/
+/dist/
+/artifacts/
+/cache/
+
+# Local env
+/.env
+/.env.local
+/.env.*
+
+# OS files
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
