@@ -15,7 +15,6 @@ export default function Web3Providers({ children }: PropsWithChildren<{}>) {
         transports: {
           [sepolia.id]: http(rpcUrl),
         },
-        autoConnect: true,
       }),
     [rpcUrl]
   );
