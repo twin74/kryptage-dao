@@ -189,7 +189,7 @@ export default function FaucetPage() {
 
       {!verified ? (
         <div className="space-y-2">
-          <label className="block text-sm font-medium">Email</label>
+          <label className="block text-sm font-medium" htmlFor="faucet-email">Email</label>
           <input
             id="faucet-email"
             name="email"
