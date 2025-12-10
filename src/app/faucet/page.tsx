@@ -1,11 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export default function FaucetPage() {
-  const { address, isConnected } = useAccount();
-  const { connectors, connect, isPending } = useConnect();
-  const { disconnect } = useDisconnect();
+  const [address, setAddress] = useState<string | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [verified, setVerified] = useState(false);
@@ -14,7 +12,49 @@ export default function FaucetPage() {
     const params = new URLSearchParams(window.location.search);
     const v = params.get("verified");
     setVerified(v === "1" || v === "true");
+    // Try to restore connection if already authorized
+    if (typeof window !== "undefined" && (window as any).ethereum) {
+      (window as any).ethereum.request({ method: "eth_accounts" }).then((accounts: string[]) => {
+        if (accounts && accounts.length > 0) {
+          setAddress(accounts[0]);
+          setIsConnected(true);
+        }
+      });
+      // Listen for account changes
+      (window as any).ethereum.on?.("accountsChanged", (accounts: string[]) => {
+        if (accounts && accounts.length > 0) {
+          setAddress(accounts[0]);
+          setIsConnected(true);
+        } else {
+          setAddress(null);
+          setIsConnected(false);
+        }
+      });
+    }
   }, []);
+
+  async function connectWallet() {
+    if (!(window as any).ethereum) {
+      setStatus("Installa MetaMask per continuare.");
+      return;
+    }
+    try {
+      const accounts: string[] = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
+      if (accounts && accounts.length > 0) {
+        setAddress(accounts[0]);
+        setIsConnected(true);
+        setStatus(null);
+      }
+    } catch (e: any) {
+      setStatus(e?.message || "Connessione wallet fallita");
+    }
+  }
+
+  function disconnectWallet() {
+    // No real disconnect in EIP-1193; clear local state
+    setAddress(null);
+    setIsConnected(false);
+  }
 
   async function register() {
     setStatus("Invio richiesta...");
@@ -54,21 +94,14 @@ export default function FaucetPage() {
 
       {!isConnected ? (
         <div className="space-y-2">
-          {connectors.map((c) => (
-            <button
-              key={c.uid}
-              onClick={() => connect({ connector: c })}
-              className="w-full rounded-md bg-black text-white py-2"
-            >
-              Connetti {c.name}
-            </button>
-          ))}
-          {isPending && <p className="text-sm text-gray-600">Connessione in corso...</p>}
+          <button onClick={connectWallet} className="w-full rounded-md bg-black text-white py-2">
+            Connetti Wallet
+          </button>
         </div>
       ) : (
         <div className="space-y-2">
           <p className="text-sm text-gray-700">Connesso: {address}</p>
-          <button onClick={() => disconnect()} className="rounded-md border px-3 py-2">
+          <button onClick={disconnectWallet} className="rounded-md border px-3 py-2">
             Disconnetti
           </button>
         </div>
