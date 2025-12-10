@@ -10,13 +10,27 @@ export default function FaucetPage() {
   const [verified, setVerified] = useState(false);
 
   const tokens = useMemo(() => {
-    return [
-      // Removed USDK per request
+    const iconFor = (symbol: string) => {
+      switch (symbol) {
+        case "USDC":
+          return "https://cdn.simpleicons.org/usdc/0ea5e9"; // blue USDC
+        case "WBTC":
+          return "https://cdn.simpleicons.org/bitcoin/f59e0b"; // BTC orange (for WBTC)
+        case "XAUT":
+          return "https://cdn.simpleicons.org/azurepipelines/d4af37"; // gold-like placeholder
+        case "SPYON":
+          return "https://cdn.simpleicons.org/fidelity/60a5fa"; // finance-like placeholder for S&P 500 ETF
+        default:
+          return "https://cdn.simpleicons.org/circle/9ca3af"; // generic gray
+      }
+    };
+    const list = [
       { symbol: "USDC", address: process.env.NEXT_PUBLIC_TOKEN_USDC as string, decimals: 18 },
       { symbol: "WBTC", address: process.env.NEXT_PUBLIC_TOKEN_WBTC as string, decimals: 18 },
       { symbol: "XAUT", address: process.env.NEXT_PUBLIC_TOKEN_XAUT as string, decimals: 18 },
       { symbol: "SPYON", address: process.env.NEXT_PUBLIC_TOKEN_SPYON as string, decimals: 18 },
     ].filter(t => !!t.address);
+    return list.map(t => ({ ...t, icon: iconFor(t.symbol) }));
   }, []);
 
   useEffect(() => {
@@ -218,9 +232,12 @@ export default function FaucetPage() {
         <ul className="space-y-2">
           {tokens.map((t) => (
             <li key={t.symbol} className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium">{t.symbol}</p>
-                <p className="text-xs text-gray-500 break-all">{t.address}</p>
+              <div className="flex items-center gap-3">
+                <img src={t.icon} alt={`${t.symbol} icon`} className="h-6 w-6 rounded" />
+                <div>
+                  <p className="text-sm font-medium">{t.symbol}</p>
+                  <p className="text-xs text-gray-500 break-all">{t.address}</p>
+                </div>
               </div>
               <button
                 onClick={() => importToken(t.symbol, t.address, t.decimals)}
