@@ -155,14 +155,14 @@ export default function FaucetPage() {
 
       {!isConnected ? (
         <div className="space-y-2">
-          <button onClick={connectWallet} className="w-full rounded-md bg-black text-white py-2">
+          <button onClick={connectWallet} className="w-full rounded-md bg-blue-600 hover:bg-blue-500 text-white py-2">
             Connetti Wallet
           </button>
         </div>
       ) : (
         <div className="space-y-2">
-          <p className="text-sm text-gray-700">Connesso: {address}</p>
-          <button onClick={disconnectWallet} className="rounded-md border px-3 py-2">
+          <p className="text-sm text-gray-200">Connesso: {address}</p>
+          <button onClick={disconnectWallet} className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-3 py-2">
             Disconnetti
           </button>
         </div>
@@ -178,14 +178,14 @@ export default function FaucetPage() {
             placeholder="you@example.com"
             className="w-full rounded-md border px-3 py-2"
           />
-          <button onClick={register} disabled={!isConnected || !email} className="w-full rounded-md bg-blue-600 text-white py-2 disabled:opacity-50">
+          <button onClick={register} disabled={!isConnected || !email} className="w-full rounded-md bg-blue-600 hover:bg-blue-500 text-white py-2 disabled:opacity-50">
             Registra & Invia conferma
           </button>
         </div>
       ) : (
         <div className="space-y-2">
           <p className="text-sm text-green-700">Email verificata. Puoi procedere al claim.</p>
-          <button onClick={claim} disabled={!isConnected} className="w-full rounded-md bg-emerald-600 text-white py-2 disabled:opacity-50">
+          <button onClick={claim} disabled={!isConnected} className="w-full rounded-md bg-blue-600 hover:bg-blue-500 text-white py-2 disabled:opacity-50">
             Esegui Claim
           </button>
         </div>
@@ -202,9 +202,9 @@ export default function FaucetPage() {
               </div>
               <button
                 onClick={() => importToken(t.symbol, t.address, t.decimals)}
-                className="rounded-md border px-3 py-1 text-sm"
+                className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 text-sm"
               >
-                Importa su MetaMask
+                importa su Wallet
               </button>
             </li>
           ))}
