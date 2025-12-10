@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 
 export default function FaucetPage() {
@@ -8,6 +8,16 @@ export default function FaucetPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [verified, setVerified] = useState(false);
+
+  const tokens = useMemo(() => {
+    return [
+      { symbol: "USDK", address: process.env.NEXT_PUBLIC_TOKEN_USDK as string, decimals: 18 },
+      { symbol: "USDC", address: process.env.NEXT_PUBLIC_TOKEN_USDC as string, decimals: 18 },
+      { symbol: "WBTC", address: process.env.NEXT_PUBLIC_TOKEN_WBTC as string, decimals: 18 },
+      { symbol: "XAUT", address: process.env.NEXT_PUBLIC_TOKEN_XAUT as string, decimals: 18 },
+      { symbol: "SPYON", address: process.env.NEXT_PUBLIC_TOKEN_SPYON as string, decimals: 18 },
+    ].filter(t => !!t.address);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -90,8 +100,29 @@ export default function FaucetPage() {
     }
   }
 
+  async function importToken(symbol: string, tokenAddress: string, decimals: number) {
+    try {
+      if (!(window as any).ethereum) throw new Error("MetaMask non disponibile");
+      const wasAdded = await (window as any).ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: tokenAddress,
+            symbol,
+            decimals,
+          },
+        },
+      });
+      if (wasAdded) setStatus(`${symbol} importato su MetaMask`);
+      else setStatus(`Import di ${symbol} annullato`);
+    } catch (e: any) {
+      setStatus(e?.message || `Errore import ${symbol}`);
+    }
+  }
+
   return (
-    <div className="max-w-md mx-auto p-6 space-y-4">
+    <div className="max-w-md mx-auto p-6 space-y-6">
       <h1 className="text-2xl font-semibold">Faucet</h1>
 
       {!isConnected ? (
@@ -131,6 +162,26 @@ export default function FaucetPage() {
           </button>
         </div>
       )}
+
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold">Token disponibili</h2>
+        <ul className="space-y-2">
+          {tokens.map((t) => (
+            <li key={t.symbol} className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">{t.symbol}</p>
+                <p className="text-xs text-gray-500 break-all">{t.address}</p>
+              </div>
+              <button
+                onClick={() => importToken(t.symbol, t.address, t.decimals)}
+                className="rounded-md border px-3 py-1 text-sm"
+              >
+                Importa su MetaMask
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {status && <p className="text-sm text-gray-700">{status}</p>}
     </div>
