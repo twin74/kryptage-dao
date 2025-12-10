@@ -241,8 +241,13 @@ export default function FaucetPage() {
               </div>
               <button
                 onClick={() => importToken(t.symbol, t.address, t.decimals)}
-                className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 text-sm"
+                className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 text-sm flex items-center gap-2"
               >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                  <path d="M2 7a3 3 0 0 1 3-3h13a2 2 0 1 1 0 4H5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a2 2 0 1 1 0 4H5a3 3 0 0 1-3-3V7Z" />
+                  <path d="M19 10a2 2 0 1 1 0 4h-6a2 2 0 1 1 0-4h6Z" />
+                  <circle cx="19" cy="12" r="1" />
+                </svg>
                 import to Wallet
               </button>
             </li>
