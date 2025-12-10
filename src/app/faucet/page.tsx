@@ -11,7 +11,7 @@ export default function FaucetPage() {
 
   const tokens = useMemo(() => {
     return [
-      { symbol: "USDK", address: process.env.NEXT_PUBLIC_TOKEN_USDK as string, decimals: 18 },
+      // Removed USDK per request
       { symbol: "USDC", address: process.env.NEXT_PUBLIC_TOKEN_USDC as string, decimals: 18 },
       { symbol: "WBTC", address: process.env.NEXT_PUBLIC_TOKEN_WBTC as string, decimals: 18 },
       { symbol: "XAUT", address: process.env.NEXT_PUBLIC_TOKEN_XAUT as string, decimals: 18 },
@@ -193,6 +193,10 @@ export default function FaucetPage() {
 
       <div className="space-y-2">
         <h2 className="text-lg font-semibold">Token disponibili</h2>
+        <p className="text-sm text-blue-300">
+          Hai bisogno di ETH di Sepolia per le fee? Prendili qui:
+          <a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer" className="ml-1 underline hover:text-blue-400">Ethereum Sepolia Faucet</a>
+        </p>
         <ul className="space-y-2">
           {tokens.map((t) => (
             <li key={t.symbol} className="flex items-center justify-between">
