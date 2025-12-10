@@ -30,7 +30,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
-    "chai": "^6.2.1",
+    "chai": "^4.3.7",
     "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
@@ -39,5 +39,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
-  "type": "module"
+  "type": "module",
+  "vercel": {
+    "installCommand": "npm install --legacy-peer-deps"
+  }
 }
