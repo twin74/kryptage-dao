@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { ethers } from "ethers";
 
 export default function FaucetPage() {
   const [address, setAddress] = useState<string | null>(null);
@@ -75,16 +76,17 @@ export default function FaucetPage() {
   async function claim() {
     setStatus("Claim in corso...");
     try {
-      const res = await fetch("/api/faucet/claim", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wallet: address }),
-      });
-      const data = await res.json();
-      if (res.ok) setStatus("Claim eseguito. Controlla il tuo wallet.");
-      else setStatus(data.error || "Errore claim");
-    } catch (e) {
-      setStatus("Errore di rete durante il claim");
+      if (!(window as any).ethereum) throw new Error("Wallet non disponibile");
+      const provider = new ethers.BrowserProvider((window as any).ethereum);
+      const signer = await provider.getSigner();
+      const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_ADDRESS as string;
+      const abi = ["function claim() external"];
+      const contract = new ethers.Contract(faucetAddress, abi, signer);
+      const tx = await contract.claim();
+      await tx.wait();
+      setStatus("Claim eseguito. Controlla il tuo wallet.");
+    } catch (e: any) {
+      setStatus(e?.message || "Errore durante il claim");
     }
   }
 
