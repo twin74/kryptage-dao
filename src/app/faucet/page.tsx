@@ -167,20 +167,20 @@ export default function FaucetPage() {
             className="w-full rounded-md border px-3 py-2"
           />
           <button onClick={register} disabled={!isConnected || !email} className="w-full rounded-md bg-blue-600 hover:bg-blue-500 text-white py-2 disabled:opacity-50">
-            Registra & Invia conferma
+            Register & Send Confirmation
           </button>
         </div>
       ) : (
         <div className="space-y-2">
-          <p className="text-sm text-green-700">Email verificata. Puoi procedere al claim.</p>
+          <p className="text-sm text-green-700">Email verified. You can proceed with the claim.</p>
           <button onClick={claim} disabled={!isConnected} className="w-full rounded-md bg-blue-600 hover:bg-blue-500 text-white py-2 disabled:opacity-50">
-            Esegui Claim
+            Execute Claim
           </button>
         </div>
       )}
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">Token disponibili</h2>
+        <h2 className="text-lg font-semibold">Available tokens</h2>
         <ul className="space-y-2">
           {tokens.map((t) => (
             <li key={t.symbol} className="flex items-center justify-between">
@@ -192,7 +192,7 @@ export default function FaucetPage() {
                 onClick={() => importToken(t.symbol, t.address, t.decimals)}
                 className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 text-sm"
               >
-                importa su Wallet
+                import to Wallet
               </button>
             </li>
           ))}
@@ -203,11 +203,11 @@ export default function FaucetPage() {
         <div
           className={
             `mt-4 rounded-md border p-3 text-sm ` +
-            (status.includes("Claim eseguito")
+            (status.includes("Claim eseguito") || status.includes("Claim executed")
               ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-              : status.includes("Controlla la tua email")
+              : status.includes("Controlla la tua email") || status.includes("Check your email")
               ? "border-blue-300 bg-blue-50 text-blue-800"
-              : status.includes("Errore") || status.includes("fallita")
+              : status.includes("Errore") || status.includes("error") || status.includes("failed")
               ? "border-red-300 bg-red-50 text-red-800"
               : "border-gray-300 bg-gray-50 text-gray-800")
           }
@@ -218,7 +218,7 @@ export default function FaucetPage() {
 
       {/* Moved Sepolia faucet link to the bottom */}
       <p className="text-sm text-blue-300">
-        Hai bisogno di ETH di Sepolia per le fee? Prendili qui:
+        Need Sepolia ETH for fees? Get it here:
         <a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer" className="ml-1 underline hover:text-blue-400">Ethereum Sepolia Faucet</a>
       </p>
     </div>
