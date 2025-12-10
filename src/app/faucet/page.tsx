@@ -183,7 +183,22 @@ export default function FaucetPage() {
         </ul>
       </div>
 
-      {status && <p className="text-sm text-gray-700">{status}</p>}
+      {status && (
+        <div
+          className={
+            `mt-4 rounded-md border p-3 text-sm ` +
+            (status.includes("Claim eseguito")
+              ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+              : status.includes("Controlla la tua email")
+              ? "border-blue-300 bg-blue-50 text-blue-800"
+              : status.includes("Errore") || status.includes("fallita")
+              ? "border-red-300 bg-red-50 text-red-800"
+              : "border-gray-300 bg-gray-50 text-gray-800")
+          }
+        >
+          {status}
+        </div>
+      )}
     </div>
   );
 }
