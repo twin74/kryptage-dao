@@ -185,9 +185,7 @@ export default function FaucetPage() {
   return (
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold">Faucet</h1>
-
-      {/* Wallet display removed per request; header manages connection */}
-      {/* Previously: show wallet or prompt to connect via header */}
+      <p className="text-sm text-gray-300">Get test tokens to try the dApp. Connect your wallet from the header, register your email once, then claim when eligible.</p>
 
       {!verified ? (
         <div className="space-y-2">

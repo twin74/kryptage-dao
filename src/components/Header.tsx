@@ -95,15 +95,17 @@ export default function Header() {
           <KLogo className="h-8 w-8" />
           <span className="font-semibold">Kryptage DAO</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm">
+        <nav className="hidden md:flex items-center gap-6 text-sm flex-1 justify-center">
           <Link href="/" className="hover:text-blue-400">Home</Link>
           <Link href="/vault" className="hover:text-blue-400">Vault</Link>
           <Link href="/dashboard" className="hover:text-blue-400">Dashboard</Link>
-          <Link href="/docs" className="hover:text-blue-400">Docs</Link>
           <Link href="/governance" className="hover:text-blue-400">Governance</Link>
           <Link href="/airdrop" className="hover:text-blue-400">Airdrop</Link>
           <Link href="/faucet" className="hover:text-blue-400">Faucet</Link>
         </nav>
+        <div className="hidden md:flex items-center gap-6 text-sm">
+          <Link href="/docs" className="hover:text-blue-400">Docs</Link>
+        </div>
         <div className="flex items-center gap-3">
           {address ? (
             <div className="flex items-center gap-2">
@@ -130,10 +132,10 @@ export default function Header() {
             <Link href="/" onClick={() => setOpen(false)} className="hover:text-blue-400">Home</Link>
             <Link href="/vault" onClick={() => setOpen(false)} className="hover:text-blue-400">Vault</Link>
             <Link href="/dashboard" onClick={() => setOpen(false)} className="hover:text-blue-400">Dashboard</Link>
-            <Link href="/docs" onClick={() => setOpen(false)} className="hover:text-blue-400">Docs</Link>
             <Link href="/governance" onClick={() => setOpen(false)} className="hover:text-blue-400">Governance</Link>
             <Link href="/airdrop" onClick={() => setOpen(false)} className="hover:text-blue-400">Airdrop</Link>
             <Link href="/faucet" onClick={() => setOpen(false)} className="hover:text-blue-400">Faucet</Link>
+            <Link href="/docs" onClick={() => setOpen(false)} className="hover:text-blue-400">Docs</Link>
           </nav>
         </div>
       )}
