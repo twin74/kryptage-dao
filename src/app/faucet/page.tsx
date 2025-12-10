@@ -153,12 +153,8 @@ export default function FaucetPage() {
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold">Faucet</h1>
 
-      {/* Wallet controls removed; header manages connection */}
-      {isConnected && address ? (
-        <p className="text-sm text-gray-200">Wallet: {address}</p>
-      ) : (
-        <p className="text-sm text-gray-400">Connettiti dal pulsante in alto a destra nell'header.</p>
-      )}
+      {/* Wallet display removed per request; header manages connection */}
+      {/* Previously: show wallet or prompt to connect via header */}
 
       {!verified ? (
         <div className="space-y-2">
@@ -185,10 +181,6 @@ export default function FaucetPage() {
 
       <div className="space-y-2">
         <h2 className="text-lg font-semibold">Token disponibili</h2>
-        <p className="text-sm text-blue-300">
-          Hai bisogno di ETH di Sepolia per le fee? Prendili qui:
-          <a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer" className="ml-1 underline hover:text-blue-400">Ethereum Sepolia Faucet</a>
-        </p>
         <ul className="space-y-2">
           {tokens.map((t) => (
             <li key={t.symbol} className="flex items-center justify-between">
@@ -223,6 +215,12 @@ export default function FaucetPage() {
           {status}
         </div>
       )}
+
+      {/* Moved Sepolia faucet link to the bottom */}
+      <p className="text-sm text-blue-300">
+        Hai bisogno di ETH di Sepolia per le fee? Prendili qui:
+        <a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer" className="ml-1 underline hover:text-blue-400">Ethereum Sepolia Faucet</a>
+      </p>
     </div>
   );
 }
