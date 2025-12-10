@@ -13,15 +13,15 @@ export default function FaucetPage() {
     const iconFor = (symbol: string) => {
       switch (symbol) {
         case "USDC":
-          return "https://cdn.simpleicons.org/usdcoin"; // USDC official icon
+          return "/usdc.svg"; // local SVG
         case "WBTC":
           return "https://cdn.simpleicons.org/bitcoin"; // BTC icon for WBTC
         case "XAUT":
-          return "https://cdn.simpleicons.org/x"; // placeholder icon that loads reliably
+          return "/xaut.svg"; // local SVG
         case "SPYON":
-          return "https://cdn.simpleicons.org/chartdotjs"; // chart icon placeholder for ETF
+          return "/SPY.svg"; // local SVG for S&P 500 ETF
         default:
-          return "https://cdn.simpleicons.org/circle"; // generic
+          return "https://cdn.simpleicons.org/circle";
       }
     };
     const list = [
