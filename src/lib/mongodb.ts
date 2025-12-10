@@ -1,19 +1,28 @@
 import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI as string;
-
 if (!uri) {
-  console.warn('MONGODB_URI is not set. MongoDB client will not initialize.');
+  throw new Error('Missing MONGODB_URI');
 }
 
-let client: MongoClient | null = null;
+let client: MongoClient;
+let clientPromise: Promise<MongoClient>;
 
-export async function getDb() {
-  if (!uri) throw new Error('Missing MONGODB_URI');
-  if (!client) {
-    client = new MongoClient(uri, {});
+// Use a cached client in dev to avoid creating many instances
+declare global {
+  // eslint-disable-next-line no-var
+  var _mongoClientPromise: Promise<MongoClient> | undefined;
+}
+
+if (process.env.NODE_ENV === 'development') {
+  if (!global._mongoClientPromise) {
+    client = new MongoClient(uri);
+    global._mongoClientPromise = client.connect();
   }
-  // Ensure connected by calling connect() once; MongoDB driver manages pooling internally
-  await client.connect();
-  return client;
+  clientPromise = global._mongoClientPromise!;
+} else {
+  client = new MongoClient(uri);
+  clientPromise = client.connect();
 }
+
+export default clientPromise;

@@ -1,0 +1,19 @@
+{
+  "name": "hardhat-verify-runner",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "verify:usdk": "hardhat verify --network sepolia 0x978B79bABA047441BAD5B3Be66242a03a356b08f --contract contracts/USDK.sol:USDK",
+    "verify:proxy": "hardhat verify --network sepolia 0xb59fA75A904f307B442dBc82C0999854f649dd58 0x978B79bABA047441BAD5B3Be66242a03a356b08f 0xC5E090EA380C6DF938b6920B78B574c58C2029B '0x8129fc1c000000000000000000000000abc00c1ad0c57878d116dfce50172055557af97b' --contract contracts/ProxyArtifacts.sol:MyTransparentUpgradeableProxy",
+    "verify:usdk:cli": "node node_modules/hardhat/dist/src/cli/cli.js verify --network sepolia 0x978B79bABA047441BAD5B3Be66242a03a356b08f --contract contracts/USDK.sol:USDK",
+    "verify:proxy:cli": "node node_modules/hardhat/dist/src/cli/cli.js verify --network sepolia 0xb59fA75A904f307B442dBc82C0999854f649dd58 0x978B79bABA047441BAD5B3Be66242a03a356b08f 0xC5E090EA380C6DF938b6920B78B574c58C2029B '0x8129fc1c000000000000000000000000abc00c1ad0c57878d116dfce50172055557af97b' --contract contracts/ProxyArtifacts.sol:MyTransparentUpgradeableProxy",
+    "verify:usdk:api": "node scripts/verify.js usdk",
+    "verify:proxy:api": "node scripts/verify.js proxy"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-verify": "^3.0.8",
+    "@openzeppelin/contracts": "^5.4.0",
+    "dotenv": "^17.2.3",
+    "hardhat": "^3.0.17"
+  }
+}
