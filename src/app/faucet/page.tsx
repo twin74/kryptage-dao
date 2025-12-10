@@ -1,94 +1,71 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import { ethers } from "ethers";
+import { useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-
-const TOKENS = [
-  { symbol: "USDC", address: process.env.NEXT_PUBLIC_TOKEN_USDC! },
-  { symbol: "WBTC", address: process.env.NEXT_PUBLIC_TOKEN_WBTC! },
-  { symbol: "XAUT", address: process.env.NEXT_PUBLIC_TOKEN_XAUT! },
-  { symbol: "SPYON", address: process.env.NEXT_PUBLIC_TOKEN_SPYON! },
-];
 
 export default function FaucetPage() {
   const { address, isConnected } = useAccount();
-  const { connect, connectors } = useConnect();
+  const { connectors, connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<string>("");
-  const [claiming, setClaiming] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
 
-  const handleRegister = async () => {
-    if (!address) return;
+  async function register() {
     setStatus("Invio richiesta...");
-    const res = await fetch("/api/faucet/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, wallet: address }),
-    });
-    const data = await res.json();
-    if (res.ok) setStatus("Controlla la tua email per confermare.");
-    else setStatus(data.error || "Errore");
-  };
-
-  const handleClaim = async () => {
-    setClaiming(true);
     try {
-      const provider = new ethers.BrowserProvider((window as any).ethereum);
-      const signer = await provider.getSigner();
-      const faucetAddr = process.env.NEXT_PUBLIC_FAUCET_ADDRESS!;
-      const abi = [
-        "function claim()",
-      ];
-      const contract = new ethers.Contract(faucetAddr, abi, signer);
-      const tx = await contract.claim();
-      setStatus("Transazione inviata: " + tx.hash);
-      await tx.wait();
-      setStatus("Token ricevuti.");
-    } catch (e: any) {
-      setStatus(e?.message || "Errore claim");
-    } finally {
-      setClaiming(false);
+      const res = await fetch("/api/faucet/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, wallet: address }),
+      });
+      const data = await res.json();
+      if (res.ok) setStatus("Controlla la tua email per confermare.");
+      else setStatus(data.error || "Errore");
+    } catch (e) {
+      setStatus("Errore di rete");
     }
-  };
+  }
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-6">
+    <div className="max-w-md mx-auto p-6 space-y-4">
       <h1 className="text-2xl font-semibold">Faucet</h1>
+
       {!isConnected ? (
-        <button className="btn" onClick={() => connect({ connector: connectors[0] })}>
-          Connetti Wallet
-        </button>
+        <div className="space-y-2">
+          {connectors.map((c) => (
+            <button
+              key={c.uid}
+              onClick={() => connect({ connector: c })}
+              className="w-full rounded-md bg-black text-white py-2"
+            >
+              Connetti {c.name}
+            </button>
+          ))}
+          {isPending && <p className="text-sm text-gray-600">Connessione in corso...</p>}
+        </div>
       ) : (
-        <div className="space-y-4">
-          <div>Wallet: {address}</div>
-          <button className="btn" onClick={() => disconnect()}>Disconnetti</button>
+        <div className="space-y-2">
+          <p className="text-sm text-gray-700">Connesso: {address}</p>
+          <button onClick={() => disconnect()} className="rounded-md border px-3 py-2">
+            Disconnetti
+          </button>
         </div>
       )}
 
       <div className="space-y-2">
-        <label>Email</label>
-        <input className="input w-full" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <button className="btn" onClick={handleRegister} disabled={!isConnected || !email}>
-          Registra & Conferma via email
+        <label className="block text-sm font-medium">Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          className="w-full rounded-md border px-3 py-2"
+        />
+        <button onClick={register} disabled={!isConnected || !email} className="w-full rounded-md bg-blue-600 text-white py-2 disabled:opacity-50">
+          Registra & Invia conferma
         </button>
       </div>
 
-      <div className="space-y-2">
-        <div className="text-sm">Token distributi:</div>
-        <ul className="list-disc ml-5">
-          {TOKENS.map((t) => (
-            <li key={t.address}>{t.symbol} - {t.address}</li>
-          ))}
-        </ul>
-      </div>
-
-      <button className="btn" onClick={handleClaim} disabled={!isConnected || claiming}>
-        Claim test tokens
-      </button>
-
-      {status && <div className="text-sm text-gray-700">{status}</div>}
+      {status && <p className="text-sm text-gray-700">{status}</p>}
     </div>
   );
 }
