@@ -153,19 +153,11 @@ export default function FaucetPage() {
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold">Faucet</h1>
 
-      {!isConnected ? (
-        <div className="space-y-2">
-          <button onClick={connectWallet} className="w-full rounded-md bg-blue-600 hover:bg-blue-500 text-white py-2">
-            Connetti Wallet
-          </button>
-        </div>
+      {/* Wallet controls removed; header manages connection */}
+      {isConnected && address ? (
+        <p className="text-sm text-gray-200">Wallet: {address}</p>
       ) : (
-        <div className="space-y-2">
-          <p className="text-sm text-gray-200">Connesso: {address}</p>
-          <button onClick={disconnectWallet} className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-3 py-2">
-            Disconnetti
-          </button>
-        </div>
+        <p className="text-sm text-gray-400">Connettiti dal pulsante in alto a destra nell'header.</p>
       )}
 
       {!verified ? (
