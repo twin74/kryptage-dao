@@ -102,10 +102,8 @@ export default function Header() {
           <Link href="/governance" className="hover:text-blue-400">Governance</Link>
           <Link href="/airdrop" className="hover:text-blue-400">Airdrop</Link>
           <Link href="/faucet" className="hover:text-blue-400">Faucet</Link>
-        </nav>
-        <div className="hidden md:flex items-center gap-6 text-sm">
           <Link href="/docs" className="hover:text-blue-400">Docs</Link>
-        </div>
+        </nav>
         <div className="flex items-center gap-3">
           {address ? (
             <div className="flex items-center gap-2">
