@@ -1,33 +1,52 @@
 import { NextResponse } from "next/server";
-import clientPromise from "../../../../lib/mongodb";
-import crypto from "crypto";
+import { ObjectId } from "mongodb";
+import clientPromise from "@/lib/mongodb";
+import { Resend } from "resend";
 
 export async function POST(req: Request) {
   try {
     const { email, wallet } = await req.json();
-    if (!email || !wallet) return NextResponse.json({ error: "Missing" }, { status: 400 });
+    if (!email || !wallet) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
     const client = await clientPromise;
     const db = client.db("kryptage");
-    const col = db.collection("faucet_users");
+    const users = db.collection("faucet_users");
 
-    // Upsert user
-    const token = crypto.randomBytes(16).toString("hex");
-    await col.updateOne(
+    const token = new ObjectId().toHexString();
+    const now = new Date();
+
+    await users.updateOne(
       { wallet },
       {
-        $set: { email, wallet, verified: false },
-        $setOnInsert: { createdAt: new Date(), tokens: [] },
-        $addToSet: { tokens: token },
+        $set: { email, wallet, verified: false, updatedAt: now },
+        $setOnInsert: { createdAt: now },
       },
       { upsert: true }
     );
+    await db.collection("faucet_tokens").insertOne({ token, wallet, email, createdAt: now, used: false });
 
-    // TODO: send email with confirmation link including token
-    // e.g. /api/faucet/confirm?token=...
+    const origin = req.headers.get("origin") ?? process.env.NEXT_PUBLIC_BASE_URL ?? "";
+    const confirmUrl = `${origin}/api/faucet/confirm?token=${token}`;
 
-    return NextResponse.json({ ok: true, message: "Check your email to confirm.", token });
-  } catch (e: any) {
-    return NextResponse.json({ error: e?.message || "Error" }, { status: 500 });
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const from = process.env.EMAIL_FROM || "no-reply@kryptage.com";
+    if (!resendApiKey) return NextResponse.json({ error: "Email not configured" }, { status: 500 });
+
+    const resend = new Resend(resendApiKey);
+    await resend.emails.send({
+      from,
+      to: email,
+      subject: "Verify your email for Kryptage Faucet",
+      html: `
+        <p>Hi,</p>
+        <p>Please verify your email to access the Kryptage Faucet.</p>
+        <p><a href="${confirmUrl}">Click here to confirm</a></p>
+        <p>If you did not request this, ignore this message.</p>
+      `,
+    });
+
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
