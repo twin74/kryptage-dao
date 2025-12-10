@@ -90,13 +90,41 @@ export default function FaucetPage() {
       const provider = new ethers.BrowserProvider((window as any).ethereum);
       const signer = await provider.getSigner();
       const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_ADDRESS as string;
-      const abi = ["function claim() external"];
+      const abi = [
+        "function claim() external",
+        "function remainingCooldown(address user) view returns (uint256)",
+      ];
       const contract = new ethers.Contract(faucetAddress, abi, signer);
+
+      // Pre-check cooldown
+      const rc: bigint = await contract.remainingCooldown(await signer.getAddress());
+      if (rc > BigInt(0)) {
+        const seconds = Number(rc);
+        setStatus(`Devi attendere ancora ${seconds} secondi prima del prossimo prelievo (cooldown attivo).`);
+        return;
+      }
+
       const tx = await contract.claim();
       await tx.wait();
       setStatus("Claim eseguito. Controlla il tuo wallet.");
     } catch (e: any) {
-      setStatus(e?.message || "Errore durante il claim");
+      // Try to provide a friendly message if cooldown likely caused the revert or nonce error occurred
+      try {
+        if ((window as any).ethereum) {
+          const provider = new ethers.BrowserProvider((window as any).ethereum);
+          const signer = await provider.getSigner();
+          const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_ADDRESS as string;
+          const abi = ["function remainingCooldown(address user) view returns (uint256)"];
+          const contractView = new ethers.Contract(faucetAddress, abi, provider);
+          const rc: bigint = await contractView.remainingCooldown(await signer.getAddress());
+          if (rc > BigInt(0)) {
+            const seconds = Number(rc);
+            setStatus(`Devi attendere ancora ${seconds} secondi prima del prossimo prelievo (cooldown attivo).`);
+            return;
+          }
+        }
+      } catch {}
+      setStatus("Errore durante il claim. Riprova più tardi.");
     }
   }
 
