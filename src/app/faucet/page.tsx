@@ -25,20 +25,53 @@ export default function FaucetPage() {
     setVerified(v === "1" || v === "true");
     // Try to restore connection if already authorized
     if (typeof window !== "undefined" && (window as any).ethereum) {
-      (window as any).ethereum.request({ method: "eth_accounts" }).then((accounts: string[]) => {
+      (window as any).ethereum.request({ method: "eth_accounts" }).then(async (accounts: string[]) => {
         if (accounts && accounts.length > 0) {
-          setAddress(accounts[0]);
+          const addr = accounts[0];
+          setAddress(addr);
           setIsConnected(true);
+          // Check persisted verification in DB or localStorage
+          const cached = localStorage.getItem(`faucet_verified_${addr.toLowerCase()}`);
+          if (cached === "true") {
+            setVerified(true);
+          } else {
+            try {
+              const res = await fetch(`/api/faucet/status?wallet=${addr}`);
+              const data = await res.json();
+              if (res.ok && data.verified) {
+                setVerified(true);
+                localStorage.setItem(`faucet_verified_${addr.toLowerCase()}`, "true");
+              }
+            } catch {}
+          }
         }
       });
       // Listen for account changes
-      (window as any).ethereum.on?.("accountsChanged", (accounts: string[]) => {
+      (window as any).ethereum.on?.("accountsChanged", async (accounts: string[]) => {
         if (accounts && accounts.length > 0) {
-          setAddress(accounts[0]);
+          const addr = accounts[0];
+          setAddress(addr);
           setIsConnected(true);
+          const cached = localStorage.getItem(`faucet_verified_${addr.toLowerCase()}`);
+          if (cached === "true") setVerified(true);
+          else {
+            try {
+              const res = await fetch(`/api/faucet/status?wallet=${addr}`);
+              const data = await res.json();
+              if (res.ok && data.verified) {
+                setVerified(true);
+                localStorage.setItem(`faucet_verified_${addr.toLowerCase()}`, "true");
+              } else {
+                setVerified(false);
+              }
+            } catch {
+              setVerified(false);
+            }
+          }
         } else {
           setAddress(null);
           setIsConnected(false);
+          setVerified(false);
         }
       });
     }
