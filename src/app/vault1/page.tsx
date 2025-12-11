@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { KLogo } from "@/components/Header";
+import { UsdkIcon, SusdkIcon } from "@/components/TokenIcons";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -192,15 +193,15 @@ export default function Vault1Page() {
       <p className="text-sm text-white mb-2">Deposit USDC, receive U$DK, earn yield in U$DK and KTG airdrop points.</p>
 
       <div className="flex gap-4 w-full">
-        {/* sU$DK box */}
+        {/* sUSDK balance box */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
-          <img src="/USDK.svg" alt="sU$DK" className="h-8 w-8 rounded mb-2" />
-          <div className="text-xs text-gray-800">Your sU$DK</div>
+          <SusdkIcon className="h-8 w-8 rounded mb-2" />
+          <div className="text-xs text-gray-800">sU$DK Balance</div>
           <div className="text-xl font-semibold text-gray-900">{susdkBalance}</div>
         </div>
         {/* Yield box */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
-          <img src="/USDK.svg" alt="U$DK" className="h-8 w-8 rounded mb-2" />
+          <UsdkIcon className="h-8 w-8 mb-2" />
           <div className="text-xs text-gray-800">Yield earned (pending)</div>
           <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
         </div>
@@ -215,7 +216,7 @@ export default function Vault1Page() {
       <div className="flex gap-4 w-full mt-4">
         {/* U$DK in Vault box - width: 2/3 + 16px, min-w-256px */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center min-w-[256px]" style={{ width: "calc(66.6667% + 16px)" }}>
-          <img src="/USDK.svg" alt="U$DK" className="h-8 w-8 rounded mb-2" />
+          <UsdkIcon className="h-8 w-8 mb-2" />
           <div className="text-xs text-gray-800">U$DK in Vault</div>
           <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
         </div>
