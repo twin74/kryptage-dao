@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 
 const usdkIcon = "/USDK.svg";
-const susdkIcon = "/usdc.svg";
+const susdkIcon = "/USDK.svg";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -172,21 +172,24 @@ export default function Vault1Page() {
             <div className="text-2xl font-bold text-gray-900">{usdkInVault}</div>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div className="rounded-xl border p-6 bg-white flex items-center gap-3 col-span-2 w-full">
             <img src={susdkIcon} alt="sUSDK" className="h-8 w-8 rounded" />
             <div>
               <div className="text-sm text-gray-600">sUSDK dell’utente</div>
               <div className="text-2xl font-bold text-gray-900">{susdkBalance}</div>
             </div>
           </div>
-          <div className="rounded-xl border p-6 bg-white w-full flex flex-col justify-center">
+          <div className="rounded-xl border p-6 bg-white flex items-center gap-3 col-span-2 w-full">
+            <img src={usdkIcon} alt="USDK" className="h-8 w-8 rounded" />
+            <div>
+              <div className="text-sm text-gray-600">Rendimento maturato (pending)</div>
+              <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
+            </div>
+          </div>
+          <div className="rounded-xl border p-4 bg-white flex flex-col justify-center col-span-1 w-32">
             <div className="text-sm text-gray-600">APY</div>
             <div className="text-xl font-semibold text-gray-900">{apy}</div>
-          </div>
-          <div className="rounded-xl border p-6 bg-white w-full flex flex-col justify-center">
-            <div className="text-sm text-gray-600">Rendimento maturato (pending)</div>
-            <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
           </div>
         </div>
       </div>
