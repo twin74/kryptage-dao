@@ -13,6 +13,7 @@ export default function Vault1Page() {
   const [susdkBalance, setSusdkBalance] = useState<string>("0");
   const [pendingRewards, setPendingRewards] = useState<string>("0");
   const [apy, setApy] = useState<string>("0");
+  const [usdcBalance, setUsdcBalance] = useState<string>("0");
 
   const VAULT = process.env.NEXT_PUBLIC_STABLE_VAULT as string;
   const CONTROLLER = process.env.NEXT_PUBLIC_STABLE_CONTROLLER as string;
@@ -24,6 +25,7 @@ export default function Vault1Page() {
     "function decimals() view returns (uint8)",
     "function approve(address spender, uint256 amount) returns (bool)",
     "function allowance(address owner, address spender) view returns (uint256)",
+    "function balanceOf(address) view returns (uint256)",
   ];
   const usdkAbi = [
     "function balanceOf(address) view returns (uint256)",
@@ -67,19 +69,23 @@ export default function Vault1Page() {
       const usdkC = new ethers.Contract(USDK, usdkAbi, provider);
       const susdkC = new ethers.Contract(VAULT, susdkAbi, provider);
       const farmC = new ethers.Contract(FARM, farmAbi, provider);
+      const usdcC = new ethers.Contract(USDC, usdcAbi, provider);
 
-      const [usdkDec, susdkDec] = await Promise.all([
+      const [usdkDec, susdkDec, usdcDec] = await Promise.all([
         usdkC.decimals(),
         susdkC.decimals(),
+        usdcC.decimals(),
       ]);
-      const [usdkBalVault, susdkBalUser, rewards] = await Promise.all([
+      const [usdkBalVault, susdkBalUser, rewards, usdcBalUser] = await Promise.all([
         usdkC.balanceOf(VAULT),
         susdkC.balanceOf(address),
         farmC.pendingRewards(),
+        usdcC.balanceOf(address),
       ]);
       setUsdkInVault(formatUnits(usdkBalVault, usdkDec));
       setSusdkBalance(formatUnits(susdkBalUser, susdkDec));
       setPendingRewards(formatUnits(rewards, 18));
+      setUsdcBalance(formatUnits(usdcBalUser, usdcDec));
       // Simple APY placeholder: assume rewards per day from pending ~ linear → apy = (rewards * 365) / stake
       // In assenza di stake totale, mostrare un valore indicativo
       setApy("—");
@@ -161,10 +167,12 @@ export default function Vault1Page() {
         <h2 className="text-lg font-semibold">Azioni</h2>
         <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
           <input name="amount" type="number" step="any" placeholder="USDC da depositare" className="input input-bordered w-full p-2 border rounded" />
+          <button type="button" className="px-3 py-2 rounded border" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
           <button className="btn px-4 py-2 rounded bg-black text-white" disabled={loading}>Deposita</button>
         </form>
         <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
           <input name="shares" type="number" step="any" placeholder="sUSDK da ritirare" className="input input-bordered w-full p-2 border rounded" />
+          <button type="button" className="px-3 py-2 rounded border" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
           <button className="btn px-4 py-2 rounded bg-black text-white" disabled={loading}>Withdraw</button>
         </form>
         <button className="btn px-4 py-2 rounded bg-black text-white" onClick={onCompound} disabled={loading}>Compound</button>
