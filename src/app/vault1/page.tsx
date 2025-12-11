@@ -45,7 +45,7 @@ export default function Vault1Page() {
     "function compoundGlobal()",
   ];
   const farmAbi = [
-    "function pendingRewards() view returns (uint256)",
+    "function pendingRewards(address) view returns (uint256)",
     "function stake(uint256 amount)",
   ];
 
@@ -82,7 +82,7 @@ export default function Vault1Page() {
       const [usdkBalVault, susdkBalUser, rewards, usdcBalUser] = await Promise.all([
         usdkC.balanceOf(VAULT),
         susdkC.balanceOf(address),
-        farmC.pendingRewards(),
+        farmC.pendingRewards(address),
         usdcC.balanceOf(address),
       ]);
       setUsdkInVault(formatUnits(usdkBalVault, usdkDec));
