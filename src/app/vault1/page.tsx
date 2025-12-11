@@ -160,15 +160,8 @@ export default function Vault1Page() {
   return (
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold text-gray-900">StableVault</h1>
-      <p className="text-sm text-white mb-2">Deposita USDC, ricevi USDK, accumula rendimenti in USDK e punti KTG. Tutte le operazioni sono gestite dal controller.</p>
+      <p className="text-sm text-white mb-2">Deposita USDC, ricevi USDK, accumula rendimenti in USDK e Punti Airdrop KTG. Tutte le operazioni sono gestite dal Controller.</p>
       <div className="space-y-6">
-        <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
-          <img src="/USDK.svg" alt="USDK" className="h-8 w-8 text-blue-500" />
-          <div>
-            <div className="text-sm text-gray-600">USDK nel Vault</div>
-            <div className="text-2xl font-bold text-gray-900">{usdkInVault}</div>
-          </div>
-        </div>
         <div className="flex gap-4 w-full">
           {/* Riquadro sUSDK */}
           <div className="flex flex-col items-center justify-center rounded-xl border p-6 bg-white w-1/3 min-w-[120px]">
@@ -182,8 +175,21 @@ export default function Vault1Page() {
             <div className="text-xs text-gray-500">Rendimento maturato (pending)</div>
             <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
           </div>
+          {/* Riquadro Punti Airdrop KTG */}
+          <div className="flex flex-col items-center justify-center rounded-xl border p-6 bg-white w-1/3 min-w-[120px]">
+            <div className="text-xs text-gray-500">Punti Airdrop KTG</div>
+            <div className="text-xl font-semibold text-gray-900">0</div>
+          </div>
+        </div>
+        <div className="flex gap-4 w-full mt-4">
+          {/* Riquadro USDK nel Vault */}
+          <div className="flex flex-col items-center justify-center rounded-xl border p-6 bg-white w-1/2 min-w-[180px]">
+            <img src="/USDK.svg" alt="USDK" className="h-8 w-8 rounded mb-2" />
+            <div className="text-xs text-gray-500">USDK nel Vault</div>
+            <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
+          </div>
           {/* Riquadro APY */}
-          <div className="flex flex-col items-center justify-center rounded-xl border p-8 bg-white w-1/3 min-w-[120px]">
+          <div className="flex flex-col items-center justify-center rounded-xl border p-8 bg-white w-1/2 min-w-[180px]">
             <div className="text-xs text-gray-500">APY</div>
             <div className="text-xl font-semibold text-gray-900">{apy}</div>
           </div>
