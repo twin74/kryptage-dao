@@ -2,9 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
-import USDKIcon from '@/components/icons/USDK.svg';
-
-const susdkIcon = "/USDK.svg";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -166,7 +163,7 @@ export default function Vault1Page() {
       <p className="text-sm text-white mb-2">Deposita USDC, ricevi USDK, accumula rendimenti e preleva. Tutte le operazioni sono gestite dal controller.</p>
       <div className="space-y-6">
         <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
-          <USDKIcon className="h-8 w-8 text-blue-500" />
+          <img src="/USDK.svg" alt="USDK" className="h-8 w-8 text-blue-500" />
           <div>
             <div className="text-sm text-gray-600">USDK nel Vault</div>
             <div className="text-2xl font-bold text-gray-900">{usdkInVault}</div>
@@ -174,14 +171,14 @@ export default function Vault1Page() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
           <div className="rounded-xl border p-6 bg-white flex items-center gap-3 col-span-2 w-full">
-            <img src={susdkIcon} alt="sUSDK" className="h-8 w-8 rounded" />
+            <img src="/USDK.svg" alt="sUSDK" className="h-8 w-8 rounded" />
             <div>
               <div className="text-sm text-gray-600">sUSDK dell’utente</div>
               <div className="text-2xl font-bold text-gray-900">{susdkBalance}</div>
             </div>
           </div>
           <div className="rounded-xl border p-6 bg-white flex items-center gap-3 col-span-2 w-full">
-            <USDKIcon className="h-8 w-8 rounded" />
+            <img src="/USDK.svg" alt="USDK" className="h-8 w-8 rounded" />
             <div>
               <div className="text-sm text-gray-600">Rendimento maturato (pending)</div>
               <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
