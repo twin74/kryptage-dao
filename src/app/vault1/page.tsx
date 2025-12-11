@@ -156,47 +156,49 @@ export default function Vault1Page() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
-      <h1 className="text-2xl font-semibold">StableVault</h1>
-      <p className="text-sm text-gray-300 mb-2">Deposita USDC, ricevi sUSDK, accumula rendimenti e preleva USDK. Tutte le operazioni sono gestite dal controller.</p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="rounded-xl border p-4 bg-white flex items-center gap-3">
-          <img src={usdkIcon} alt="USDK" className="h-6 w-6 rounded" />
+      <h1 className="text-2xl font-semibold text-gray-900">StableVault</h1>
+      <p className="text-sm text-gray-700 mb-2">Deposita USDC, ricevi sUSDK, accumula rendimenti e preleva USDK. Tutte le operazioni sono gestite dal controller.</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
+          <img src={usdkIcon} alt="USDK" className="h-8 w-8 rounded" />
           <div>
-            <div className="text-sm text-gray-500">USDK nel Vault</div>
-            <div className="text-xl font-medium">{usdkInVault}</div>
+            <div className="text-sm text-gray-600">USDK nel Vault</div>
+            <div className="text-2xl font-bold text-gray-900">{usdkInVault}</div>
           </div>
         </div>
-        <div className="rounded-xl border p-4 bg-white flex items-center gap-3">
-          <img src={susdkIcon} alt="sUSDK" className="h-6 w-6 rounded" />
+        <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
+          <img src={susdkIcon} alt="sUSDK" className="h-8 w-8 rounded" />
           <div>
-            <div className="text-sm text-gray-500">sUSDK dell’utente</div>
-            <div className="text-xl font-medium">{susdkBalance}</div>
+            <div className="text-sm text-gray-600">sUSDK dell’utente</div>
+            <div className="text-2xl font-bold text-gray-900">{susdkBalance}</div>
           </div>
         </div>
-        <div className="rounded-xl border p-4 bg-white">
-          <div className="text-sm text-gray-500">Rendimento maturato (pending)</div>
-          <div className="text-xl font-medium">{pendingRewards}</div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="rounded-xl border p-4 bg-white w-full">
+          <div className="text-sm text-gray-600">Rendimento maturato (pending)</div>
+          <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
+        </div>
+        <div className="rounded-xl border p-4 bg-white w-full">
+          <div className="text-sm text-gray-600">APY</div>
+          <div className="text-xl font-semibold text-gray-900">{apy}</div>
         </div>
       </div>
-      <div className="rounded-xl border p-4 bg-white">
-        <div className="text-sm text-gray-500">APY</div>
-        <div className="text-xl font-medium">{apy}</div>
-      </div>
-      <div className="rounded-xl border p-4 space-y-4 bg-white">
-        <h2 className="text-lg font-semibold">Azioni</h2>
+      <div className="rounded-xl border p-6 space-y-4 bg-white">
+        <h2 className="text-lg font-semibold text-gray-900">Azioni</h2>
         <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
-          <label className="block text-sm font-medium" htmlFor="vault-deposit">Deposita USDC</label>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="vault-deposit">Deposita USDC</label>
           <div className="flex items-center gap-2">
-            <input id="vault-deposit" name="amount" type="number" step="any" placeholder="USDC da depositare" className="w-full rounded-md border px-3 py-2" />
-            <button type="button" className="rounded-md border px-3 py-2" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
+            <input id="vault-deposit" name="amount" type="number" step="any" placeholder="USDC da depositare" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50" />
+            <button type="button" className="rounded-md border px-3 py-2 text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
             <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Deposita</button>
           </div>
         </form>
         <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
-          <label className="block text-sm font-medium" htmlFor="vault-withdraw">Preleva sUSDK</label>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="vault-withdraw">Preleva sUSDK</label>
           <div className="flex items-center gap-2">
-            <input id="vault-withdraw" name="shares" type="number" step="any" placeholder="sUSDK da ritirare" className="w-full rounded-md border px-3 py-2" />
-            <button type="button" className="rounded-md border px-3 py-2" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
+            <input id="vault-withdraw" name="shares" type="number" step="any" placeholder="sUSDK da ritirare" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50" />
+            <button type="button" className="rounded-md border px-3 py-2 text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
             <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Withdraw</button>
           </div>
         </form>
@@ -210,7 +212,7 @@ export default function Vault1Page() {
               ? "border-emerald-300 bg-emerald-50 text-emerald-800"
               : status.includes("Errore") || status.includes("error") || status.includes("failed")
               ? "border-red-300 bg-red-50 text-red-800"
-              : "border-gray-300 bg-gray-50 text-gray-800")
+              : "border-gray-300 bg-gray-50 text-gray-900")
           }
         >
           {status}
