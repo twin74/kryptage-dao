@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
+import KLogo from "@/components/Header";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -205,6 +206,7 @@ export default function Vault1Page() {
         </div>
         {/* KTG Airdrop Points box */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
+          <KLogo className="h-8 w-8 mb-2" />
           <div className="text-xs text-gray-800">KTG Airdrop Points</div>
           <div className="text-xl font-semibold text-gray-900">0</div>
         </div>
