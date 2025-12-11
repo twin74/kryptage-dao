@@ -211,13 +211,13 @@ export default function Vault1Page() {
       </div>
 
       <div className="flex gap-4 w-full mt-4">
-        {/* U$DK in Vault box - make it as wide as the two boxes above plus gap */}
-        <div className="rounded-xl border p-6 bg-white flex flex-col items-center" style={{ flex: 2.05, minWidth: 0 }}>
+        {/* U$DK in Vault box - as wide as two boxes plus gap */}
+        <div className="rounded-xl border p-6 bg-white flex flex-col items-center" style={{ flex: 2, minWidth: 0 }}>
           <img src="/USDK.svg" alt="U$DK" className="h-8 w-8 rounded mb-2" />
           <div className="text-xs text-gray-800">U$DK in Vault</div>
           <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
         </div>
-        {/* APY box - match KTG Airdrop Points size */}
+        {/* APY box - same as KTG Airdrop Points */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
           <div className="text-xs text-gray-800">APY</div>
           <div className="text-xl font-semibold text-gray-900">{apy}</div>
