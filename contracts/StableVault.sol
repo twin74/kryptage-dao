@@ -42,6 +42,7 @@ contract StableVault is ERC20Upgradeable {
     event Paused(address indexed by);
     event Unpaused(address indexed by);
     event ControllerChanged(address indexed oldController, address indexed newController);
+    event Redeemed(address indexed to, uint256 sharesBurned, uint256 usdkOut);
 
     // initializer per proxy (invece del costruttore)
     function initialize(address _usdc, address _usdk, address _farm) external initializer {
@@ -139,5 +140,16 @@ contract StableVault is ERC20Upgradeable {
         require(amount > 0, "AMOUNT_ZERO");
         _burn(msg.sender, amount);
         require(usdc.transfer(msg.sender, amount), "USDC_TRANSFER_FAIL");
+    }
+
+    function redeemUSDK(address to, uint256 shares) external onlyController whenNotPaused nonReentrant {
+        require(initialized, "NOT_INIT");
+        require(to != address(0), "BAD_TO");
+        require(shares > 0, "AMOUNT_ZERO");
+        // normalize shares (18) to USDK (6)
+        uint256 usdkOut = shares / 1_000_000_000_000;
+        // transfer USDK from vault custody to user
+        require(IERC20Minimal(address(usdk)).transfer(to, usdkOut), "USDK_TRANSFER_FAIL");
+        emit Redeemed(to, shares, usdkOut);
     }
 }

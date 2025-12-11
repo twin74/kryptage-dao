@@ -24,6 +24,7 @@ interface IStableVault {
     function mintShares(address to, uint256 amount) external;
     function burnShares(address from, uint256 amount) external;
     function depositUSDK(uint256 amount) external;
+    function redeemUSDK(address to, uint256 shares) external;
 }
 
 contract StableController {
@@ -138,8 +139,8 @@ contract StableController {
         require(initialized, "NOT_INIT");
         require(shares > 0, "AMOUNT_ZERO");
         vault.burnShares(msg.sender, shares);
-        // user receives USDK 1:1
-        usdk.mint(msg.sender, shares);
+        // transfer normalized USDK from Vault to user instead of minting
+        vault.redeemUSDK(msg.sender, shares);
         emit Withdrawn(msg.sender, shares, shares);
         // Note: vault/pool must handle USDC removal from farm and maintain 1:1 via mint/burn separately.
     }
