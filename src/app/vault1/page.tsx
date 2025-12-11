@@ -181,7 +181,7 @@ export default function Vault1Page() {
             </div>
           </div>
           <div className="rounded-xl border p-6 bg-white flex items-center gap-3 col-span-2 w-full">
-            <img src={usdkIcon} alt="USDK" className="h-8 w-8 rounded" />
+            <USDKIcon className="h-8 w-8 rounded" />
             <div>
               <div className="text-sm text-gray-600">Rendimento maturato (pending)</div>
               <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
