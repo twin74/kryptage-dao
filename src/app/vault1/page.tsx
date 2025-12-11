@@ -103,6 +103,7 @@ export default function Vault1Page() {
   const onDeposit = async (amountStr: string) => {
     if (!provider || !signer) return;
     setLoading(true);
+    setStatus("Attendi conferma dal wallet...");
     try {
       const usdcC = new ethers.Contract(USDC, usdcAbi, signer);
       const dec = await usdcC.decimals();
@@ -112,6 +113,7 @@ export default function Vault1Page() {
       // Call deposit on Controller
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
       await (await controllerC.depositUSDC(amount)).wait();
+      setStatus(null);
       setStatus("Deposito eseguito.");
       await refresh();
     } catch (e: any) {
@@ -124,12 +126,14 @@ export default function Vault1Page() {
   const onWithdraw = async (sharesStr: string) => {
     if (!signer) return;
     setLoading(true);
+    setStatus("Attendi conferma dal wallet...");
     try {
       const susdkC = new ethers.Contract(VAULT, susdkAbi, signer);
       const dec = await susdkC.decimals();
       const shares = ethers.parseUnits(sharesStr || "0", dec);
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
       await (await controllerC.withdrawShares(shares)).wait();
+      setStatus(null);
       setStatus("Prelievo eseguito.");
       await refresh();
     } catch (e: any) {
@@ -142,9 +146,11 @@ export default function Vault1Page() {
   const onCompound = async () => {
     if (!signer) return;
     setLoading(true);
+    setStatus("Attendi conferma dal wallet...");
     try {
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
       await (await controllerC.compoundGlobal()).wait();
+      setStatus(null);
       setStatus("Compound eseguito.");
       await refresh();
     } catch (e: any) {
@@ -157,8 +163,10 @@ export default function Vault1Page() {
   return (
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold text-gray-900">StableVault</h1>
-      <p className="text-sm text-gray-700 mb-2">Deposita USDC, ricevi sUSDK, accumula rendimenti e preleva USDK. Tutte le operazioni sono gestite dal controller.</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="rounded-xl bg-white p-4 mb-2">
+        <p className="text-sm text-gray-800">Deposita USDC, ricevi sUSDK, accumula rendimenti e preleva USDK. Tutte le operazioni sono gestite dal controller.</p>
+      </div>
+      <div className="space-y-6">
         <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
           <img src={usdkIcon} alt="USDK" className="h-8 w-8 rounded" />
           <div>
@@ -166,22 +174,22 @@ export default function Vault1Page() {
             <div className="text-2xl font-bold text-gray-900">{usdkInVault}</div>
           </div>
         </div>
-        <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
-          <img src={susdkIcon} alt="sUSDK" className="h-8 w-8 rounded" />
-          <div>
-            <div className="text-sm text-gray-600">sUSDK dell’utente</div>
-            <div className="text-2xl font-bold text-gray-900">{susdkBalance}</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
+            <img src={susdkIcon} alt="sUSDK" className="h-8 w-8 rounded" />
+            <div>
+              <div className="text-sm text-gray-600">sUSDK dell’utente</div>
+              <div className="text-2xl font-bold text-gray-900">{susdkBalance}</div>
+            </div>
+          </div>
+          <div className="rounded-xl border p-4 bg-white w-48">
+            <div className="text-sm text-gray-600">APY</div>
+            <div className="text-xl font-semibold text-gray-900">{apy}</div>
           </div>
         </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="rounded-xl border p-4 bg-white w-full">
           <div className="text-sm text-gray-600">Rendimento maturato (pending)</div>
           <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
-        </div>
-        <div className="rounded-xl border p-4 bg-white w-full">
-          <div className="text-sm text-gray-600">APY</div>
-          <div className="text-xl font-semibold text-gray-900">{apy}</div>
         </div>
       </div>
       <div className="rounded-xl border p-6 space-y-4 bg-white">
