@@ -166,18 +166,18 @@ export default function Vault1Page() {
           {/* sUSDK box */}
           <div className="flex flex-col items-center justify-center rounded-xl border p-6 bg-white w-1/3 min-w-[120px]">
             <img src="/USDK.svg" alt="sUSDK" className="h-8 w-8 rounded mb-2" />
-            <div className="text-xs text-gray-500">Your sUSDK</div>
+            <div className="text-xs text-gray-800">Your sUSDK</div>
             <div className="text-xl font-semibold text-gray-900">{susdkBalance}</div>
           </div>
           {/* Yield box */}
           <div className="flex flex-col items-center justify-center rounded-xl border p-6 bg-white w-1/3 min-w-[120px]">
             <img src="/USDK.svg" alt="USDK" className="h-8 w-8 rounded mb-2" />
-            <div className="text-xs text-gray-500">Yield earned (pending)</div>
+            <div className="text-xs text-gray-800">Yield earned (pending)</div>
             <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
           </div>
           {/* KTG Airdrop Points box */}
           <div className="flex flex-col items-center justify-center rounded-xl border p-6 bg-white w-1/3 min-w-[120px]">
-            <div className="text-xs text-gray-500">KTG Airdrop Points</div>
+            <div className="text-xs text-gray-800">KTG Airdrop Points</div>
             <div className="text-xl font-semibold text-gray-900">0</div>
           </div>
         </div>
@@ -185,12 +185,12 @@ export default function Vault1Page() {
           {/* USDK in Vault box */}
           <div className="flex flex-col items-center justify-center rounded-xl border p-6 bg-white flex-[1.5] min-w-[180px]">
             <img src="/USDK.svg" alt="USDK" className="h-8 w-8 rounded mb-2" />
-            <div className="text-xs text-gray-500">USDK in Vault</div>
+            <div className="text-xs text-gray-800">USDK in Vault</div>
             <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
           </div>
           {/* APY box */}
           <div className="flex flex-col items-center justify-center rounded-xl border p-8 bg-white flex-[0.5] min-w-[90px]">
-            <div className="text-xs text-gray-500">APY</div>
+            <div className="text-xs text-gray-800">APY</div>
             <div className="text-xl font-semibold text-gray-900">{apy}</div>
           </div>
         </div>
