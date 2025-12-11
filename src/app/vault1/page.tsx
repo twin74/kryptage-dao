@@ -46,6 +46,7 @@ export default function Vault1Page() {
   ];
   const farmAbi = [
     "function pendingRewards(address) view returns (uint256)",
+    "function apr1e18() view returns (uint256)",
     "function stake(uint256 amount)",
   ];
 
@@ -74,10 +75,11 @@ export default function Vault1Page() {
       const farmC = new ethers.Contract(FARM, farmAbi, provider);
       const usdcC = new ethers.Contract(USDC, usdcAbi, provider);
 
-      const [usdkDec, susdkDec, usdcDec] = await Promise.all([
+      const [usdkDec, susdkDec, usdcDec, apr1e18Raw] = await Promise.all([
         usdkC.decimals(),
         susdkC.decimals(),
         usdcC.decimals(),
+        farmC.apr1e18(),
       ]);
       const [usdkBalVault, susdkBalUser, rewards, usdcBalUser] = await Promise.all([
         usdkC.balanceOf(VAULT),
@@ -89,9 +91,9 @@ export default function Vault1Page() {
       setSusdkBalance(formatUnits(susdkBalUser, susdkDec));
       setPendingRewards(formatUnits(rewards, 18));
       setUsdcBalance(formatUnits(usdcBalUser, usdcDec));
-      // Simple APY placeholder: assume rewards per day from pending ~ linear → apy = (rewards * 365) / stake
-      // In assenza di stake totale, mostrare un valore indicativo
-      setApy("—");
+      // APY = apr1e18 (18 decimali) - 5
+      const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
+      setApy((aprPercent - 5).toFixed(2) + "%");
     } finally {
       setLoading(false);
     }
