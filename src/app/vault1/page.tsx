@@ -87,9 +87,9 @@ export default function Vault1Page() {
         farmC.pendingRewards(address),
         usdcC.balanceOf(address),
       ]);
-      setUsdkInVault(formatUnits(usdkBalVault, usdkDec));
-      setSusdkBalance(formatUnits(susdkBalUser, susdkDec));
-      setPendingRewards(formatUnits(rewards, 18));
+      setUsdkInVault(Number(formatUnits(usdkBalVault, usdkDec)).toLocaleString(undefined, { maximumFractionDigits: 0 }));
+      setSusdkBalance(Number(formatUnits(susdkBalUser, susdkDec)).toLocaleString(undefined, { maximumFractionDigits: 1, minimumFractionDigits: 1 }));
+      setPendingRewards(Number(formatUnits(rewards, 18)).toLocaleString(undefined, { maximumFractionDigits: 4, minimumFractionDigits: 4 }));
       setUsdcBalance(formatUnits(usdcBalUser, usdcDec));
       // APY = apr1e18 (18 decimali) - 5
       const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
