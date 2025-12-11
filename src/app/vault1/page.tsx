@@ -223,9 +223,11 @@ export default function Vault1Page() {
           <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
         </div>
         {/* APY box - same as KTG Airdrop Points */}
-        <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
-          <div className="text-xs text-gray-800">APY</div>
-          <div className="text-xl font-semibold text-gray-900">{apy}</div>
+        <div className="rounded-xl border p-6 bg-white flex flex-col items-center justify-center w-1/3 min-w-[120px] h-full" style={{ minHeight: 120 }}>
+          <div className="flex flex-col items-center justify-center h-full w-full">
+            <div className="text-xs text-gray-800">APY</div>
+            <div className="text-xl font-semibold text-gray-900">{apy}</div>
+          </div>
         </div>
       </div>
 
