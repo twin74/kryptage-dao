@@ -211,8 +211,8 @@ export default function Vault1Page() {
       </div>
 
       <div className="flex gap-4 w-full mt-4">
-        {/* U$DK in Vault box - set to w-2/3 min-w-[240px] */}
-        <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-2/3 min-w-[240px]">
+        {/* U$DK in Vault box - width: 2/3 + 16px, min-w-256px */}
+        <div className="rounded-xl border p-6 bg-white flex flex-col items-center min-w-[256px]" style={{ width: "calc(66.6667% + 16px)" }}>
           <img src="/USDK.svg" alt="U$DK" className="h-8 w-8 rounded mb-2" />
           <div className="text-xs text-gray-800">U$DK in Vault</div>
           <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
