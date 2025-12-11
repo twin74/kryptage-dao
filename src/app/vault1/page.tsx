@@ -196,7 +196,7 @@ export default function Vault1Page() {
         {/* sUSDK balance box */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
           <SusdkIcon className="h-8 w-8 rounded mb-2" />
-          <div className="text-xs text-gray-800">sU$DK Balance</div>
+          <div className="text-xs text-gray-800">susdk Balance</div>
           <div className="text-xl font-semibold text-gray-900">{susdkBalance}</div>
         </div>
         {/* Yield box */}
@@ -217,7 +217,7 @@ export default function Vault1Page() {
         {/* U$DK in Vault box - width: 2/3 + 16px, min-w-256px */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center min-w-[256px]" style={{ width: "calc(66.6667% + 16px)" }}>
           <UsdkIcon className="h-8 w-8 mb-2" />
-          <div className="text-xs text-gray-800">U$DK in Vault</div>
+          <div className="text-xs text-gray-800">usdk in Vault</div>
           <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
         </div>
         {/* APY box - same as KTG Airdrop Points */}
