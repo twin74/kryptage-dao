@@ -156,3 +156,5 @@ function KLogo({ className = '' }: { className?: string }) {
     </svg>
   );
 }
+
+export { KLogo };

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
-import KLogo from "@/components/Header";
+import { KLogo } from "@/components/Header";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
