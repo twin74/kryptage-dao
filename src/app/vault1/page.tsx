@@ -163,9 +163,7 @@ export default function Vault1Page() {
   return (
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold text-gray-900">StableVault</h1>
-      <div className="rounded-xl bg-white p-4 mb-2">
-        <p className="text-sm text-gray-800">Deposita USDC, ricevi sUSDK, accumula rendimenti e preleva USDK. Tutte le operazioni sono gestite dal controller.</p>
-      </div>
+      <p className="text-sm text-white mb-2">Deposita USDC, ricevi USDK, accumula rendimenti e preleva. Tutte le operazioni sono gestite dal controller.</p>
       <div className="space-y-6">
         <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
           <img src={usdkIcon} alt="USDK" className="h-8 w-8 rounded" />
