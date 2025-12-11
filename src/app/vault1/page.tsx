@@ -91,9 +91,9 @@ export default function Vault1Page() {
       setSusdkBalance(Number(formatUnits(susdkBalUser, susdkDec)).toLocaleString(undefined, { maximumFractionDigits: 1, minimumFractionDigits: 1 }));
       setPendingRewards(Number(formatUnits(rewards, 18)).toLocaleString(undefined, { maximumFractionDigits: 4, minimumFractionDigits: 4 }));
       setUsdcBalance(formatUnits(usdcBalUser, usdcDec));
-      // APY = apr1e18 (18 decimali) - 5
+      // APY = apr1e18 / 6 * 5
       const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
-      setApy((aprPercent - 5).toFixed(2) + "%");
+      setApy(((aprPercent / 6) * 5).toFixed(2) + "%");
     } finally {
       setLoading(false);
     }
