@@ -93,7 +93,7 @@ export default function FaucetPage() {
 
   async function connectWallet() {
     if (!(window as any).ethereum) {
-      setStatus("Installa MetaMask per continuare.");
+      setStatus("Install MetaMask to continue.");
       return;
     }
     try {
@@ -104,7 +104,7 @@ export default function FaucetPage() {
         setStatus(null);
       }
     } catch (e: any) {
-      setStatus(e?.message || "Connessione wallet fallita");
+      setStatus(e?.message || "Wallet connection failed");
     }
   }
 
@@ -115,7 +115,7 @@ export default function FaucetPage() {
   }
 
   async function register() {
-    setStatus("Invio richiesta...");
+    setStatus("Sending request...");
     try {
       const res = await fetch("/api/faucet/register", {
         method: "POST",
@@ -123,17 +123,17 @@ export default function FaucetPage() {
         body: JSON.stringify({ email, wallet: address }),
       });
       const data = await res.json();
-      if (res.ok) setStatus("Controlla la tua email per confermare.");
-      else setStatus(data.error || "Errore");
+      if (res.ok) setStatus("Check your email to confirm.");
+      else setStatus(data.error || "Error");
     } catch (e) {
-      setStatus("Errore di rete");
+      setStatus("Network error");
     }
   }
 
   async function claim() {
-    setStatus("Claim in corso...");
+    setStatus("Claim in progress...");
     try {
-      if (!(window as any).ethereum) throw new Error("Wallet non disponibile");
+      if (!(window as any).ethereum) throw new Error("Wallet not available");
       const provider = new ethers.BrowserProvider((window as any).ethereum);
       const signer = await provider.getSigner();
       const faucetAddress = process.env.NEXT_PUBLIC_FAUCET_ADDRESS as string;
@@ -147,13 +147,13 @@ export default function FaucetPage() {
       const rc: bigint = await contract.remainingCooldown(await signer.getAddress());
       if (rc > BigInt(0)) {
         const seconds = Number(rc);
-        setStatus(`Devi attendere ancora ${seconds} secondi prima del prossimo prelievo (cooldown attivo).`);
+        setStatus(`You must wait ${seconds} more seconds before the next claim (cooldown active).`);
         return;
       }
 
       const tx = await contract.claim();
       await tx.wait();
-      setStatus("Claim eseguito. Controlla il tuo wallet.");
+      setStatus("Claim executed. Check your wallet.");
     } catch (e: any) {
       // Try to provide a friendly message if cooldown likely caused the revert or nonce error occurred
       try {
@@ -166,18 +166,18 @@ export default function FaucetPage() {
           const rc: bigint = await contractView.remainingCooldown(await signer.getAddress());
           if (rc > BigInt(0)) {
             const seconds = Number(rc);
-            setStatus(`Devi attendere ancora ${seconds} secondi prima del prossimo prelievo (cooldown attivo).`);
+            setStatus(`You must wait ${seconds} more seconds before the next claim (cooldown active).`);
             return;
           }
         }
       } catch {}
-      setStatus("Errore durante il claim. Riprova più tardi.");
+      setStatus("Error during claim. Please try again later.");
     }
   }
 
   async function importToken(symbol: string, tokenAddress: string, decimals: number) {
     try {
-      if (!(window as any).ethereum) throw new Error("MetaMask non disponibile");
+      if (!(window as any).ethereum) throw new Error("MetaMask not available");
       const wasAdded = await (window as any).ethereum.request({
         method: "wallet_watchAsset",
         params: {
@@ -189,10 +189,10 @@ export default function FaucetPage() {
           },
         },
       });
-      if (wasAdded) setStatus(`${symbol} importato su MetaMask`);
-      else setStatus(`Import di ${symbol} annullato`);
+      if (wasAdded) setStatus(`${symbol} imported to MetaMask`);
+      else setStatus(`Import of ${symbol} cancelled`);
     } catch (e: any) {
-      setStatus(e?.message || `Errore import ${symbol}`);
+      setStatus(e?.message || `Error importing ${symbol}`);
     }
   }
 
@@ -259,11 +259,11 @@ export default function FaucetPage() {
         <div
           className={
             `mt-4 rounded-md border p-3 text-sm ` +
-            (status.includes("Claim eseguito") || status.includes("Claim executed")
+            (status.includes("Claim executed")
               ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-              : status.includes("Controlla la tua email") || status.includes("Check your email")
+              : status.includes("Check your email")
               ? "border-blue-300 bg-blue-50 text-blue-800"
-              : status.includes("Errore") || status.includes("error") || status.includes("failed")
+              : status.includes("Error") || status.includes("error") || status.includes("failed")
               ? "border-red-300 bg-red-50 text-red-800"
               : "border-gray-300 bg-gray-50 text-gray-800")
           }
