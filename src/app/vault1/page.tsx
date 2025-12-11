@@ -8,6 +8,7 @@ export default function Vault1Page() {
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [address, setAddress] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
 
   const [usdkInVault, setUsdkInVault] = useState<string>("0");
   const [susdkBalance, setSusdkBalance] = useState<string>("0");
@@ -108,7 +109,10 @@ export default function Vault1Page() {
       // Call deposit on Controller
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
       await (await controllerC.depositUSDC(amount)).wait();
+      setStatus("Deposito eseguito.");
       await refresh();
+    } catch (e: any) {
+      setStatus(e?.message || "Errore nel deposito");
     } finally {
       setLoading(false);
     }
@@ -123,7 +127,10 @@ export default function Vault1Page() {
       const shares = ethers.parseUnits(sharesStr || "0", dec);
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
       await (await controllerC.withdrawShares(shares)).wait();
+      setStatus("Prelievo eseguito.");
       await refresh();
+    } catch (e: any) {
+      setStatus(e?.message || "Errore nel prelievo");
     } finally {
       setLoading(false);
     }
@@ -135,48 +142,70 @@ export default function Vault1Page() {
     try {
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
       await (await controllerC.compoundGlobal()).wait();
+      setStatus("Compound eseguito.");
       await refresh();
+    } catch (e: any) {
+      setStatus(e?.message || "Errore nel compound");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold">StableVault</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="rounded-xl border p-4">
+        <div className="rounded-xl border p-4 bg-white">
           <div className="text-sm text-gray-500">USDK nel Vault</div>
           <div className="text-xl font-medium">{usdkInVault}</div>
         </div>
-        <div className="rounded-xl border p-4">
+        <div className="rounded-xl border p-4 bg-white">
           <div className="text-sm text-gray-500">sUSDK dell’utente</div>
           <div className="text-xl font-medium">{susdkBalance}</div>
         </div>
-        <div className="rounded-xl border p-4">
+        <div className="rounded-xl border p-4 bg-white">
           <div className="text-sm text-gray-500">Rendimento maturato (pending)</div>
           <div className="text-xl font-medium">{pendingRewards}</div>
         </div>
       </div>
-      <div className="rounded-xl border p-4">
+      <div className="rounded-xl border p-4 bg-white">
         <div className="text-sm text-gray-500">APY</div>
         <div className="text-xl font-medium">{apy}</div>
       </div>
-
-      <div className="rounded-xl border p-4 space-y-3">
+      <div className="rounded-xl border p-4 space-y-3 bg-white">
         <h2 className="text-lg font-semibold">Azioni</h2>
-        <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
-          <input name="amount" type="number" step="any" placeholder="USDC da depositare" className="input input-bordered w-full p-2 border rounded" />
-          <button type="button" className="px-3 py-2 rounded border" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
-          <button className="btn px-4 py-2 rounded bg-black text-white" disabled={loading}>Deposita</button>
+        <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
+          <label className="block text-sm font-medium" htmlFor="vault-deposit">USDC da depositare</label>
+          <div className="flex items-center gap-2">
+            <input id="vault-deposit" name="amount" type="number" step="any" placeholder="USDC da depositare" className="w-full rounded-md border px-3 py-2" />
+            <button type="button" className="rounded-md border px-3 py-2" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
+            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Deposita</button>
+          </div>
         </form>
-        <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
-          <input name="shares" type="number" step="any" placeholder="sUSDK da ritirare" className="input input-bordered w-full p-2 border rounded" />
-          <button type="button" className="px-3 py-2 rounded border" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
-          <button className="btn px-4 py-2 rounded bg-black text-white" disabled={loading}>Withdraw</button>
+        <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
+          <label className="block text-sm font-medium" htmlFor="vault-withdraw">sUSDK da ritirare</label>
+          <div className="flex items-center gap-2">
+            <input id="vault-withdraw" name="shares" type="number" step="any" placeholder="sUSDK da ritirare" className="w-full rounded-md border px-3 py-2" />
+            <button type="button" className="rounded-md border px-3 py-2" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
+            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Withdraw</button>
+          </div>
         </form>
-        <button className="btn px-4 py-2 rounded bg-black text-white" onClick={onCompound} disabled={loading}>Compound</button>
+        <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-full" onClick={onCompound} disabled={loading}>Compound</button>
       </div>
+      {status && (
+        <div
+          className={
+            `mt-4 rounded-md border p-3 text-sm ` +
+            (status.includes("eseguito")
+              ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+              : status.includes("Errore") || status.includes("error") || status.includes("failed")
+              ? "border-red-300 bg-red-50 text-red-800"
+              : "border-gray-300 bg-gray-50 text-gray-800")
+          }
+        >
+          {status}
+        </div>
+      )}
     </div>
   );
 }
