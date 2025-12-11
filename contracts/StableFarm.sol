@@ -58,6 +58,26 @@ contract StableFarm {
         d.lastAccrual = block.timestamp;
     }
 
+    // Controller-compatible: stake USDC from caller (e.g., Controller)
+    function stake(uint256 amount) external {
+        require(amount > 0, "AMOUNT_ZERO");
+        _accrue(msg.sender);
+        require(usdc.transferFrom(msg.sender, address(this), amount), "USDC_TRANSFER_FAIL");
+        deposits[msg.sender].amount += amount;
+        emit Deposited(msg.sender, amount);
+    }
+
+    // Controller-compatible: unstake USDC back to caller
+    function unstake(uint256 amount) external {
+        DepositInfo storage d = deposits[msg.sender];
+        require(amount > 0 && amount <= d.amount, "BAD_AMOUNT");
+        _accrue(msg.sender);
+        d.amount -= amount;
+        require(usdc.transfer(msg.sender, amount), "USDC_TRANSFER_FAIL");
+        emit Withdrawn(msg.sender, amount);
+    }
+
+    // Original user deposit (legacy)
     function deposit(uint256 amount) external {
         require(amount > 0, "AMOUNT_ZERO");
         _accrue(msg.sender);
@@ -66,6 +86,7 @@ contract StableFarm {
         emit Deposited(msg.sender, amount);
     }
 
+    // Original user withdraw (legacy)
     function withdraw(uint256 amount) external {
         DepositInfo storage d = deposits[msg.sender];
         require(amount > 0 && amount <= d.amount, "BAD_AMOUNT");
@@ -75,26 +96,18 @@ contract StableFarm {
         emit Withdrawn(msg.sender, amount);
     }
 
-    function claim() external {
-        _accrue(msg.sender);
-        uint256 r = deposits[msg.sender].rewards;
-        require(r > 0, "NO_REWARDS");
-        deposits[msg.sender].rewards = 0;
-        // pay rewards in USDC to simplify
-        require(usdc.transfer(msg.sender, r), "USDC_TRANSFER_FAIL");
-        emit RewardsClaimed(msg.sender, r);
-    }
-
-    function balanceOf(address user) external view returns (uint256) {
-        return deposits[user].amount;
-    }
-
-    function pendingRewards(address user) external view returns (uint256) {
-        DepositInfo memory d = deposits[user];
+    // Controller-compatible: global pending rewards (simple sum for caller)
+    function pendingRewards() external view returns (uint256) {
+        DepositInfo memory d = deposits[msg.sender];
         if (d.amount == 0) return d.rewards;
         uint256 dt = block.timestamp - d.lastAccrual;
         uint256 rewards = d.amount * apr1e18 * dt / (365 days) / 1e18;
         return d.rewards + rewards;
+    }
+
+    // Controller-compatible: compound (no-op for simple farm)
+    function compound() external {
+        // No-op in this mock farm; rewards accrue linearly
     }
 
     // Owner funding to pay rewards/fees

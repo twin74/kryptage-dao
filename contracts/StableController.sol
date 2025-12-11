@@ -41,11 +41,12 @@ contract StableController {
 
     event Deposited(address indexed user, uint256 usdcAmount, uint256 sharesMinted);
     event Harvested(uint256 rewardUSDC, uint256 mintedUSDK, uint256 ktgPoints);
-    event Compounded(uint256 timestamp);
+    event Compounded(uint256 timestamp, uint256 amount);
     event Withdrawn(address indexed user, uint256 sharesBurned, uint256 usdkOut);
     event Paused(address indexed by);
     event Unpaused(address indexed by);
     event OwnerChanged(address indexed oldOwner, address indexed newOwner);
+    event FarmChanged(address indexed oldFarm, address indexed newFarm);
 
     modifier onlyOwner() { require(msg.sender == owner, "NOT_OWNER"); _; }
     modifier whenNotPaused() { require(!paused, "PAUSED"); _; }
@@ -101,10 +102,26 @@ contract StableController {
         emit Harvested(reward, usdkPart, ktgPart);
     }
 
-    // Compound only USDK (no KTG points)
-    function compoundGlobal() external onlyOwner whenNotPaused nonReentrant {
+    // Compound: claim rewards and restake into Farm
+    function compoundGlobal() external whenNotPaused nonReentrant {
         require(initialized, "NOT_INIT");
-        emit Compounded(block.timestamp);
+        // get pending rewards
+        uint256 pending = farm.pendingRewards();
+        if (pending == 0) {
+            emit Compounded(block.timestamp, 0);
+            return;
+        }
+        // claim rewards (USDC) to this controller
+        uint256 claimed = farm.claim();
+        require(claimed > 0, "NO_CLAIM");
+        // safe approve pattern (handles strict tokens)
+        // reset allowance if needed
+        usdc.approve(address(farm), 0);
+        // set allowance to claimed
+        require(usdc.approve(address(farm), claimed), "APPROVE_FAIL");
+        // restake rewards
+        farm.stake(claimed);
+        emit Compounded(block.timestamp, claimed);
     }
 
     // Withdraw by burning sUSDK shares; user receives USDK, USDC are balanced via pool by vault
@@ -116,5 +133,17 @@ contract StableController {
         usdk.mint(msg.sender, shares);
         emit Withdrawn(msg.sender, shares, shares);
         // Note: vault/pool must handle USDC removal from farm and maintain 1:1 via mint/burn separately.
+    }
+
+    function setFarm(address _farm) external onlyOwner {
+        require(_farm != address(0), "BAD_FARM");
+        emit FarmChanged(address(farm), _farm);
+        farm = IStableFarm(_farm);
+    }
+
+    function setAllowance(uint256 amount) external onlyOwner whenNotPaused {
+        // safe approve pattern
+        usdc.approve(address(farm), 0);
+        require(usdc.approve(address(farm), amount), "APPROVE_FAIL");
     }
 }

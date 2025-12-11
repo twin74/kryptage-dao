@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-interface IERC20 {
+interface IERC20Minimal {
     function balanceOf(address) external view returns (uint256);
     function transfer(address to, uint256 amount) external returns (bool);
     function transferFrom(address from, address to, uint256 amount) external returns (bool);
@@ -9,14 +9,12 @@ interface IERC20 {
     function decimals() external view returns (uint8);
 }
 
-// Minimal USDK interface (proxy address will be used on-chain)
 interface IUSDK {
     function mint(address to, uint256 amount) external;
     function burn(address from, uint256 amount) external;
     function decimals() external view returns (uint8);
 }
 
-// Minimal StableFarm interface
 interface IStableFarm {
     function stake(uint256 amount) external;
     function unstake(uint256 amount) external;
@@ -24,10 +22,10 @@ interface IStableFarm {
     function compound() external;
 }
 
-import "./ERC20.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
-contract StableVault is ERC20 {
-    IERC20 public usdc;
+contract StableVault is ERC20Upgradeable {
+    IERC20Minimal public usdc;
     IUSDK public usdk;
     IStableFarm public stableFarm;
 
@@ -46,10 +44,10 @@ contract StableVault is ERC20 {
     event ControllerChanged(address indexed oldController, address indexed newController);
 
     // initializer per proxy (invece del costruttore)
-    function initialize(address _usdc, address _usdk, address _farm) external {
-        require(!initialized, "ALREADY_INITIALIZED");
+    function initialize(address _usdc, address _usdk, address _farm) external initializer {
         require(_usdc != address(0) && _usdk != address(0) && _farm != address(0), "BAD_ADDR");
-        usdc = IERC20(_usdc);
+        __ERC20_init("sUSDK", "sUSDK");
+        usdc = IERC20Minimal(_usdc);
         usdk = IUSDK(_usdk);
         stableFarm = IStableFarm(_farm);
         initialized = true;
@@ -126,14 +124,13 @@ contract StableVault is ERC20 {
     }
 
     // Harvest (legacy single-user) non più mint su utente: lasciare alla logica controller globale
-    function harvest(address /*user*/ ) external {
-        require(initialized, "NOT_INIT");
+    function harvest(address /*user*/ ) external pure {
         // Defer to controller for global harvest & pro-rata distribution
         revert("USE_CONTROLLER");
     }
 
     // Compound globale (legacy): deferito al controller
-    function compoundGlobal() external {
+    function compoundGlobal() external pure {
         revert("USE_CONTROLLER");
     }
 
@@ -142,12 +139,5 @@ contract StableVault is ERC20 {
         require(amount > 0, "AMOUNT_ZERO");
         _burn(msg.sender, amount);
         require(usdc.transfer(msg.sender, amount), "USDC_TRANSFER_FAIL");
-    }
-
-    function _burn(address from, uint256 value) internal {
-        require(balanceOf[from] >= value, "INSUFFICIENT_BALANCE");
-        unchecked { balanceOf[from] -= value; }
-        totalSupply -= value;
-        emit Transfer(from, address(0), value);
     }
 }
