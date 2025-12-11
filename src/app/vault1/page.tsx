@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
+import USDKIcon from '@/components/icons/USDK.svg';
 
-const usdkIcon = "/USDK.svg";
 const susdkIcon = "/USDK.svg";
 
 export default function Vault1Page() {
@@ -166,7 +166,7 @@ export default function Vault1Page() {
       <p className="text-sm text-white mb-2">Deposita USDC, ricevi USDK, accumula rendimenti e preleva. Tutte le operazioni sono gestite dal controller.</p>
       <div className="space-y-6">
         <div className="rounded-xl border p-6 bg-white flex items-center gap-3 w-full">
-          <img src={usdkIcon} alt="USDK" className="h-8 w-8 rounded" />
+          <USDKIcon className="h-8 w-8 text-blue-500" />
           <div>
             <div className="text-sm text-gray-600">USDK nel Vault</div>
             <div className="text-2xl font-bold text-gray-900">{usdkInVault}</div>
@@ -187,31 +187,30 @@ export default function Vault1Page() {
               <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
             </div>
           </div>
-          <div className="rounded-xl border p-4 bg-white flex flex-col justify-center col-span-1 w-32">
-            <div className="text-sm text-gray-600">APY</div>
-            <div className="text-xl font-semibold text-gray-900">{apy}</div>
+          <div className="rounded-xl border p-2 bg-white flex flex-col justify-center col-span-1 w-16">
+            <div className="text-xs text-gray-600">APY</div>
+            <div className="text-lg font-semibold text-gray-900">{apy}</div>
           </div>
         </div>
-      </div>
-      <div className="rounded-xl border p-6 space-y-4 bg-white">
-        <h2 className="text-lg font-semibold text-gray-900">Azioni</h2>
-        <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="vault-deposit">Deposita USDC</label>
-          <div className="flex items-center gap-2">
-            <input id="vault-deposit" name="amount" type="number" step="any" placeholder="USDC da depositare" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50" />
-            <button type="button" className="rounded-md border px-3 py-2 text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
-            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Deposita</button>
-          </div>
-        </form>
-        <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="vault-withdraw">Preleva sUSDK</label>
-          <div className="flex items-center gap-2">
-            <input id="vault-withdraw" name="shares" type="number" step="any" placeholder="sUSDK da ritirare" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50" />
-            <button type="button" className="rounded-md border px-3 py-2 text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
-            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Withdraw</button>
-          </div>
-        </form>
-        <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-full" onClick={onCompound} disabled={loading}>Compound</button>
+        <div className="space-y-4 mt-8">
+          <h2 className="text-lg font-semibold text-white">Azioni</h2>
+          <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
+            <label className="block text-sm font-medium text-white" htmlFor="vault-deposit">Deposita USDC</label>
+            <div className="flex items-center gap-2">
+              <input id="vault-deposit" name="amount" type="number" step="any" placeholder="USDC da depositare" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50" />
+              <button type="button" className="rounded-md border px-3 py-2 text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
+              <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Deposita</button>
+            </div>
+          </form>
+          <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
+            <label className="block text-sm font-medium text-white" htmlFor="vault-withdraw">Preleva sUSDK</label>
+            <div className="flex items-center gap-2">
+              <input id="vault-withdraw" name="shares" type="number" step="any" placeholder="sUSDK da ritirare" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50" />
+              <button type="button" className="rounded-md border px-3 py-2 text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest("form") as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
+              <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Withdraw</button>
+            </div>
+          </form>
+        </div>
       </div>
       {status && (
         <div
