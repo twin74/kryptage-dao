@@ -72,6 +72,12 @@ contract StableController {
     function pause() external onlyOwner { paused = true; emit Paused(msg.sender); }
     function unpause() external onlyOwner { paused = false; emit Unpaused(msg.sender); }
 
+    // Convert USDC (18 decimals) amount to USDK (6 decimals)
+    function _toUSDK(uint256 usdcAmount) internal pure returns (uint256) {
+        // assumes USDC=18, USDK=6 -> divide by 1e12
+        return usdcAmount / 1_000_000_000_000;
+    }
+
     // Deposit USDC -> stake in Farm, mint USDK into vault, mint sUSDK (shares) to user
     function depositUSDC(uint256 amount) external whenNotPaused nonReentrant {
         require(initialized, "NOT_INIT");
@@ -79,8 +85,10 @@ contract StableController {
         require(usdc.transferFrom(msg.sender, address(this), amount), "USDC_XFER_FAIL");
         require(usdc.approve(address(farm), amount), "USDC_APPROVE_FAIL");
         farm.stake(amount);
-        usdk.mint(address(vault), amount);
-        vault.depositUSDK(amount);
+        // normalize 18-dec USDC to 6-dec USDK
+        uint256 mintAmount = _toUSDK(amount);
+        usdk.mint(address(vault), mintAmount);
+        vault.depositUSDK(mintAmount);
         vault.mintShares(msg.sender, amount);
         emit Deposited(msg.sender, amount, amount);
     }
@@ -94,12 +102,13 @@ contract StableController {
         uint256 claimed = farm.claim();
         uint256 reward = claimed;
         if (reward == 0) reward = pending;
-        uint256 usdkPart = (reward * 5) / 6; // 83.33%
-        uint256 ktgPart = reward - usdkPart;  // 16.66%
+        // normalize reward from USDC(18) to USDK(6)
+        uint256 rewardUsdkUnits = _toUSDK(reward);
+        uint256 usdkPart = (rewardUsdkUnits * 5) / 6; // 83.33%
+        uint256 ktgPart = rewardUsdkUnits - usdkPart;  // 16.66%
         usdk.mint(address(vault), usdkPart);
         vault.depositUSDK(usdkPart);
-        // TODO: account ktgPart as KTG points pro-rata via separate contract
-        emit Harvested(reward, usdkPart, ktgPart);
+        emit Harvested(rewardUsdkUnits, usdkPart, ktgPart);
     }
 
     // Compound: claim rewards and restake into Farm
