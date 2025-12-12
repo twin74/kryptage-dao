@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { KLogo } from "@/components/Header";
 import { UsdkIcon, SusdkIcon } from "@/components/TokenIcons";
+import { Card, PageShell } from "@/components/UI";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -367,12 +368,12 @@ export default function Vault1Page() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
-      <h1 className="text-2xl font-semibold">Stable Vault</h1>
-      <p className="text-sm text-white mb-2">Deposit USDC, receive USDK, earn yield in USDK and KTG airdrop points.</p>
-
+    <PageShell
+      title="Stable Vault"
+      subtitle="Deposit USDC, receive USDK, earn yield in USDK and KTG airdrop points."
+    >
       {!address && (
-        <div className="rounded-md border border-yellow-300 bg-yellow-50 text-yellow-900 p-3 text-sm">
+        <div className="rounded-md border border-amber-800 bg-amber-950/40 text-amber-200 p-3 text-sm">
           Wallet not connected.
           <button className="ml-2 underline" onClick={connectWallet} disabled={loading}>
             Connect
@@ -380,104 +381,125 @@ export default function Vault1Page() {
         </div>
       )}
 
-      <div className="flex gap-4 w-full">
-        {/* sUSDK balance box */}
-        <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <Card className="flex flex-col items-center">
           <SusdkIcon className="h-8 w-8 rounded mb-2" />
-          <div className="text-xs text-gray-800 font-bold">USDK Balance</div>
-          <div className="text-xl font-semibold text-gray-900">{susdkBalance}</div>
-        </div>
-        {/* Yield box */}
-        <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
+          <div className="text-xs text-slate-400 font-semibold">Your USDK Staked</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{susdkBalance}</div>
+        </Card>
+
+        <Card className="flex flex-col items-center">
           <UsdkIcon className="h-8 w-8 mb-2" />
-          <div className="text-xs text-gray-800 font-bold">Yield earned (pending)</div>
-          <div className="text-xl font-semibold text-gray-900">{pendingRewardsTotalEst}</div>
-        </div>
-        {/* KTG Airdrop Points box */}
-        <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
+          <div className="text-xs text-slate-400 font-semibold">Yield earned (pending)</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{pendingRewardsTotalEst}</div>
+        </Card>
+
+        <Card className="flex flex-col items-center">
           <KLogo className="h-8 w-8 mb-2" />
-          <div className="text-xs text-gray-800 font-bold">KTG Airdrop Points</div>
-          <div className="text-xl font-semibold text-gray-900">{ktgPoints}</div>
-        </div>
+          <div className="text-xs text-slate-400 font-semibold">KTG Airdrop Points</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{ktgPoints}</div>
+        </Card>
       </div>
 
-      <div className="flex gap-4 w-full mt-4">
-        {/* USDK in Vault box - width: 2/3 + 16px, min-w-256px */}
-        <div className="rounded-xl border p-6 bg-white flex flex-col items-center min-w-[256px]" style={{ width: "calc(66.6667% + 16px)" }}>
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <Card className="md:col-span-2 flex flex-col items-center">
           <UsdkIcon className="h-8 w-8 mb-2" />
-          <div className="text-xs text-gray-800 font-bold">USDK in Vault</div>
-          <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
-        </div>
-        {/* APY box - same as KTG Airdrop Points */}
-        <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
-          <div className="flex flex-col items-center justify-center h-full w-full">
-            <div className="text-xs text-gray-800 font-bold">APY</div>
-            <div className="text-xl font-semibold text-gray-900">{apy}</div>
-          </div>
-        </div>
+          <div className="text-xs text-slate-400 font-semibold">Total USDK in Vault</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{usdkInVault}</div>
+        </Card>
+
+        <Card className="flex flex-col items-center justify-center">
+          <div className="text-xs text-slate-400 font-semibold">APY</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{apy}</div>
+        </Card>
       </div>
 
-      <div className="space-y-4 mt-8">
-        <h2 className="text-lg font-semibold text-white">Actions</h2>
-        <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
-          <label className="block text-sm font-medium text-white" htmlFor="vault-deposit">
-            Deposit USDC
-          </label>
-          <div className="flex items-center gap-2">
-            <div className="relative w-full">
-              <input id="vault-deposit" name="amount" type="text" inputMode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="USDC to deposit" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50 appearance-none pr-14" />
-              <button
-                type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-2 py-0.5 text-xs text-gray-900"
-                onClick={(e) => {
-                  const form = (e.currentTarget.closest("form") as any);
-                  if (form && form.amount) form.amount.value = sanitizeNumericInput(usdcBalance);
-                }}
-              >
-                Max
-              </button>
-            </div>
-            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>Deposit</button>
-          </div>
-        </form>
-        <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
-          <label className="block text-sm font-medium text-white" htmlFor="vault-withdraw">
-            Withdraw USDK
-          </label>
-          <div className="flex items-center gap-2">
-            <div className="relative w-full">
-              <input id="vault-withdraw" name="shares" type="text" inputMode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="USDK to withdraw" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50 appearance-none pr-14" />
-              <button
-                type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-2 py-0.5 text-xs text-gray-900"
-                onClick={(e) => {
-                  const form = (e.currentTarget.closest("form") as any);
-                  if (form && form.shares) form.shares.value = sanitizeNumericInput(susdkBalance);
-                }}
-              >
-                Max
-              </button>
-            </div>
-            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>Withdraw</button>
-          </div>
-        </form>
-      </div>
+      <Card className="mt-8">
+        <h2 className="text-lg font-semibold">Actions</h2>
 
-      {/* Status/feedback area, armonizzato con faucet */}
-      {status && (
-        <div
-          className={
-            `mt-4 rounded-md border p-3 text-sm ` +
-            (status.includes("success")
-              ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-              : status.includes("error") || status.includes("failed")
-              ? "border-red-300 bg-red-50 text-red-800"
-              : "border-gray-300 bg-gray-50 text-gray-800")
-          }
-        >
-          {status}
+        <div className="mt-4 grid grid-cols-1 gap-6">
+          <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
+            <label className="block text-sm font-medium text-slate-200" htmlFor="vault-deposit">
+              Deposit USDC
+            </label>
+            <div className="flex items-center gap-2">
+              <div className="relative w-full">
+                <input
+                  id="vault-deposit"
+                  name="amount"
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9]*[.,]?[0-9]*"
+                  placeholder="USDC to deposit"
+                  className="w-full rounded-md border border-slate-700 bg-slate-950/30 px-3 py-2 text-slate-100 appearance-none pr-14"
+                />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-900"
+                  onClick={(e) => {
+                    const form = (e.currentTarget.closest("form") as any);
+                    if (form && form.amount) form.amount.value = sanitizeNumericInput(usdcBalance);
+                  }}
+                >
+                  Max
+                </button>
+              </div>
+              <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>
+                Deposit
+              </button>
+            </div>
+          </form>
+
+          <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
+            <label className="block text-sm font-medium text-slate-200" htmlFor="vault-withdraw">
+              Withdraw USDK
+            </label>
+            <div className="flex items-center gap-2">
+              <div className="relative w-full">
+                <input
+                  id="vault-withdraw"
+                  name="shares"
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9]*[.,]?[0-9]*"
+                  placeholder="USDK to withdraw"
+                  className="w-full rounded-md border border-slate-700 bg-slate-950/30 px-3 py-2 text-slate-100 appearance-none pr-14"
+                />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-900"
+                  onClick={(e) => {
+                    const form = (e.currentTarget.closest("form") as any);
+                    if (form && form.shares) form.shares.value = sanitizeNumericInput(susdkBalance);
+                  }}
+                >
+                  Max
+                </button>
+              </div>
+              <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>
+                Withdraw
+              </button>
+            </div>
+          </form>
+
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="rounded-md border border-slate-700 bg-slate-950/30 px-4 py-2 text-sm text-slate-200 hover:bg-slate-900 disabled:opacity-50"
+              onClick={onCompound}
+              disabled={loading}
+            >
+              Compound
+            </button>
+          </div>
         </div>
-      )}
-    </div>
+
+        {status && (
+          <div className="mt-4 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-sm text-slate-200">
+            {status}
+          </div>
+        )}
+      </Card>
+    </PageShell>
   );
 }

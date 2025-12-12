@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import { Card, PageShell, SecondaryButton } from "@/components/UI";
+import { useEffect, useState } from "react";
 
 type Entry = {
   wallet: string;
@@ -17,58 +18,44 @@ export default function AirdropPage() {
   const [error, setError] = useState<string | null>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
 
+  const load = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/airdrop/leaderboard?limit=10", { cache: "no-store" });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json?.error || "Failed to load leaderboard");
+      setEntries((json?.entries || []) as Entry[]);
+    } catch (e: any) {
+      setError(e?.message || "Failed to load leaderboard");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     let alive = true;
-    const run = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetch("/api/airdrop/leaderboard?limit=10", { cache: "no-store" });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json?.error || "Failed to load leaderboard");
-        if (alive) setEntries((json?.entries || []) as Entry[]);
-      } catch (e: any) {
-        if (alive) setError(e?.message || "Failed to load leaderboard");
-      } finally {
-        if (alive) setLoading(false);
-      }
-    };
-    run();
+    (async () => {
+      if (!alive) return;
+      await load();
+    })();
     return () => {
       alive = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <h1 className="text-2xl font-semibold mb-4">Airdrop</h1>
-      <p className="text-slate-300">
-        Connect your wallet and stay tuned for upcoming airdrop campaigns. This page will display eligibility and claim options when available.
-      </p>
-
-      <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900/40 p-6">
+    <PageShell
+      title="Airdrop"
+      subtitle="Track your points and follow the leaderboard. Campaign eligibility and claiming will be available here."
+    >
+      <Card>
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Leaderboard (Top 10)</h2>
-          <button
-            className="rounded-md border border-slate-700 px-3 py-1 text-sm text-slate-200 hover:bg-slate-800 disabled:opacity-50"
-            disabled={loading}
-            onClick={async () => {
-              setLoading(true);
-              setError(null);
-              try {
-                const res = await fetch("/api/airdrop/leaderboard?limit=10", { cache: "no-store" });
-                const json = await res.json();
-                if (!res.ok) throw new Error(json?.error || "Failed to load leaderboard");
-                setEntries((json?.entries || []) as Entry[]);
-              } catch (e: any) {
-                setError(e?.message || "Failed to load leaderboard");
-              } finally {
-                setLoading(false);
-              }
-            }}
-          >
+          <SecondaryButton disabled={loading} onClick={load}>
             Refresh
-          </button>
+          </SecondaryButton>
         </div>
 
         {error && <div className="mt-3 rounded-md border border-red-800 bg-red-950/40 p-3 text-sm text-red-200">{error}</div>}
@@ -147,7 +134,7 @@ export default function AirdropPage() {
           </div>
           <div className="mt-2 text-xs text-slate-400">Newsletter signup integration coming soon.</div>
         </div>
-      </div>
-    </div>
+      </Card>
+    </PageShell>
   );
 }

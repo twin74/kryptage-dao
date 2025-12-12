@@ -1,5 +1,5 @@
 {
-  "_format": "hh3-artifact-1",
+  "_format": "hh-sol-artifact-1",
   "contractName": "IERC20Ex",
   "sourceName": "contracts/LendingPool.sol",
   "abi": [
@@ -79,8 +79,5 @@
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "linkReferences": {},
-  "deployedLinkReferences": {},
-  "immutableReferences": {},
-  "inputSourceName": "project/contracts/LendingPool.sol",
-  "buildInfoId": "solc-0_8_23-bbe8a019afd44ddca0c1139a015d172564bd9268"
+  "deployedLinkReferences": {}
 }
