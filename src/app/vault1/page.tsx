@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { KLogo } from "@/components/Header";
 import { UsdkIcon, SusdkIcon } from "@/components/TokenIcons";
@@ -14,7 +14,9 @@ export default function Vault1Page() {
 
   const [usdkInVault, setUsdkInVault] = useState<string>("0");
   const [susdkBalance, setSusdkBalance] = useState<string>("0");
-  const [pendingRewards, setPendingRewards] = useState<string>("0");
+  const [pendingRewardsOnchain, setPendingRewardsOnchain] = useState<string>("0");
+  const [pendingRewardsFarmEst, setPendingRewardsFarmEst] = useState<string>("0");
+  const [pendingRewardsTotalEst, setPendingRewardsTotalEst] = useState<string>("0");
   const [apy, setApy] = useState<string>("0");
   const [usdcBalance, setUsdcBalance] = useState<string>("0");
 
@@ -64,7 +66,11 @@ export default function Vault1Page() {
   }, []);
 
   const formatUnits = (value: bigint, decimals = 18) => {
-    try { return ethers.formatUnits(value, decimals); } catch { return "0"; }
+    try {
+      return ethers.formatUnits(value, decimals);
+    } catch {
+      return "0";
+    }
   };
 
   const refresh = async () => {
@@ -83,32 +89,74 @@ export default function Vault1Page() {
         usdcC.decimals(),
         farmC.apr1e18(),
       ]);
-      const [usdkBalVault, susdkBalUser, userRewards, usdcBalUser] = await Promise.all([
+
+      const [
+        usdkBalVault,
+        susdkBalUser,
+        susdkTotal,
+        usdcBalUser,
+        userPendingOnchain,
+        globalPendingFarm,
+      ] = await Promise.all([
         usdkC.balanceOf(VAULT),
         susdkC.balanceOf(address),
-        controllerC.pendingRewards(address),
+        susdkC.totalSupply(),
         usdcC.balanceOf(address),
+        controllerC.pendingRewards(address),
+        farmC.pendingRewards(CONTROLLER),
       ]);
+
       setUsdkInVault(
         Number(formatUnits(usdkBalVault, usdkDec)).toLocaleString(undefined, {
           maximumFractionDigits: 0,
         })
       );
+
+      const susdkBalUserNum = Number(formatUnits(susdkBalUser, susdkDec));
+      const susdkTotalNum = Number(formatUnits(susdkTotal, susdkDec));
+
       setSusdkBalance(
-        Number(formatUnits(susdkBalUser, susdkDec)).toLocaleString(undefined, {
+        susdkBalUserNum.toLocaleString(undefined, {
           maximumFractionDigits: 1,
           minimumFractionDigits: 1,
         })
       );
-      // userRewards è in USDK (6 decimali)
-      setPendingRewards(
-        Number(formatUnits(userRewards, 6)).toLocaleString(undefined, {
+
+      // On-chain pending (controller, in USDK 6 decimali)
+      const userOnchainNum = Number(formatUnits(userPendingOnchain, 6));
+      setPendingRewardsOnchain(
+        userOnchainNum.toLocaleString(undefined, {
           maximumFractionDigits: 4,
           minimumFractionDigits: 4,
         })
       );
+
+      // Quota stimata dei rewards ancora in Farm per il controller
+      let userFarmEstNum = 0;
+      if (susdkTotalNum > 0 && susdkBalUserNum > 0) {
+        const userShare = susdkBalUserNum / susdkTotalNum;
+        const globalPendingNum = Number(formatUnits(globalPendingFarm, 18)); // USDC 18 dec
+        const globalPendingUsdkNum = globalPendingNum / 1e12; // converti da 18 a 6 dec (USDK-like)
+        userFarmEstNum = globalPendingUsdkNum * userShare;
+      }
+
+      setPendingRewardsFarmEst(
+        userFarmEstNum.toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+          minimumFractionDigits: 4,
+        })
+      );
+
+      const totalEst = userOnchainNum + userFarmEstNum;
+      setPendingRewardsTotalEst(
+        totalEst.toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+          minimumFractionDigits: 4,
+        })
+      );
+
       setUsdcBalance(formatUnits(usdcBalUser, usdcDec));
-      // APY = apr1e18 / 6 * 5
+
       const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
       setApy(((aprPercent / 6) * 5).toFixed(2) + "%");
     } finally {
@@ -116,7 +164,9 @@ export default function Vault1Page() {
     }
   };
 
-  useEffect(() => { refresh(); }, [provider, address]);
+  useEffect(() => {
+    refresh();
+  }, [provider, address]);
 
   const isUserRejected = (e: any) => {
     // ethers v6: code === 'ACTION_REJECTED' or error.code === 4001 or error.message includes 'denied'
@@ -222,7 +272,7 @@ export default function Vault1Page() {
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
           <UsdkIcon className="h-8 w-8 mb-2" />
           <div className="text-xs text-gray-800 font-bold">Yield earned (pending)</div>
-          <div className="text-xl font-semibold text-gray-900">{pendingRewards}</div>
+          <div className="text-xl font-semibold text-gray-900">{pendingRewardsOnchain} (+{pendingRewardsFarmEst})</div>
         </div>
         {/* KTG Airdrop Points box */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
