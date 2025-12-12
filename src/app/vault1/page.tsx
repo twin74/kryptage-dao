@@ -53,17 +53,71 @@ export default function Vault1Page() {
     "function stake(uint256 amount)",
   ];
 
+  const resetWalletState = () => {
+    setSigner(null);
+    setAddress("");
+    // reset UI numbers
+    setUsdkInVault("0");
+    setSusdkBalance("0");
+    setPendingRewardsOnchain("0");
+    setPendingRewardsFarmEst("0");
+    setPendingRewardsTotalEst("0");
+    setApy("0");
+    setUsdcBalance("0");
+  };
+
   useEffect(() => {
-    if (typeof window !== "undefined" && (window as any).ethereum) {
-      const p = new ethers.BrowserProvider((window as any).ethereum);
-      setProvider(p);
-      p.send("eth_requestAccounts", []).then(async () => {
-        const s = await p.getSigner();
-        setSigner(s);
-        setAddress(await s.getAddress());
-      });
-    }
+    const eth = (window as any)?.ethereum;
+    if (typeof window === "undefined" || !eth) return;
+
+    const p = new ethers.BrowserProvider(eth);
+    setProvider(p);
+
+    const syncAccounts = async (accounts?: string[]) => {
+      const accs = accounts ?? (await p.send("eth_accounts", []));
+      if (!accs || accs.length === 0) {
+        resetWalletState();
+        return;
+      }
+      const s = await p.getSigner();
+      setSigner(s);
+      setAddress(await s.getAddress());
+    };
+
+    // initial: don't force connect; just sync if already connected
+    syncAccounts();
+
+    const onAccountsChanged = (accounts: string[]) => {
+      // when user disconnects all accounts -> reset
+      // when user switches account -> update + refresh
+      syncAccounts(accounts);
+    };
+
+    const onDisconnect = () => {
+      resetWalletState();
+    };
+
+    eth.on?.("accountsChanged", onAccountsChanged);
+    eth.on?.("disconnect", onDisconnect);
+
+    return () => {
+      eth.removeListener?.("accountsChanged", onAccountsChanged);
+      eth.removeListener?.("disconnect", onDisconnect);
+    };
   }, []);
+
+  const connectWallet = async () => {
+    const eth = (window as any)?.ethereum;
+    if (!provider || !eth) return;
+    try {
+      await provider.send("eth_requestAccounts", []);
+      const s = await provider.getSigner();
+      setSigner(s);
+      setAddress(await s.getAddress());
+    } catch {
+      // ignore
+    }
+  };
 
   const formatUnits = (value: bigint, decimals = 18) => {
     try {
@@ -131,18 +185,12 @@ export default function Vault1Page() {
         })
       );
 
-      // Quota stimata dei rewards ancora in Farm per il controller
-      // NOTE: usiamo bigint per evitare perdita di precisione con numeri molto grandi.
+      // Quota stimata dei rewards ancora in Farm per il controller (bigint-safe)
       let userFarmEstNum = 0;
       try {
         if (susdkTotal > 0n && susdkBalUser > 0n && globalPendingFarm > 0n) {
-          // Converti pending farm da USDC(18) a USDK-like(6) -> / 1e12
           const globalPendingUsdk6 = globalPendingFarm / 1_000_000_000_000n; // 1e12
-
-          // userFarmEstUsdk6 = globalPendingUsdk6 * userShares / totalShares (tutto bigint)
           const userFarmEstUsdk6 = (globalPendingUsdk6 * susdkBalUser) / susdkTotal;
-
-          // Converti a numero solo per display (dopo aver ridotto a 6 decimali)
           userFarmEstNum = Number(formatUnits(userFarmEstUsdk6, 6));
         }
       } catch {
@@ -269,6 +317,15 @@ export default function Vault1Page() {
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold">Stable Vault</h1>
       <p className="text-sm text-white mb-2">Deposit USDC, receive U$DK, earn yield in U$DK and KTG airdrop points.</p>
+
+      {!address && (
+        <div className="rounded-md border border-yellow-300 bg-yellow-50 text-yellow-900 p-3 text-sm">
+          Wallet not connected.
+          <button className="ml-2 underline" onClick={connectWallet} disabled={loading}>
+            Connect
+          </button>
+        </div>
+      )}
 
       <div className="flex gap-4 w-full">
         {/* sUSDK balance box */}
