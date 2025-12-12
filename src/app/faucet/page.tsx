@@ -64,10 +64,26 @@ export default function FaucetPage() {
     }
   };
 
+  const refreshVerification = async (walletAddr: string) => {
+    try {
+      const res = await fetch(`/api/faucet/status?wallet=${walletAddr}`);
+      const data = await res.json();
+      if (res.ok && data.verified) {
+        setVerified(true);
+        localStorage.setItem(`faucet_verified_${walletAddr.toLowerCase()}`, "true");
+      } else {
+        setVerified(false);
+      }
+    } catch {
+      setVerified(false);
+    }
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const v = params.get("verified");
     setVerified(v === "1" || v === "true");
+
     // Try to restore connection if already authorized
     if (typeof window !== "undefined" && (window as any).ethereum) {
       (window as any).ethereum.request({ method: "eth_accounts" }).then(async (accounts: string[]) => {
@@ -76,54 +92,30 @@ export default function FaucetPage() {
           setAddress(addr);
           setIsConnected(true);
           await refreshPoints(addr);
-          // Check persisted verification in DB or localStorage
-          const cached = localStorage.getItem(`faucet_verified_${addr.toLowerCase()}`);
-          if (cached === "true") {
-            setVerified(true);
-          } else {
-            try {
-              const res = await fetch(`/api/faucet/status?wallet=${addr}`);
-              const data = await res.json();
-              if (res.ok && data.verified) {
-                setVerified(true);
-                localStorage.setItem(`faucet_verified_${addr.toLowerCase()}`, "true");
-              }
-            } catch {}
-          }
-        }
-      });
-      // Listen for account changes
-      (window as any).ethereum.on?.("accountsChanged", async (accounts: string[]) => {
-        if (accounts && accounts.length > 0) {
-          const addr = accounts[0];
-          setAddress(addr);
-          setIsConnected(true);
-          await refreshPoints(addr);
-          const cached = localStorage.getItem(`faucet_verified_${addr.toLowerCase()}`);
-          if (cached === "true") setVerified(true);
-          else {
-            try {
-              const res = await fetch(`/api/faucet/status?wallet=${addr}`);
-              const data = await res.json();
-              if (res.ok && data.verified) {
-                setVerified(true);
-                localStorage.setItem(`faucet_verified_${addr.toLowerCase()}`, "true");
-              } else {
-                setVerified(false);
-              }
-            } catch {
-              setVerified(false);
-            }
-          }
-        } else {
-          setAddress(null);
-          setIsConnected(false);
-          setVerified(false);
-          setKtgPoints("0.0000");
+
+          // Prefer server truth (DB + on-chain sync) over local cache
+          await refreshVerification(addr);
         }
       });
     }
-  }, [KTG_POINTS]);
+
+    // Listen for account changes
+    (window as any).ethereum?.on?.("accountsChanged", async (accounts: string[]) => {
+      if (accounts && accounts.length > 0) {
+        const addr = accounts[0];
+        setAddress(addr);
+        setIsConnected(true);
+        await refreshPoints(addr);
+        await refreshVerification(addr);
+      } else {
+        setAddress(null);
+        setIsConnected(false);
+        setVerified(false);
+        setKtgPoints("0.0000");
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function connectWallet() {
     if (!(window as any).ethereum) {
@@ -133,9 +125,11 @@ export default function FaucetPage() {
     try {
       const accounts: string[] = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
       if (accounts && accounts.length > 0) {
-        setAddress(accounts[0]);
+        const addr = accounts[0];
+        setAddress(addr);
         setIsConnected(true);
-        await refreshPoints(accounts[0]);
+        await refreshPoints(addr);
+        await refreshVerification(addr);
         setStatus(null);
       }
     } catch (e: any) {
