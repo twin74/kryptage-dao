@@ -124,8 +124,8 @@ export default function DashboardPage() {
     return [
       {
         id: 1,
-        name: "Stable Vault 1",
-        symbol: "USDK",
+        name: "Stable Vault",
+        symbol: "USDC",
         status: "Live",
         deposited: v1Deposited,
         pendingYield: v1Pending,
@@ -134,7 +134,7 @@ export default function DashboardPage() {
       },
       {
         id: 2,
-        name: "Stable Vault 2",
+        name: "WBTC Vault",
         symbol: "WBTC",
         status: "Preview",
         deposited: "-",
@@ -144,7 +144,7 @@ export default function DashboardPage() {
       },
       {
         id: 3,
-        name: "Stable Vault 3",
+        name: "XAUT Vault",
         symbol: "XAUT",
         status: "Preview",
         deposited: "-",
@@ -154,7 +154,7 @@ export default function DashboardPage() {
       },
       {
         id: 4,
-        name: "Stable Vault 4",
+        name: "SPYON Vault",
         symbol: "SPYON",
         status: "Preview",
         deposited: "-",
@@ -183,7 +183,7 @@ export default function DashboardPage() {
   }, [vaultRows]);
 
   return (
-    <PageShell title="Dashboard" subtitle="A complete portfolio overview across 4 vaults.">
+    <PageShell title="Dashboard" subtitle="A complete portfolio overview across all vaults.">
       {!address && (
         <div className="rounded-md border border-amber-800 bg-amber-950/40 text-amber-200 p-3 text-sm">
           Wallet not connected. Connect from the header to see your dashboard.
