@@ -114,9 +114,15 @@ export default function AirdropPage() {
           <p className="mt-1 text-sm text-slate-300">
             Subscribe to the Kryptage newsletter to get platform updates, upcoming events, points announcements and the token launch timeline.
           </p>
-          <p className="mt-2 text-sm text-slate-200">
-            Subscribing to the newsletter adds <span className="font-mono">+10</span> points.
-          </p>
+
+          <div className="mt-4 rounded-md border border-slate-800 bg-slate-900/30 p-3">
+            <div className="text-sm font-semibold text-slate-100">KTG Points</div>
+            <div className="mt-1 text-sm text-slate-300">
+              Current: <span className="font-mono">0.0000</span>
+            </div>
+            <div className="mt-1 text-sm text-slate-200">Subscribing to the newsletter adds +10 points.</div>
+          </div>
+
           <div className="mt-3 flex flex-col gap-2 sm:flex-row">
             <input
               type="email"
