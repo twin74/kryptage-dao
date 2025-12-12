@@ -110,31 +110,37 @@ export default function AirdropPage() {
         </div>
 
         <div className="mt-6 rounded-lg border border-slate-800 bg-slate-950/30 p-4">
-          <h3 className="text-base font-semibold">Kryptage Newsletter</h3>
-          <p className="mt-1 text-sm text-slate-300">
-            Subscribe to the Kryptage newsletter to get platform updates, upcoming events, points announcements and the token launch timeline.
-          </p>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="md:col-span-2">
+              <h3 className="text-base font-semibold">Kryptage Newsletter</h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Subscribe to the Kryptage newsletter to get platform updates, upcoming events, points announcements and the token launch timeline.
+              </p>
 
-          <div className="mt-4 rounded-md border border-slate-800 bg-slate-900/30 p-3">
-            <div className="text-sm font-semibold text-slate-100">KTG Points</div>
-            <div className="mt-1 text-sm text-slate-300">
-              Current: <span className="font-mono">0.0000</span>
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100"
+                  disabled
+                />
+                <SecondaryButton disabled className="sm:w-56">
+                  Subscribe (coming soon)
+                </SecondaryButton>
+              </div>
+              <div className="mt-2 text-xs text-slate-400">UI preview  on-chain integration coming next.</div>
             </div>
-            <div className="mt-1 text-sm text-slate-200">Subscribing to the newsletter adds +10 points.</div>
-          </div>
 
-          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100"
-              disabled
-            />
-            <SecondaryButton disabled className="sm:w-56">
-              Subscribe (coming soon)
-            </SecondaryButton>
+            <div className="md:col-span-1">
+              <div className="h-full rounded-md border border-slate-800 bg-slate-900/30 p-3">
+                <div className="text-sm font-semibold text-slate-100">KTG Points</div>
+                <div className="mt-1 text-sm text-slate-300">
+                  Current: <span className="font-mono">0.0000</span>
+                </div>
+                <div className="mt-1 text-sm text-slate-200">Subscribing to the newsletter adds +10 points.</div>
+              </div>
+            </div>
           </div>
-          <div className="mt-2 text-xs text-slate-400">UI preview  on-chain integration coming next.</div>
         </div>
       </Card>
     </PageShell>
