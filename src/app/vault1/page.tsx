@@ -19,7 +19,7 @@ export default function Vault1Page() {
   const [pendingRewardsTotalEst, setPendingRewardsTotalEst] = useState<string>("0");
   const [apy, setApy] = useState<string>("0");
   const [usdcBalance, setUsdcBalance] = useState<string>("0");
-  const [ktgPoints, setKtgPoints] = useState<string>("0");
+  const [ktgPoints, setKtgPoints] = useState<string>("0.0000");
 
   // UI-only: 1 punto ogni 10.000 U$DK di yield stimato (deterministico, non dipende dalla pagina aperta)
   const POINTS_FACTOR = 1 / 10;
@@ -68,6 +68,7 @@ export default function Vault1Page() {
     setPendingRewardsTotalEst("0");
     setApy("0");
     setUsdcBalance("0");
+    setKtgPoints("0.0000");
   };
 
   useEffect(() => {
