@@ -345,6 +345,27 @@ export default function Vault1Page() {
     }
   };
 
+  const sanitizeNumericInput = (v: string) => {
+    // remove thousands separators/spaces, keep digits and at most one decimal separator
+    // accept both "." and "," as decimal separators, normalize to "." for consistency
+    const s = (v || "").trim();
+    const noSpaces = s.replace(/\s/g, "");
+
+    // If both '.' and ',' exist, assume the last one is the decimal separator and
+    // the other ones are thousands separators.
+    const lastDot = noSpaces.lastIndexOf(".");
+    const lastComma = noSpaces.lastIndexOf(",");
+    const decIdx = Math.max(lastDot, lastComma);
+
+    if (decIdx === -1) {
+      return noSpaces.replace(/[^0-9]/g, "");
+    }
+
+    const intPart = noSpaces.slice(0, decIdx).replace(/[^0-9]/g, "");
+    const fracPart = noSpaces.slice(decIdx + 1).replace(/[^0-9]/g, "");
+    return fracPart.length ? `${intPart}.${fracPart}` : intPart;
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold">Stable Vault</h1>
@@ -363,7 +384,7 @@ export default function Vault1Page() {
         {/* sUSDK balance box */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
           <SusdkIcon className="h-8 w-8 rounded mb-2" />
-          <div className="text-xs text-gray-800 font-bold">susdk Balance</div>
+          <div className="text-xs text-gray-800 font-bold">USDK Balance</div>
           <div className="text-xl font-semibold text-gray-900">{susdkBalance}</div>
         </div>
         {/* Yield box */}
@@ -384,7 +405,7 @@ export default function Vault1Page() {
         {/* USDK in Vault box - width: 2/3 + 16px, min-w-256px */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center min-w-[256px]" style={{ width: "calc(66.6667% + 16px)" }}>
           <UsdkIcon className="h-8 w-8 mb-2" />
-          <div className="text-xs text-gray-800 font-bold">usdk in Vault</div>
+          <div className="text-xs text-gray-800 font-bold">USDK in Vault</div>
           <div className="text-xl font-semibold text-gray-900">{usdkInVault}</div>
         </div>
         {/* APY box - same as KTG Airdrop Points */}
@@ -405,7 +426,16 @@ export default function Vault1Page() {
           <div className="flex items-center gap-2">
             <div className="relative w-full">
               <input id="vault-deposit" name="amount" type="text" inputMode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="USDC to deposit" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50 appearance-none pr-14" />
-              <button type="button" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-2 py-0.5 text-xs text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest('form') as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
+              <button
+                type="button"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-2 py-0.5 text-xs text-gray-900"
+                onClick={(e) => {
+                  const form = (e.currentTarget.closest("form") as any);
+                  if (form && form.amount) form.amount.value = sanitizeNumericInput(usdcBalance);
+                }}
+              >
+                Max
+              </button>
             </div>
             <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>Deposit</button>
           </div>
@@ -417,7 +447,16 @@ export default function Vault1Page() {
           <div className="flex items-center gap-2">
             <div className="relative w-full">
               <input id="vault-withdraw" name="shares" type="text" inputMode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="USDK to withdraw" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50 appearance-none pr-14" />
-              <button type="button" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-2 py-0.5 text-xs text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest('form') as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
+              <button
+                type="button"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-2 py-0.5 text-xs text-gray-900"
+                onClick={(e) => {
+                  const form = (e.currentTarget.closest("form") as any);
+                  if (form && form.shares) form.shares.value = sanitizeNumericInput(susdkBalance);
+                }}
+              >
+                Max
+              </button>
             </div>
             <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>Withdraw</button>
           </div>
