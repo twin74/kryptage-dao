@@ -236,7 +236,7 @@ export default function FaucetPage() {
     >
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2">
-          <div className="text-xs text-slate-400">
+          <div className="font-semibold text-slate-100">
             Need Sepolia ETH?{" "}
             <a
               href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
