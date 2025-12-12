@@ -59,7 +59,7 @@ export default function Home() {
         <Card>
           <div className="text-sm font-semibold text-slate-100">Airdrop</div>
           <div className="mt-2 text-sm text-slate-300">
-            Track points, eligibility and the current leaderboard.
+            Track points, eligibility and leaderboard.
           </div>
           <div className="mt-4">
             <Link href="/airdrop">
