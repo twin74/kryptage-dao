@@ -55,56 +55,41 @@ export default function Home() {
         </Card>
       </div>
 
-      <Card className="mt-8">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div>
-            <div className="text-sm font-semibold text-slate-100">Resources</div>
-            <ul className="mt-3 space-y-2 text-sm text-slate-300">
-              <li>
-                <Link href="/docs" className="text-blue-400 hover:text-blue-300">
-                  Docs
-                </Link>
-              </li>
-              <li>
-                <Link href="/airdrop" className="text-blue-400 hover:text-blue-300">
-                  Airdrop
-                </Link>
-              </li>
-              <li>
-                <Link href="/governance" className="text-blue-400 hover:text-blue-300">
-                  Governance
-                </Link>
-              </li>
-            </ul>
+      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <Card>
+          <div className="text-sm font-semibold text-slate-100">Airdrop</div>
+          <div className="mt-2 text-sm text-slate-300">
+            Track points, eligibility and the current leaderboard.
           </div>
-
-          <div>
-            <div className="text-sm font-semibold text-slate-100">Social</div>
-            <ul className="mt-3 space-y-2 text-sm text-slate-300">
-              <li>
-                <span className="text-slate-300">X (Twitter)  coming soon</span>
-              </li>
-              <li>
-                <span className="text-slate-300">Telegram  coming soon</span>
-              </li>
-              <li>
-                <span className="text-slate-300">Discord  coming soon</span>
-              </li>
-            </ul>
+          <div className="mt-4">
+            <Link href="/airdrop">
+              <SecondaryButton className="w-full">Open Airdrop</SecondaryButton>
+            </Link>
           </div>
+        </Card>
 
-          <div>
-            <div className="text-sm font-semibold text-slate-100">Contracts</div>
-            <div className="mt-3 text-sm text-slate-300">
-              Sepolia addresses are configured via <span className="font-mono">.env</span>. For now, use the Vault and Faucet pages to interact.
-            </div>
+        <Card>
+          <div className="text-sm font-semibold text-slate-100">Governance</div>
+          <div className="mt-2 text-sm text-slate-300">
+            Explore proposals and voting (UI preview).
           </div>
-        </div>
+          <div className="mt-4">
+            <Link href="/governance">
+              <SecondaryButton className="w-full">Open Governance</SecondaryButton>
+            </Link>
+          </div>
+        </Card>
 
-        <div className="mt-6 border-t border-slate-800 pt-4 text-xs text-slate-400">
-          {new Date().getFullYear()} Kryptage DAO. All rights reserved.
-        </div>
-      </Card>
+        <Card>
+          <div className="text-sm font-semibold text-slate-100">Docs</div>
+          <div className="mt-2 text-sm text-slate-300">Protocol docs and integration notes.</div>
+          <div className="mt-4">
+            <Link href="/docs">
+              <SecondaryButton className="w-full">Open Docs</SecondaryButton>
+            </Link>
+          </div>
+        </Card>
+      </div>
     </PageShell>
   );
 }

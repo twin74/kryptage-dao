@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Web3Providers from "@/components/Web3Providers";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({
         <Header />
         <Web3Providers>
           <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+          <Footer />
         </Web3Providers>
       </body>
     </html>
