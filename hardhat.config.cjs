@@ -1,5 +1,6 @@
 require('dotenv/config');
-require('@nomicfoundation/hardhat-toolbox');
+require('@nomicfoundation/hardhat-ethers');
+require('@nomicfoundation/hardhat-chai-matchers');
 
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
 const DEPLOY_PRIVATE_KEY = (process.env.DEPLOY_PRIVATE_KEY || '').replace(/^0x/, '');
@@ -16,7 +17,7 @@ module.exports = {
     sepolia: {
       url: SEPOLIA_RPC_URL,
       accounts: DEPLOY_PRIVATE_KEY ? [DEPLOY_PRIVATE_KEY] : [],
-      type: 'http'
+      type: 'http',
     },
   },
   etherscan: {

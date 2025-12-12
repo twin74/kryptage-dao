@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy:usdk": "hardhat run scripts/deploy-usdk-proxy.ts --network sepolia",
-    "usdk:roles": "hardhat run scripts/grant-usdk-roles.ts --network sepolia"
+    "deploy:usdk": "hardhat run --config hardhat.config.cjs scripts/deploy-usdk-proxy.ts --network sepolia",
+    "usdk:roles": "hardhat run --config hardhat.config.cjs scripts/grant-usdk-roles.ts --network sepolia",
+    "deploy:points": "hardhat run --config hardhat.config.cjs scripts/deploy-ktg-points-proxy.ts --network sepolia"
   },
   "dependencies": {
     "ethers": "^6.16.0",

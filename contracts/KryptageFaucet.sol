@@ -7,6 +7,10 @@ interface IERC20 {
     function decimals() external view returns (uint8);
 }
 
+interface IKtgPoints {
+    function onFaucetClaim(address user) external returns (uint256 earned1e18, uint256 bonus1e18);
+}
+
 contract KryptageFaucet {
     address public owner;
 
@@ -23,6 +27,9 @@ contract KryptageFaucet {
     uint256 public cooldownSec;
     bool public paused;
 
+    // Optional: points contract (upgradeable proxy address)
+    address public points;
+
     // Simple reentrancy guard
     bool private _locked;
     modifier nonReentrant() {
@@ -37,6 +44,7 @@ contract KryptageFaucet {
     event ClaimAmountSet(address indexed token, uint256 amount);
     event PausedSet(bool paused);
     event Claimed(address indexed user);
+    event PointsSet(address indexed points);
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not owner");
@@ -92,6 +100,11 @@ contract KryptageFaucet {
         emit PausedSet(_paused);
     }
 
+    function setPoints(address _points) external onlyOwner {
+        points = _points;
+        emit PointsSet(_points);
+    }
+
     // Claim all configured tokens
     function claim() external notPaused nonReentrant {
         require(allowed[msg.sender], "Email not verified");
@@ -100,6 +113,15 @@ contract KryptageFaucet {
 
         // Effects first
         lastClaim[msg.sender] = block.timestamp;
+
+        // non-blocking points update (daily claim hook)
+        if (points != address(0)) {
+            try IKtgPoints(points).onFaucetClaim(msg.sender) {
+                // ignore outputs
+            } catch {
+                // do not block faucet
+            }
+        }
 
         // Interactions
         for (uint256 i = 0; i < tokens.length; i++) {

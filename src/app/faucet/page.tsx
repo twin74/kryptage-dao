@@ -8,6 +8,9 @@ export default function FaucetPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [verified, setVerified] = useState(false);
+  const [ktgPoints, setKtgPoints] = useState<string>("0.0000");
+
+  const KTG_POINTS = process.env.NEXT_PUBLIC_KTG_POINTS as string | undefined;
 
   const tokens = useMemo(() => {
     const iconFor = (symbol: string) => {
@@ -33,6 +36,34 @@ export default function FaucetPage() {
     return list.map(t => ({ ...t, icon: iconFor(t.symbol) }));
   }, []);
 
+  const refreshPoints = async (walletAddr: string) => {
+    try {
+      if (!KTG_POINTS || !(window as any).ethereum) {
+        setKtgPoints("0.0000");
+        return;
+      }
+      const provider = new ethers.BrowserProvider((window as any).ethereum);
+      const pointsAbi = [
+        "function points(address) view returns (uint256)",
+        "function pendingEarned(address) view returns (uint256)",
+      ];
+      const pointsC = new ethers.Contract(KTG_POINTS, pointsAbi, provider);
+      const [p, pend] = await Promise.all([
+        pointsC.points(walletAddr) as Promise<bigint>,
+        pointsC.pendingEarned(walletAddr) as Promise<bigint>,
+      ]);
+      const total = (p ?? 0n) + (pend ?? 0n);
+      setKtgPoints(
+        Number(ethers.formatUnits(total, 18)).toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+          minimumFractionDigits: 4,
+        })
+      );
+    } catch {
+      setKtgPoints("0.0000");
+    }
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const v = params.get("verified");
@@ -44,6 +75,7 @@ export default function FaucetPage() {
           const addr = accounts[0];
           setAddress(addr);
           setIsConnected(true);
+          await refreshPoints(addr);
           // Check persisted verification in DB or localStorage
           const cached = localStorage.getItem(`faucet_verified_${addr.toLowerCase()}`);
           if (cached === "true") {
@@ -66,6 +98,7 @@ export default function FaucetPage() {
           const addr = accounts[0];
           setAddress(addr);
           setIsConnected(true);
+          await refreshPoints(addr);
           const cached = localStorage.getItem(`faucet_verified_${addr.toLowerCase()}`);
           if (cached === "true") setVerified(true);
           else {
@@ -86,10 +119,11 @@ export default function FaucetPage() {
           setAddress(null);
           setIsConnected(false);
           setVerified(false);
+          setKtgPoints("0.0000");
         }
       });
     }
-  }, []);
+  }, [KTG_POINTS]);
 
   async function connectWallet() {
     if (!(window as any).ethereum) {
@@ -101,6 +135,7 @@ export default function FaucetPage() {
       if (accounts && accounts.length > 0) {
         setAddress(accounts[0]);
         setIsConnected(true);
+        await refreshPoints(accounts[0]);
         setStatus(null);
       }
     } catch (e: any) {
@@ -112,6 +147,7 @@ export default function FaucetPage() {
     // No real disconnect in EIP-1193; clear local state
     setAddress(null);
     setIsConnected(false);
+    setKtgPoints("0.0000");
   }
 
   async function register() {
@@ -153,7 +189,9 @@ export default function FaucetPage() {
 
       const tx = await contract.claim();
       await tx.wait();
-      setStatus("Claim executed. Check your wallet.");
+
+      await refreshPoints(await signer.getAddress());
+      setStatus("Claim executed. Check your wallet. (+10 KTG points)");
     } catch (e: any) {
       // Try to provide a friendly message if cooldown likely caused the revert or nonce error occurred
       try {
@@ -200,6 +238,12 @@ export default function FaucetPage() {
     <div className="max-w-2xl mx-auto p-6 md:p-8 space-y-6">
       <h1 className="text-2xl font-semibold">Faucet</h1>
       <p className="text-sm text-gray-300">Get test tokens to try the dApp. Connect your wallet from the header, register your email once, then claim when eligible.</p>
+
+      <div className="rounded-md border border-slate-700 bg-slate-900/40 p-3 text-sm text-slate-200">
+        <div className="font-semibold">KTG Points</div>
+        <div className="mt-1">Current: <span className="font-mono">{ktgPoints}</span></div>
+        <div className="mt-1 text-xs text-slate-300">Each faucet claim adds <span className="font-mono">+10</span> points (and updates daily accrual).</div>
+      </div>
 
       {!verified ? (
         <div className="space-y-2">

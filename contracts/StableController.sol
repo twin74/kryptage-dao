@@ -30,6 +30,10 @@ interface IStableVault {
     function totalSupply() external view returns (uint256);
 }
 
+interface IKtgPoints {
+    function update(address user) external returns (uint256);
+}
+
 contract StableController {
     IERC20 public usdc;
     IUSDK public usdk;
@@ -38,6 +42,9 @@ contract StableController {
 
     bool private initialized;
     address public owner;
+
+    // Optional: points contract (upgradeable proxy address)
+    address public points;
 
     // Security
     bool public paused;
@@ -54,6 +61,7 @@ contract StableController {
     event Unpaused(address indexed by);
     event OwnerChanged(address indexed oldOwner, address indexed newOwner);
     event FarmChanged(address indexed oldFarm, address indexed newFarm);
+    event PointsSet(address indexed points);
 
     modifier onlyOwner() { require(msg.sender == owner, "NOT_OWNER"); _; }
     modifier whenNotPaused() { require(!paused, "PAUSED"); _; }
@@ -76,6 +84,11 @@ contract StableController {
         owner = _owner;
     }
 
+    function setPoints(address _points) external onlyOwner {
+        points = _points;
+        emit PointsSet(_points);
+    }
+
     function pause() external onlyOwner { paused = true; emit Paused(msg.sender); }
     function unpause() external onlyOwner { paused = false; emit Unpaused(msg.sender); }
 
@@ -85,17 +98,21 @@ contract StableController {
         return usdcAmount / 1_000_000_000_000;
     }
 
+    function _updatePoints(address user) internal {
+        if (points == address(0)) return;
+        // don't block core flow if points contract reverts
+        try IKtgPoints(points).update(user) {
+        } catch {
+        }
+    }
+
     // Deposit USDC -> stake in Farm, mint USDK into vault, mint sUSDK (shares) to user
     function depositUSDC(uint256 amount) external whenNotPaused nonReentrant {
         require(initialized, "NOT_INIT");
         require(amount > 0, "AMOUNT_ZERO");
-        // --- reward accounting: update user pending before changing shares ---
-        uint256 userShares = vault.balanceOf(msg.sender);
-        if (userShares > 0) {
-            // Optionally: store/emit pending rewards for user here
-        }
-        // Update userRewardDebt to current shares * rewardPerShare after deposit
-        // (will be updated after minting new shares below)
+
+        _updatePoints(msg.sender);
+
         require(usdc.transferFrom(msg.sender, address(this), amount), "USDC_XFER_FAIL");
         require(usdc.approve(address(farm), amount), "USDC_APPROVE_FAIL");
         farm.stake(amount);
@@ -103,6 +120,7 @@ contract StableController {
         usdk.mint(address(vault), mintAmount);
         vault.depositUSDK(mintAmount);
         vault.mintShares(msg.sender, amount);
+
         // Update userRewardDebt to new shares * rewardPerShare
         uint256 newUserShares = vault.balanceOf(msg.sender);
         userRewardDebt[msg.sender] = (newUserShares * rewardPerShare) / 1e18;
@@ -155,22 +173,19 @@ contract StableController {
         emit Compounded(block.timestamp, claimed);
     }
 
-    // Withdraw by burning sUSDK shares; user receives USDK, USDC are balanced via pool by vault
+    // Withdraw by burning sUSDK shares
     function withdrawShares(uint256 shares) external whenNotPaused nonReentrant {
         require(initialized, "NOT_INIT");
         require(shares > 0, "AMOUNT_ZERO");
-        // --- reward accounting: update user pending before changing shares ---
-        uint256 userShares = vault.balanceOf(msg.sender);
-        if (userShares > 0) {
-            // Optionally: store/emit pending rewards for user here
-        }
+
+        _updatePoints(msg.sender);
+
         vault.burnShares(msg.sender, shares);
         vault.redeemUSDK(msg.sender, shares);
         // Update userRewardDebt to new shares * rewardPerShare
         uint256 newUserShares = vault.balanceOf(msg.sender);
         userRewardDebt[msg.sender] = (newUserShares * rewardPerShare) / 1e18;
         emit Withdrawn(msg.sender, shares, shares);
-        // Note: vault/pool must handle USDC removal from farm and maintain 1:1 via mint/burn separately.
     }
 
     function setFarm(address _farm) external onlyOwner {
@@ -202,6 +217,7 @@ contract StableController {
     // Claim function: transfers pending rewards to user and updates userRewardDebt
     function claim() external whenNotPaused nonReentrant {
         require(initialized, "NOT_INIT");
+        _updatePoints(msg.sender);
         uint256 reward = pendingRewards(msg.sender);
         require(reward > 0, "NO_REWARD");
         // Transfer USDK from vault to user

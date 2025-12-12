@@ -21,14 +21,12 @@ export default function Vault1Page() {
   const [usdcBalance, setUsdcBalance] = useState<string>("0");
   const [ktgPoints, setKtgPoints] = useState<string>("0.0000");
 
-  // UI-only: 1 punto ogni 10.000 U$DK di yield stimato (deterministico, non dipende dalla pagina aperta)
-  const POINTS_FACTOR = 1 / 10;
-
   const VAULT = process.env.NEXT_PUBLIC_STABLE_VAULT as string;
   const CONTROLLER = process.env.NEXT_PUBLIC_STABLE_CONTROLLER as string;
   const FARM = process.env.NEXT_PUBLIC_STABLE_FARM as string;
   const USDK = process.env.NEXT_PUBLIC_TOKEN_USDK as string;
   const USDC = process.env.NEXT_PUBLIC_TOKEN_USDC as string;
+  const KTG_POINTS = process.env.NEXT_PUBLIC_KTG_POINTS as string | undefined;
 
   const usdcAbi = [
     "function decimals() view returns (uint8)",
@@ -55,6 +53,10 @@ export default function Vault1Page() {
     "function pendingRewards(address) view returns (uint256)",
     "function apr1e18() view returns (uint256)",
     "function stake(uint256 amount)",
+  ];
+  const ktgPointsAbi = [
+    "function points(address) view returns (uint256)",
+    "function pendingEarned(address) view returns (uint256)",
   ];
 
   const resetWalletState = () => {
@@ -149,6 +151,8 @@ export default function Vault1Page() {
         farmC.apr1e18(),
       ]);
 
+      const pointsC = KTG_POINTS ? new ethers.Contract(KTG_POINTS, ktgPointsAbi, provider) : null;
+
       const [
         usdkBalVault,
         susdkBalUser,
@@ -156,6 +160,8 @@ export default function Vault1Page() {
         usdcBalUser,
         userPendingOnchain,
         globalPendingFarm,
+        onchainPoints,
+        pendingPointsEarned,
       ] = await Promise.all([
         usdkC.balanceOf(VAULT),
         susdkC.balanceOf(address),
@@ -163,6 +169,8 @@ export default function Vault1Page() {
         usdcC.balanceOf(address),
         controllerC.pendingRewards(address),
         farmC.pendingRewards(CONTROLLER),
+        pointsC ? pointsC.points(address) : Promise.resolve(0n),
+        pointsC ? pointsC.pendingEarned(address) : Promise.resolve(0n),
       ]);
 
       setUsdkInVault(
@@ -221,6 +229,15 @@ export default function Vault1Page() {
 
       const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
       setApy(((aprPercent / 6) * 5).toFixed(2) + "%");
+
+      // KTG points: on-chain accumulated + pending (both 1e18)
+      const pointsTotal1e18 = (onchainPoints as bigint) + (pendingPointsEarned as bigint);
+      setKtgPoints(
+        Number(formatUnits(pointsTotal1e18, 18)).toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+          minimumFractionDigits: 4,
+        })
+      );
     } finally {
       setLoading(false);
     }
