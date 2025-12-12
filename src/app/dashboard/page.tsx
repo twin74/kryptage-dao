@@ -182,6 +182,21 @@ export default function DashboardPage() {
     };
   }, [vaultRows]);
 
+  const tokenIconFor = (symbol: string) => {
+    switch (symbol) {
+      case "USDC":
+        return "/usdc.svg";
+      case "WBTC":
+        return "https://cdn.simpleicons.org/bitcoin";
+      case "XAUT":
+        return "/xaut.svg";
+      case "SPYON":
+        return "/SPY.svg";
+      default:
+        return "https://cdn.simpleicons.org/circle";
+    }
+  };
+
   return (
     <PageShell title="Dashboard" subtitle="A complete portfolio overview across all vaults.">
       {!address && (
@@ -254,7 +269,16 @@ export default function DashboardPage() {
                       <Badge tone={v.status === "Live" ? "green" : "blue"}>{v.status}</Badge>
                     </div>
                   </td>
-                  <td className="py-3 pr-4 text-slate-300 font-mono">{v.symbol}</td>
+                  <td className="py-3 pr-4">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={tokenIconFor(v.symbol)}
+                        alt={v.symbol}
+                        className="h-6 w-6 rounded"
+                        loading="lazy"
+                      />
+                    </div>
+                  </td>
                   <td className="py-3 pr-4 text-slate-200">{address ? v.deposited : "-"}</td>
                   <td className="py-3 pr-4 text-slate-200">{address ? v.pendingYield : "-"}</td>
                   <td className="py-3 pr-4 text-slate-200">{v.apy}</td>
