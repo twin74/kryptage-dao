@@ -86,14 +86,6 @@ export default function VaultPage() {
           cta="Preview"
         />
       </div>
-
-      <Card className="mt-8">
-        <div className="text-sm font-semibold text-slate-100">Notes</div>
-        <ul className="mt-3 space-y-2 text-sm text-slate-300 list-disc list-inside">
-          <li>Vault 1 is connected to on-chain contracts via Sepolia.</li>
-          <li>Vault 2–4 are UI previews and will be wired to contracts next.</li>
-        </ul>
-      </Card>
     </PageShell>
   );
 }
