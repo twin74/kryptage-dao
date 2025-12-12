@@ -97,7 +97,7 @@ export default function Header() {
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm flex-1 justify-center">
           <Link href="/" className="hover:text-blue-400">Home</Link>
-          <Link href="/pool" className="hover:text-blue-400">Pool</Link>
+          <Link href="/swap" className="hover:text-blue-400">Swap</Link>
           <Link href="/vault" className="hover:text-blue-400">Vault</Link>
           <Link href="/dashboard" className="hover:text-blue-400">Dashboard</Link>
           <Link href="/governance" className="hover:text-blue-400">Governance</Link>
@@ -129,7 +129,7 @@ export default function Header() {
         <div className="md:hidden border-t border-slate-800">
           <nav className="px-4 py-2 flex flex-col gap-2">
             <Link href="/" onClick={() => setOpen(false)} className="hover:text-blue-400">Home</Link>
-            <Link href="/pool" onClick={() => setOpen(false)} className="hover:text-blue-400">Pool</Link>
+            <Link href="/swap" onClick={() => setOpen(false)} className="hover:text-blue-400">Swap</Link>
             <Link href="/vault" onClick={() => setOpen(false)} className="hover:text-blue-400">Vault</Link>
             <Link href="/dashboard" onClick={() => setOpen(false)} className="hover:text-blue-400">Dashboard</Link>
             <Link href="/governance" onClick={() => setOpen(false)} className="hover:text-blue-400">Governance</Link>
