@@ -19,6 +19,10 @@ export default function Vault1Page() {
   const [pendingRewardsTotalEst, setPendingRewardsTotalEst] = useState<string>("0");
   const [apy, setApy] = useState<string>("0");
   const [usdcBalance, setUsdcBalance] = useState<string>("0");
+  const [ktgPoints, setKtgPoints] = useState<string>("0");
+
+  // UI-only: 1 punto ogni 10.000 U$DK di yield stimato (deterministico, non dipende dalla pagina aperta)
+  const POINTS_FACTOR = 1 / 10;
 
   const VAULT = process.env.NEXT_PUBLIC_STABLE_VAULT as string;
   const CONTROLLER = process.env.NEXT_PUBLIC_STABLE_CONTROLLER as string;
@@ -344,7 +348,7 @@ export default function Vault1Page() {
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
           <KLogo className="h-8 w-8 mb-2" />
           <div className="text-xs text-gray-800 font-bold">KTG Airdrop Points</div>
-          <div className="text-xl font-semibold text-gray-900">0</div>
+          <div className="text-xl font-semibold text-gray-900">{ktgPoints}</div>
         </div>
       </div>
 
