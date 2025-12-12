@@ -167,24 +167,26 @@ contract KtgPointsUpgradeable {
         emit Updated(user, earned1e18, points[user], block.timestamp);
     }
 
-    /// @notice Called by the faucet per claim; adds a fixed bonus (e.g. 10 points) and also updates daily accrual.
-    /// This is optional and can be turned off by setting bonusPointsPerClaim=0.
+    /// @notice Called by the faucet per claim; adds a fixed bonus (e.g. 10 points) and optionally updates daily accrual.
+    /// @dev IMPORTANT: never reverts due to cooldown, so faucet claim won't "silently skip" bonuses.
     function onFaucetClaim(address user) external onlyFaucet returns (uint256 earned1e18, uint256 bonus1e18) {
-        // try to accrue time-based points too (will enforce cooldown)
-        // if first touch, sets the baseline
         uint256 last = lastUpdate[user];
+
         if (last == 0) {
+            // first touch: set baseline so future accrual has a reference point
             lastUpdate[user] = block.timestamp;
         } else {
             uint256 dt = block.timestamp - last;
-            if (minUpdateInterval > 0) {
-                require(dt >= minUpdateInterval, "COOLDOWN");
+
+            // cooldown affects only the time-based accrual, not the bonus.
+            // If cooldown not met yet, earned stays 0 and we do NOT revert.
+            if (minUpdateInterval == 0 || dt >= minUpdateInterval) {
+                uint256 basePoints = scoreOf(user) / divisor;
+                earned1e18 = (basePoints * dt) / 1 days;
+                points[user] += earned1e18;
+                lastUpdate[user] = block.timestamp;
+                emit Updated(user, earned1e18, points[user], block.timestamp);
             }
-            uint256 basePoints = scoreOf(user) / divisor;
-            earned1e18 = (basePoints * dt) / 1 days;
-            points[user] += earned1e18;
-            lastUpdate[user] = block.timestamp;
-            emit Updated(user, earned1e18, points[user], block.timestamp);
         }
 
         if (bonusPointsPerClaim > 0) {
