@@ -8,6 +8,8 @@ function VaultCard({
   status,
   description,
   cta,
+  iconSrc,
+  iconAlt,
 }: {
   title: string;
   asset: string;
@@ -15,13 +17,18 @@ function VaultCard({
   status: "Live" | "Preview";
   description: string;
   cta: string;
+  iconSrc: string;
+  iconAlt: string;
 }) {
   return (
     <Card className="flex flex-col">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="text-sm text-slate-400">{title}</div>
-          <div className="mt-1 text-lg font-semibold text-slate-100">{asset}</div>
+        <div className="flex items-start gap-3">
+          <img src={iconSrc} alt={iconAlt} className="h-9 w-9 rounded" loading="lazy" />
+          <div>
+            <div className="text-sm text-slate-400">{title}</div>
+            <div className="mt-1 text-lg font-semibold text-slate-100">{asset}</div>
+          </div>
         </div>
         <Badge tone={status === "Live" ? "green" : "blue"}>{status}</Badge>
       </div>
@@ -57,6 +64,8 @@ export default function VaultPage() {
           status="Live"
           description="Deposit USDC, receive USDK exposure and earn yield. Tracks KTG airdrop points."
           cta="Open"
+          iconSrc="/usdc.svg"
+          iconAlt="USDC"
         />
 
         <VaultCard
@@ -66,6 +75,8 @@ export default function VaultPage() {
           status="Preview"
           description="BTC-collateral vault UI. Deposit WBTC and manage your vault position."
           cta="Preview"
+          iconSrc="https://cdn.simpleicons.org/bitcoin"
+          iconAlt="WBTC"
         />
 
         <VaultCard
@@ -75,6 +86,8 @@ export default function VaultPage() {
           status="Preview"
           description="Gold-collateral vault UI. Deposit XAUT and manage your vault position."
           cta="Preview"
+          iconSrc="/xaut.svg"
+          iconAlt="XAUT"
         />
 
         <VaultCard
@@ -84,6 +97,8 @@ export default function VaultPage() {
           status="Preview"
           description="Index-collateral vault UI. Deposit SPYON and manage your vault position."
           cta="Preview"
+          iconSrc="/SPY.svg"
+          iconAlt="SPYON"
         />
       </div>
     </PageShell>
