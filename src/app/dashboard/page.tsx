@@ -135,7 +135,7 @@ export default function DashboardPage() {
       {
         id: 2,
         name: "Stable Vault 2",
-        symbol: "USDC",
+        symbol: "WBTC",
         status: "Preview",
         deposited: "-",
         pendingYield: "-",
@@ -145,7 +145,7 @@ export default function DashboardPage() {
       {
         id: 3,
         name: "Stable Vault 3",
-        symbol: "WBTC",
+        symbol: "XAUT",
         status: "Preview",
         deposited: "-",
         pendingYield: "-",
@@ -155,7 +155,7 @@ export default function DashboardPage() {
       {
         id: 4,
         name: "Stable Vault 4",
-        symbol: "XAUT",
+        symbol: "SPYON",
         status: "Preview",
         deposited: "-",
         pendingYield: "-",
