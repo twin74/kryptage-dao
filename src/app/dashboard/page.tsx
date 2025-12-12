@@ -279,11 +279,8 @@ export default function DashboardPage() {
           <div className="text-sm font-semibold text-slate-100">Actions</div>
           <div className="mt-2 text-sm text-slate-300">Deposit, withdraw and compound from each vault page.</div>
           <div className="mt-4 flex flex-col gap-2">
-            <Link href="/vault">
-              <PrimaryButton className="w-full">Go to Vaults</PrimaryButton>
-            </Link>
             <Link href="/swap">
-              <SecondaryButton className="w-full">Swap</SecondaryButton>
+              <PrimaryButton className="w-full">Swap</PrimaryButton>
             </Link>
           </div>
         </Card>
