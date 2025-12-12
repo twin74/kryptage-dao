@@ -268,17 +268,13 @@ export default function DashboardPage() {
             </tbody>
           </table>
         </div>
-
-        <div className="mt-4 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-xs text-slate-300">
-          Note: Only Vault 1 numbers are currently sourced from on-chain contracts. Vault 24 are displayed as UI preview.
-        </div>
       </Card>
 
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card>
           <div className="text-sm font-semibold text-slate-100">Swap</div>
           <div className="mt-2 text-sm text-slate-300">Simple stable swap.</div>
-          <div className="mt-6">
+          <div className="mt-8">
             <Link href="/swap">
               <SecondaryButton className="w-full">Swap</SecondaryButton>
             </Link>
