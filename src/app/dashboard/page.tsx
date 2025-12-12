@@ -274,7 +274,7 @@ export default function DashboardPage() {
         <Card>
           <div className="text-sm font-semibold text-slate-100">Swap</div>
           <div className="mt-2 text-sm text-slate-300">Simple stable swap.</div>
-          <div className="mt-10">
+          <div className="mt-9">
             <Link href="/swap">
               <SecondaryButton className="w-full">Swap</SecondaryButton>
             </Link>
