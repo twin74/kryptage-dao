@@ -1,8 +1,10 @@
 "use client";
-import { usePendingRewards } from "@/hooks/usePendingRewards";
+import { useAccount } from "wagmi";
+import { usePendingRewardsEthers } from "@/hooks/usePendingRewardsEthers";
 
 export default function DashboardPage() {
-  const { pendingRewards, isLoading } = usePendingRewards();
+  const { address } = useAccount();
+  const { pendingRewards, isLoading } = usePendingRewardsEthers(address);
 
   return (
     <section>
