@@ -97,9 +97,9 @@ export default function GovernancePage() {
   return (
     <PageShell
       title="Governance"
-      subtitle="Explore proposals, voting stats and governance activity."
+      subtitle="Create proposals, vote and shape the future of Kryptage. (UI preview — on-chain integration coming next.)"
     >
-      <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card>
           <div className="text-xs text-slate-400">Voting power</div>
           <div className="mt-1 text-2xl font-semibold">—</div>
@@ -117,7 +117,7 @@ export default function GovernancePage() {
         </Card>
       </div>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-1 items-center gap-3">
           <input
             value={q}
@@ -145,7 +145,7 @@ export default function GovernancePage() {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-3">
+      <div className="mt-6 space-y-4">
         {visible.map((p) => (
           <Card key={p.id} className="p-5">
             <div className="flex items-start justify-between gap-4">
