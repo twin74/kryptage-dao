@@ -257,7 +257,7 @@ export default function DashboardPage() {
                   <td className="py-3 pr-4 text-slate-300 font-mono">{v.symbol}</td>
                   <td className="py-3 pr-4 text-slate-200">{address ? v.deposited : "-"}</td>
                   <td className="py-3 pr-4 text-slate-200">{address ? v.pendingYield : "-"}</td>
-                  <td className="py-3 pr-4 text-slate-400">{v.apy}</td>
+                  <td className="py-3 pr-4 text-slate-200">{v.apy}</td>
                   <td className="py-3 pr-0 text-right">
                     <Link href={v.href}>
                       <SecondaryButton>Open</SecondaryButton>
