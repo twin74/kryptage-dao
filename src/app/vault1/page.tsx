@@ -375,7 +375,7 @@ export default function Vault1Page() {
               <input id="vault-deposit" name="amount" type="text" inputMode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="USDC to deposit" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50 appearance-none pr-14" />
               <button type="button" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-2 py-0.5 text-xs text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest('form') as any); if (form && form.amount) form.amount.value = usdcBalance; }}>Max</button>
             </div>
-            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Deposit</button>
+            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>Deposit</button>
           </div>
         </form>
         <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
@@ -387,7 +387,7 @@ export default function Vault1Page() {
               <input id="vault-withdraw" name="shares" type="text" inputMode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="sU$DK to withdraw" className="w-full rounded-md border px-3 py-2 text-gray-900 bg-gray-50 appearance-none pr-14" />
               <button type="button" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border px-2 py-0.5 text-xs text-gray-900" onClick={(e) => { const form = (e.currentTarget.closest('form') as any); if (form && form.shares) form.shares.value = susdkBalance; }}>Max</button>
             </div>
-            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50" disabled={loading}>Withdraw</button>
+            <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>Withdraw</button>
           </div>
         </form>
       </div>
