@@ -236,27 +236,16 @@ export default function FaucetPage() {
     >
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <div className="text-sm font-semibold text-slate-100">Wallet</div>
-              <div className="mt-1 text-sm text-slate-300">{isConnected && address ? address : "Not connected"}</div>
-              <div className="mt-2 text-xs text-slate-400">
-                Need Sepolia ETH?{" "}
-                <a
-                  href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-400 hover:text-blue-300"
-                >
-                  Open Sepolia faucet
-                </a>
-              </div>
-            </div>
-            {isConnected ? (
-              <SecondaryButton onClick={disconnectWallet}>Disconnect</SecondaryButton>
-            ) : (
-              <PrimaryButton onClick={connectWallet}>Connect</PrimaryButton>
-            )}
+          <div className="text-xs text-slate-400">
+            Need Sepolia ETH?{" "}
+            <a
+              href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-400 hover:text-blue-300"
+            >
+              Open Sepolia faucet
+            </a>
           </div>
         </Card>
 
