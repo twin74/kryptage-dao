@@ -140,9 +140,18 @@ export default function Vault1Page() {
     }
   };
 
+  const clearEstimates = () => {
+    setPendingRewardsOnchain("0.0000");
+    setPendingRewardsFarmEst("0.0000");
+    setPendingRewardsTotalEst("0.0000");
+    setKtgPoints("0.0000");
+  };
+
   const refresh = async () => {
     if (!provider || !address) return;
     setLoading(true);
+    // Prevent a brief flash of stale pre-tx numbers (especially after withdraw)
+    clearEstimates();
     try {
       const usdkC = new ethers.Contract(USDK, usdkAbi, provider);
       const susdkC = new ethers.Contract(VAULT, susdkAbi, provider);
@@ -281,6 +290,7 @@ export default function Vault1Page() {
       await (await controllerC.depositUSDC(amount)).wait();
       setStatus(null);
       setStatus("Deposit successful. Check your wallet.");
+      clearEstimates();
       await refresh();
     } catch (e: any) {
       if (isUserRejected(e)) {
@@ -309,6 +319,7 @@ export default function Vault1Page() {
       await (await controllerC.withdrawShares(shares)).wait();
       setStatus(null);
       setStatus("Withdraw successful. Check your wallet.");
+      clearEstimates();
       await refresh();
     } catch (e: any) {
       if (isUserRejected(e)) {
@@ -334,6 +345,7 @@ export default function Vault1Page() {
       await (await controllerC.compoundGlobal()).wait();
       setStatus(null);
       setStatus("Compound successful.");
+      clearEstimates();
       await refresh();
     } catch (e: any) {
       if (isUserRejected(e)) {
