@@ -203,13 +203,13 @@ export default function DashboardPage() {
 
         <Card className="flex flex-col items-center">
           <div className="text-xs text-slate-400 font-semibold">Total deposited</div>
-          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.deposited : "-"}</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? v1Deposited : "-"}</div>
           <div className="mt-1 text-xs text-slate-400">Across all vaults</div>
         </Card>
 
         <Card className="flex flex-col items-center">
           <div className="text-xs text-slate-400 font-semibold">Pending yield</div>
-          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.pending : "-"}</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? v1Pending : "-"}</div>
           <div className="mt-1 text-xs text-slate-400">Claim/compound per-vault</div>
         </Card>
 
