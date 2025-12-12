@@ -281,7 +281,7 @@ export default function Vault1Page() {
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
           <UsdkIcon className="h-8 w-8 mb-2" />
           <div className="text-xs text-gray-800 font-bold">Yield earned (pending)</div>
-          <div className="text-xl font-semibold text-gray-900">{pendingRewardsOnchain} (+{pendingRewardsFarmEst})</div>
+          <div className="text-xl font-semibold text-gray-900">{pendingRewardsTotalEst}</div>
         </div>
         {/* KTG Airdrop Points box */}
         <div className="rounded-xl border p-6 bg-white flex flex-col items-center w-1/3 min-w-[120px]">
