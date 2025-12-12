@@ -132,12 +132,21 @@ export default function Vault1Page() {
       );
 
       // Quota stimata dei rewards ancora in Farm per il controller
+      // NOTE: usiamo bigint per evitare perdita di precisione con numeri molto grandi.
       let userFarmEstNum = 0;
-      if (susdkTotalNum > 0 && susdkBalUserNum > 0) {
-        const userShare = susdkBalUserNum / susdkTotalNum;
-        const globalPendingNum = Number(formatUnits(globalPendingFarm, 18)); // USDC 18 dec
-        const globalPendingUsdkNum = globalPendingNum / 1e12; // converti da 18 a 6 dec (USDK-like)
-        userFarmEstNum = globalPendingUsdkNum * userShare;
+      try {
+        if (susdkTotal > 0n && susdkBalUser > 0n && globalPendingFarm > 0n) {
+          // Converti pending farm da USDC(18) a USDK-like(6) -> / 1e12
+          const globalPendingUsdk6 = globalPendingFarm / 1_000_000_000_000n; // 1e12
+
+          // userFarmEstUsdk6 = globalPendingUsdk6 * userShares / totalShares (tutto bigint)
+          const userFarmEstUsdk6 = (globalPendingUsdk6 * susdkBalUser) / susdkTotal;
+
+          // Converti a numero solo per display (dopo aver ridotto a 6 decimali)
+          userFarmEstNum = Number(formatUnits(userFarmEstUsdk6, 6));
+        }
+      } catch {
+        userFarmEstNum = 0;
       }
 
       setPendingRewardsFarmEst(

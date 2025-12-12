@@ -31,6 +31,7 @@ contract StableVault is ERC20Upgradeable {
 
     bool private initialized;
     address public controller; // authorized orchestrator
+    address public owner; // aggiunto owner
 
     // Security
     bool public paused;
@@ -53,13 +54,21 @@ contract StableVault is ERC20Upgradeable {
         stableFarm = IStableFarm(_farm);
         initialized = true;
         controller = msg.sender;
+        owner = msg.sender; // set owner iniziale
     }
 
     modifier onlyController() {
         require(msg.sender == controller, "NOT_CONTROLLER");
         _;
     }
-
+    modifier onlyOwner() {
+        require(msg.sender == owner, "NOT_OWNER");
+        _;
+    }
+    modifier onlyControllerOrOwner() {
+        require(msg.sender == controller || msg.sender == owner, "NOT_CONTROLLER_OR_OWNER");
+        _;
+    }
     modifier whenNotPaused() {
         require(!paused, "PAUSED");
         _;
@@ -88,6 +97,11 @@ contract StableVault is ERC20Upgradeable {
         controller = _controller;
     }
 
+    function setOwner(address newOwner) external onlyController {
+        require(newOwner != address(0), "BAD_OWNER");
+        owner = newOwner;
+    }
+
     // Controller API: deposit USDK into vault custody (USDK held by vault)
     function depositUSDK(uint256 amount) external onlyController whenNotPaused nonReentrant {
         require(initialized, "NOT_INIT");
@@ -113,7 +127,7 @@ contract StableVault is ERC20Upgradeable {
     }
 
     // Deposito USDC diretto (legacy): minta quote sUSDK 1:1 e invia USDC alla Farm
-    function depositUSDC(uint256 amount) external whenNotPaused nonReentrant {
+    function depositUSDC(uint256 amount) external onlyControllerOrOwner whenNotPaused nonReentrant {
         require(initialized, "NOT_INIT");
         require(amount > 0, "AMOUNT_ZERO");
         require(usdc.transferFrom(msg.sender, address(this), amount), "USDC_TRANSFER_FAIL");
@@ -136,7 +150,7 @@ contract StableVault is ERC20Upgradeable {
     }
 
     // Prelievo diretto legacy in USDC: mantenuto per compatibilità ma non consigliato
-    function withdraw(uint256 amount) external whenNotPaused nonReentrant {
+    function withdraw(uint256 amount) external onlyControllerOrOwner whenNotPaused nonReentrant {
         require(amount > 0, "AMOUNT_ZERO");
         _burn(msg.sender, amount);
         require(usdc.transfer(msg.sender, amount), "USDC_TRANSFER_FAIL");
