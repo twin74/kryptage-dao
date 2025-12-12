@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { Card, PageShell, PrimaryButton, SecondaryButton } from "@/components/UI";
+import { Badge, Card, PageShell, PrimaryButton, SecondaryButton } from "@/components/UI";
 
 export default function DashboardPage() {
   const [address, setAddress] = useState<string>("");
@@ -95,10 +95,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <PageShell
-      title="Dashboard"
-      subtitle="Your position overview across the Stable Vault and points system."
-    >
+    <PageShell title="Dashboard" subtitle="Your position overview across the Stable Vault and points system.">
       {!address && (
         <div className="rounded-md border border-amber-800 bg-amber-950/40 text-amber-200 p-3 text-sm">
           Wallet not connected. Connect from the header to see your dashboard.
@@ -171,6 +168,21 @@ export default function DashboardPage() {
           </div>
         </Card>
       </div>
+
+      <Card className="mt-8">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-sm font-semibold text-slate-100">Multi-vault dashboard</div>
+            <div className="mt-2 text-sm text-slate-300">
+              Vault 24 will appear here once their on-chain integration is enabled.
+            </div>
+          </div>
+          <Badge tone="blue">Preview</Badge>
+        </div>
+        <div className="mt-3 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-xs text-slate-300">
+          UI preview  on-chain integration coming next.
+        </div>
+      </Card>
     </PageShell>
   );
 }

@@ -8,7 +8,6 @@ function VaultCard({
   status,
   description,
   cta,
-  enabled,
 }: {
   title: string;
   asset: string;
@@ -16,7 +15,6 @@ function VaultCard({
   status: "Live" | "Preview";
   description: string;
   cta: string;
-  enabled: boolean;
 }) {
   return (
     <Card className="flex flex-col">
@@ -37,15 +35,11 @@ function VaultCard({
       )}
 
       <div className="mt-4 flex items-center justify-end gap-2">
-        {enabled ? (
-          <Link href={href}>
-            <PrimaryButton>{cta}</PrimaryButton>
-          </Link>
-        ) : (
-          <PrimaryButton disabled>{cta}</PrimaryButton>
-        )}
         <Link href={href}>
-          <SecondaryButton disabled={!enabled}>Details</SecondaryButton>
+          {status === "Live" ? <PrimaryButton>{cta}</PrimaryButton> : <SecondaryButton>{cta}</SecondaryButton>}
+        </Link>
+        <Link href={href} className="text-sm text-blue-400 hover:text-blue-300">
+          Details
         </Link>
       </div>
     </Card>
@@ -54,19 +48,15 @@ function VaultCard({
 
 export default function VaultPage() {
   return (
-    <PageShell
-      title="Vaults"
-      subtitle="Choose a vault to deposit collateral and earn yield. Vault 1 is live; other vaults are UI previews."
-    >
+    <PageShell title="Vaults" subtitle="Choose a vault to deposit collateral and earn yield.">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <VaultCard
           title="Vault 1"
           asset="USDC → USDK (Stable Vault)"
           href="/vault1"
           status="Live"
-          description="Deposit USDC, receive USDK exposure and earn yield. Tracks KTG airdrop points." 
+          description="Deposit USDC, receive USDK exposure and earn yield. Tracks KTG airdrop points."
           cta="Open"
-          enabled
         />
 
         <VaultCard
@@ -74,9 +64,8 @@ export default function VaultPage() {
           asset="WBTC Vault"
           href="/vault2"
           status="Preview"
-          description="BTC-collateral vault UI. Deposit WBTC and manage your vault position." 
+          description="BTC-collateral vault UI. Deposit WBTC and manage your vault position."
           cta="Preview"
-          enabled={false}
         />
 
         <VaultCard
@@ -84,9 +73,8 @@ export default function VaultPage() {
           asset="XAUT Vault"
           href="/vault3"
           status="Preview"
-          description="Gold-collateral vault UI. Deposit XAUT and manage your vault position." 
+          description="Gold-collateral vault UI. Deposit XAUT and manage your vault position."
           cta="Preview"
-          enabled={false}
         />
 
         <VaultCard
@@ -94,17 +82,16 @@ export default function VaultPage() {
           asset="SPYON Vault"
           href="/vault4"
           status="Preview"
-          description="Index-collateral vault UI. Deposit SPYON and manage your vault position." 
+          description="Index-collateral vault UI. Deposit SPYON and manage your vault position."
           cta="Preview"
-          enabled={false}
         />
       </div>
 
       <Card className="mt-8">
         <div className="text-sm font-semibold text-slate-100">Notes</div>
         <ul className="mt-3 space-y-2 text-sm text-slate-300 list-disc list-inside">
-          <li>Vault 1 is already connected to on-chain contracts via Sepolia.</li>
-          <li>Vault 2–4 are UI previews only and will be wired to contracts next.</li>
+          <li>Vault 1 is connected to on-chain contracts via Sepolia.</li>
+          <li>Vault 2–4 are UI previews and will be wired to contracts next.</li>
         </ul>
       </Card>
     </PageShell>

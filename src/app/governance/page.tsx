@@ -95,10 +95,22 @@ export default function GovernancePage() {
   });
 
   return (
-    <PageShell
-      title="Governance"
-      subtitle="Create proposals, vote and shape the future of Kryptage. (UI preview — on-chain integration coming next.)"
-    >
+    <PageShell title="Governance" subtitle="Create proposals, vote and shape the future of Kryptage.">
+      <Card className="mb-6">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-sm font-semibold text-slate-100">Governance portal</div>
+            <div className="mt-2 text-sm text-slate-300">
+              UI preview of a Snapshot/Tally-style governance hub. Proposal creation and on-chain voting will be enabled next.
+            </div>
+          </div>
+          <Badge tone="blue">Preview</Badge>
+        </div>
+        <div className="mt-3 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-xs text-slate-300">
+          UI preview — on-chain integration coming next.
+        </div>
+      </Card>
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card>
           <div className="text-xs text-slate-400">Voting power</div>

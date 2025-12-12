@@ -124,15 +124,11 @@ export default function AirdropPage() {
               className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100"
               disabled
             />
-            <button
-              className="rounded-md bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
-              disabled
-              title="Coming soon"
-            >
+            <SecondaryButton disabled className="sm:w-56">
               Subscribe (coming soon)
-            </button>
+            </SecondaryButton>
           </div>
-          <div className="mt-2 text-xs text-slate-400">Newsletter signup integration coming soon.</div>
+          <div className="mt-2 text-xs text-slate-400">UI preview  on-chain integration coming next.</div>
         </div>
       </Card>
     </PageShell>

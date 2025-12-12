@@ -234,16 +234,39 @@ export default function FaucetPage() {
       title="Faucet"
       subtitle="Get test tokens to try the dApp. Connect your wallet, register your email once, then claim when eligible."
     >
-      <Card>
-        <div className="font-semibold">KTG Points</div>
-        <div className="mt-1">Current: <span className="font-mono">{ktgPoints}</span></div>
-        <div className="mt-1 text-xs text-slate-300">Each faucet claim adds <span className="font-mono">+10</span> points</div>
-      </Card>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <Card className="md:col-span-2">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="text-sm font-semibold text-slate-100">Wallet</div>
+              <div className="mt-1 text-sm text-slate-300">{isConnected && address ? address : "Not connected"}</div>
+              <div className="mt-2 text-xs text-slate-400">Sepolia testnet required.</div>
+            </div>
+            {isConnected ? (
+              <SecondaryButton onClick={disconnectWallet}>Disconnect</SecondaryButton>
+            ) : (
+              <PrimaryButton onClick={connectWallet}>Connect</PrimaryButton>
+            )}
+          </div>
+        </Card>
+
+        <Card>
+          <div className="font-semibold">KTG Points</div>
+          <div className="mt-1">
+            Current: <span className="font-mono">{ktgPoints}</span>
+          </div>
+          <div className="mt-1 text-xs text-slate-300">
+            Each faucet claim adds <span className="font-mono">+10</span> points
+          </div>
+        </Card>
+      </div>
 
       {!verified ? (
         <Card className="mt-6">
           <div className="space-y-2">
-            <label className="block text-sm font-medium" htmlFor="faucet-email">Email</label>
+            <label className="block text-sm font-medium" htmlFor="faucet-email">
+              Email
+            </label>
             <input
               id="faucet-email"
               name="email"
@@ -254,13 +277,12 @@ export default function FaucetPage() {
               placeholder="you@example.com"
               className="w-full rounded-md border border-slate-700 bg-slate-950/30 px-3 py-2 text-slate-100"
             />
-            <PrimaryButton
-              onClick={register}
-              disabled={!isConnected || !email}
-              className="w-full"
-            >
+            <PrimaryButton onClick={register} disabled={!isConnected || !email} className="w-full">
               Register & Send Confirmation
             </PrimaryButton>
+            <div className="text-xs text-slate-400">
+              You will receive a confirmation email. Once verified, your wallet will be allowed to claim.
+            </div>
           </div>
         </Card>
       ) : (
@@ -291,18 +313,14 @@ export default function FaucetPage() {
                   <div className="text-xs text-slate-400 font-mono">{t.address}</div>
                 </div>
               </div>
-              <SecondaryButton onClick={() => importToken(t.symbol, t.address, t.decimals)}>
-                Import
-              </SecondaryButton>
+              <SecondaryButton onClick={() => importToken(t.symbol, t.address, t.decimals)}>Import</SecondaryButton>
             </li>
           ))}
         </ul>
       </Card>
 
       {status && (
-        <div className="mt-6 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-sm text-slate-200">
-          {status}
-        </div>
+        <div className="mt-6 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-sm text-slate-200">{status}</div>
       )}
     </PageShell>
   );
