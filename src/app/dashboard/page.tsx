@@ -78,7 +78,7 @@ export default function DashboardPage() {
       // APY (same computation used in /vault1)
       try {
         const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
-        setV1Apy(((aprPercent / 6) * 5).toFixed(2) + "%");
+        setV1Apy(((aprPercent / 6) * 5).toFixed(2) + " %");
       } catch {
         setV1Apy("-");
       }
