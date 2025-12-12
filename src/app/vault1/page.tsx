@@ -43,6 +43,7 @@ export default function Vault1Page() {
     "function depositUSDC(uint256 amount)",
     "function withdrawShares(uint256 shares)",
     "function compoundGlobal()",
+    "function pendingRewards(address user) view returns (uint256)",
   ];
   const farmAbi = [
     "function pendingRewards(address) view returns (uint256)",
@@ -74,6 +75,7 @@ export default function Vault1Page() {
       const susdkC = new ethers.Contract(VAULT, susdkAbi, provider);
       const farmC = new ethers.Contract(FARM, farmAbi, provider);
       const usdcC = new ethers.Contract(USDC, usdcAbi, provider);
+      const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, provider);
 
       const [usdkDec, susdkDec, usdcDec, apr1e18Raw] = await Promise.all([
         usdkC.decimals(),
@@ -81,15 +83,30 @@ export default function Vault1Page() {
         usdcC.decimals(),
         farmC.apr1e18(),
       ]);
-      const [usdkBalVault, susdkBalUser, rewards, usdcBalUser] = await Promise.all([
+      const [usdkBalVault, susdkBalUser, userRewards, usdcBalUser] = await Promise.all([
         usdkC.balanceOf(VAULT),
         susdkC.balanceOf(address),
-        farmC.pendingRewards(address),
+        controllerC.pendingRewards(address),
         usdcC.balanceOf(address),
       ]);
-      setUsdkInVault(Number(formatUnits(usdkBalVault, usdkDec)).toLocaleString(undefined, { maximumFractionDigits: 0 }));
-      setSusdkBalance(Number(formatUnits(susdkBalUser, susdkDec)).toLocaleString(undefined, { maximumFractionDigits: 1, minimumFractionDigits: 1 }));
-      setPendingRewards(Number(formatUnits(rewards, 18)).toLocaleString(undefined, { maximumFractionDigits: 4, minimumFractionDigits: 4 }));
+      setUsdkInVault(
+        Number(formatUnits(usdkBalVault, usdkDec)).toLocaleString(undefined, {
+          maximumFractionDigits: 0,
+        })
+      );
+      setSusdkBalance(
+        Number(formatUnits(susdkBalUser, susdkDec)).toLocaleString(undefined, {
+          maximumFractionDigits: 1,
+          minimumFractionDigits: 1,
+        })
+      );
+      // userRewards è in USDK (6 decimali)
+      setPendingRewards(
+        Number(formatUnits(userRewards, 6)).toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+          minimumFractionDigits: 4,
+        })
+      );
       setUsdcBalance(formatUnits(usdcBalUser, usdcDec));
       // APY = apr1e18 / 6 * 5
       const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
