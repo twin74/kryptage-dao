@@ -122,9 +122,31 @@ export default function AirdropPage() {
           </table>
         </div>
 
-        <p className="mt-3 text-xs text-slate-400">
-          Source: verified wallets in MongoDB (`faucet_users`) + on-chain `points+pendingEarned`.
-        </p>
+        <div className="mt-6 rounded-lg border border-slate-800 bg-slate-950/30 p-4">
+          <h3 className="text-base font-semibold">Kryptage Newsletter</h3>
+          <p className="mt-1 text-sm text-slate-300">
+            Subscribe to the Kryptage newsletter to get platform updates, upcoming events, points announcements and the token launch timeline.
+          </p>
+          <p className="mt-2 text-sm text-slate-200">
+            Subscribing to the newsletter adds <span className="font-mono">+10</span> points.
+          </p>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input
+              type="email"
+              placeholder="you@example.com"
+              className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100"
+              disabled
+            />
+            <button
+              className="rounded-md bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
+              disabled
+              title="Coming soon"
+            >
+              Subscribe (coming soon)
+            </button>
+          </div>
+          <div className="mt-2 text-xs text-slate-400">Newsletter signup integration coming soon.</div>
+        </div>
       </div>
     </div>
   );

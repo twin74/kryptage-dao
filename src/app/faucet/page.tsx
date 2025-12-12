@@ -236,7 +236,7 @@ export default function FaucetPage() {
       <div className="rounded-md border border-slate-700 bg-slate-900/40 p-3 text-sm text-slate-200">
         <div className="font-semibold">KTG Points</div>
         <div className="mt-1">Current: <span className="font-mono">{ktgPoints}</span></div>
-        <div className="mt-1 text-xs text-slate-300">Each faucet claim adds <span className="font-mono">+10</span> points (and updates daily accrual).</div>
+        <div className="mt-1 text-xs text-slate-300">Each faucet claim adds <span className="font-mono">+10</span> points</div>
       </div>
 
       {!verified ? (
