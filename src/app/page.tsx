@@ -19,7 +19,7 @@ export default function Home() {
 
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href="/vault">
-              <PrimaryButton>Open Vaults</PrimaryButton>
+              <SecondaryButton>Open Vaults</SecondaryButton>
             </Link>
             <Link href="/dashboard">
               <SecondaryButton>Dashboard</SecondaryButton>
@@ -30,10 +30,6 @@ export default function Home() {
             <Link href="/faucet">
               <SecondaryButton>Faucet</SecondaryButton>
             </Link>
-          </div>
-
-          <div className="mt-4 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-xs text-slate-300">
-            Tip: Vault 1 is live. Vault 24 are UI previews (on-chain integration coming next).
           </div>
         </Card>
 
@@ -46,10 +42,10 @@ export default function Home() {
           </ol>
           <div className="mt-4 flex flex-col gap-2">
             <Link href="/faucet">
-              <SecondaryButton className="w-full">Go to Faucet</SecondaryButton>
+              <PrimaryButton className="w-full">Go to Faucet</PrimaryButton>
             </Link>
             <Link href="/vault1">
-              <SecondaryButton className="w-full">Open Vault 1</SecondaryButton>
+              <SecondaryButton className="w-full">Stable Vault</SecondaryButton>
             </Link>
           </div>
         </Card>
