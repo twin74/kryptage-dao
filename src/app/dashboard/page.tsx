@@ -23,14 +23,17 @@ export default function DashboardPage() {
   // Live (Vault 1 on-chain)
   const [v1Deposited, setV1Deposited] = useState<string>("0.0");
   const [v1Pending, setV1Pending] = useState<string>("0.0000");
+  const [v1Apy, setV1Apy] = useState<string>("-");
   const [ktgPoints, setKtgPoints] = useState<string>("0.0000");
 
   const VAULT1 = process.env.NEXT_PUBLIC_STABLE_VAULT as string;
   const CONTROLLER = process.env.NEXT_PUBLIC_STABLE_CONTROLLER as string;
   const KTG_POINTS = process.env.NEXT_PUBLIC_KTG_POINTS as string | undefined;
+  const FARM = process.env.NEXT_PUBLIC_STABLE_FARM as string | undefined;
 
   const susdkAbi = ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"] as const;
   const controllerAbi = ["function pendingRewards(address) view returns (uint256)"] as const;
+  const farmAbi = ["function apr1e18() view returns (uint256)"] as const;
   const pointsAbi = [
     "function points(address) view returns (uint256)",
     "function pendingEarned(address) view returns (uint256)",
@@ -50,6 +53,7 @@ export default function DashboardPage() {
         setAddress("");
         setV1Deposited("0.0");
         setV1Pending("0.0000");
+        setV1Apy("-");
         setKtgPoints("0.0000");
         return;
       }
@@ -59,15 +63,25 @@ export default function DashboardPage() {
 
       const susdkC = new ethers.Contract(VAULT1, susdkAbi, provider);
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, provider);
+      const farmC = FARM ? new ethers.Contract(FARM, farmAbi, provider) : null;
       const pointsC = KTG_POINTS ? new ethers.Contract(KTG_POINTS, pointsAbi, provider) : null;
 
-      const [susdkDec, susdkBal, pending, pts, ptsPend] = await Promise.all([
+      const [susdkDec, susdkBal, pending, apr1e18Raw, pts, ptsPend] = await Promise.all([
         susdkC.decimals() as Promise<number>,
         susdkC.balanceOf(addr) as Promise<bigint>,
         controllerC.pendingRewards(addr) as Promise<bigint>,
+        farmC ? (farmC.apr1e18() as Promise<bigint>) : Promise.resolve(0n),
         pointsC ? (pointsC.points(addr) as Promise<bigint>) : Promise.resolve(0n),
         pointsC ? (pointsC.pendingEarned(addr) as Promise<bigint>) : Promise.resolve(0n),
       ]);
+
+      // APY (same computation used in /vault1)
+      try {
+        const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
+        setV1Apy(((aprPercent / 6) * 5).toFixed(2) + "%");
+      } catch {
+        setV1Apy("-");
+      }
 
       setV1Deposited(
         Number(ethers.formatUnits(susdkBal, susdkDec)).toLocaleString(undefined, {
@@ -115,7 +129,7 @@ export default function DashboardPage() {
         status: "Live",
         deposited: v1Deposited,
         pendingYield: v1Pending,
-        apy: "",
+        apy: v1Apy,
         href: "/vault1",
       },
       {
@@ -123,9 +137,9 @@ export default function DashboardPage() {
         name: "Stable Vault 2",
         symbol: "USDC",
         status: "Preview",
-        deposited: "",
-        pendingYield: "",
-        apy: "",
+        deposited: "-",
+        pendingYield: "-",
+        apy: "-",
         href: "/vault2",
       },
       {
@@ -133,9 +147,9 @@ export default function DashboardPage() {
         name: "Stable Vault 3",
         symbol: "WBTC",
         status: "Preview",
-        deposited: "",
-        pendingYield: "",
-        apy: "",
+        deposited: "-",
+        pendingYield: "-",
+        apy: "-",
         href: "/vault3",
       },
       {
@@ -143,13 +157,13 @@ export default function DashboardPage() {
         name: "Stable Vault 4",
         symbol: "XAUT",
         status: "Preview",
-        deposited: "",
-        pendingYield: "",
-        apy: "",
+        deposited: "-",
+        pendingYield: "-",
+        apy: "-",
         href: "/vault4",
       },
     ];
-  }, [v1Deposited, v1Pending]);
+  }, [v1Deposited, v1Pending, v1Apy]);
 
   const totals = useMemo(() => {
     const sumDeposited = vaultRows.reduce((acc, v) => {
@@ -179,7 +193,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         <Card className="flex flex-col items-center">
           <div className="text-xs text-slate-400 font-semibold">Wallet</div>
-          <div className="mt-1 text-base font-semibold text-slate-100">{address ? shortAddr(address) : ""}</div>
+          <div className="mt-1 text-base font-semibold text-slate-100">{address ? shortAddr(address) : "-"}</div>
           <div className="mt-3">
             <SecondaryButton disabled={loading} onClick={load}>
               Refresh
@@ -189,19 +203,19 @@ export default function DashboardPage() {
 
         <Card className="flex flex-col items-center">
           <div className="text-xs text-slate-400 font-semibold">Total deposited</div>
-          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.deposited : ""}</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.deposited : "-"}</div>
           <div className="mt-1 text-xs text-slate-400">Across all vaults</div>
         </Card>
 
         <Card className="flex flex-col items-center">
           <div className="text-xs text-slate-400 font-semibold">Pending yield</div>
-          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.pending : ""}</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.pending : "-"}</div>
           <div className="mt-1 text-xs text-slate-400">Claim/compound per-vault</div>
         </Card>
 
         <Card className="flex flex-col items-center">
           <div className="text-xs text-slate-400 font-semibold">KTG points</div>
-          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? ktgPoints : ""}</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? ktgPoints : "-"}</div>
           <div className="mt-3">
             <Link href="/airdrop">
               <SecondaryButton>Open Airdrop</SecondaryButton>
@@ -241,8 +255,8 @@ export default function DashboardPage() {
                     </div>
                   </td>
                   <td className="py-3 pr-4 text-slate-300 font-mono">{v.symbol}</td>
-                  <td className="py-3 pr-4 text-slate-200">{address ? v.deposited : ""}</td>
-                  <td className="py-3 pr-4 text-slate-200">{address ? v.pendingYield : ""}</td>
+                  <td className="py-3 pr-4 text-slate-200">{address ? v.deposited : "-"}</td>
+                  <td className="py-3 pr-4 text-slate-200">{address ? v.pendingYield : "-"}</td>
                   <td className="py-3 pr-4 text-slate-400">{v.apy}</td>
                   <td className="py-3 pr-0 text-right">
                     <Link href={v.href}>
