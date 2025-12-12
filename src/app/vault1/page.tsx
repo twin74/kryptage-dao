@@ -21,6 +21,10 @@ export default function Vault1Page() {
   const [usdcBalance, setUsdcBalance] = useState<string>("0");
   const [ktgPoints, setKtgPoints] = useState<string>("0.0000");
 
+  // Track previous share balance to avoid attributing pre-existing global Farm pending
+  // to a newly-created position right after the first deposit.
+  const [prevSusdkBalUser, setPrevSusdkBalUser] = useState<bigint>(0n);
+
   const VAULT = process.env.NEXT_PUBLIC_STABLE_VAULT as string;
   const CONTROLLER = process.env.NEXT_PUBLIC_STABLE_CONTROLLER as string;
   const FARM = process.env.NEXT_PUBLIC_STABLE_FARM as string;
@@ -71,6 +75,7 @@ export default function Vault1Page() {
     setApy("0");
     setUsdcBalance("0");
     setKtgPoints("0.0000");
+    setPrevSusdkBalUser(0n);
   };
 
   useEffect(() => {
@@ -199,13 +204,11 @@ export default function Vault1Page() {
       );
 
       // Quota stimata dei rewards ancora in Farm per il controller (bigint-safe)
-      // IMPORTANT: this is a UI-only estimate. A fresh depositor would otherwise appear
-      // to immediately "earn" a pro-rata share of rewards that accrued before their deposit.
-      // To avoid that misleading UX, only show a farm-estimate if the user already had shares.
+      // IMPORTANT: UI-only estimate; do not attribute pre-existing global pending to new depositors.
       let userFarmEstNum = 0;
       try {
-        const hadSharesAlready = susdkBalUser > 0n;
-        if (hadSharesAlready && susdkTotal > 0n && globalPendingFarm > 0n) {
+        const hadSharesBeforeThisRefresh = prevSusdkBalUser > 0n;
+        if (hadSharesBeforeThisRefresh && susdkTotal > 0n && globalPendingFarm > 0n && susdkBalUser > 0n) {
           const globalPendingUsdk6 = globalPendingFarm / 1_000_000_000_000n; // 1e12
           const userFarmEstUsdk6 = (globalPendingUsdk6 * susdkBalUser) / susdkTotal;
           userFarmEstNum = Number(formatUnits(userFarmEstUsdk6, 6));
@@ -228,6 +231,9 @@ export default function Vault1Page() {
           minimumFractionDigits: 4,
         })
       );
+
+      // Update prev balance for next refresh cycle
+      setPrevSusdkBalUser(susdkBalUser as bigint);
 
       setUsdcBalance(formatUnits(usdcBalUser, usdcDec));
 
