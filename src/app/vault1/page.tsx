@@ -199,9 +199,13 @@ export default function Vault1Page() {
       );
 
       // Quota stimata dei rewards ancora in Farm per il controller (bigint-safe)
+      // IMPORTANT: this is a UI-only estimate. A fresh depositor would otherwise appear
+      // to immediately "earn" a pro-rata share of rewards that accrued before their deposit.
+      // To avoid that misleading UX, only show a farm-estimate if the user already had shares.
       let userFarmEstNum = 0;
       try {
-        if (susdkTotal > 0n && susdkBalUser > 0n && globalPendingFarm > 0n) {
+        const hadSharesAlready = susdkBalUser > 0n;
+        if (hadSharesAlready && susdkTotal > 0n && globalPendingFarm > 0n) {
           const globalPendingUsdk6 = globalPendingFarm / 1_000_000_000_000n; // 1e12
           const userFarmEstUsdk6 = (globalPendingUsdk6 * susdkBalUser) / susdkTotal;
           userFarmEstNum = Number(formatUnits(userFarmEstUsdk6, 6));
