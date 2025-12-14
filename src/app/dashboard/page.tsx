@@ -281,7 +281,7 @@ export default function DashboardPage() {
               <tr className="text-left text-xs text-slate-400">
                 <th className="py-2 pr-4">Vault</th>
                 <th className="py-2 pr-4">Asset</th>
-                <th className="py-2 pr-4">Le tue Shares (sUSDK)</th>
+                <th className="py-2 pr-4">Your Shares (sUSDK)</th>
                 <th className="py-2 pr-4">Claimable USDK</th>
                 <th className="py-2 pr-4">APY</th>
                 <th className="py-2 pr-0 text-right">Action</th>
