@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { Card, PageShell } from "@/components/UI";
 import { useVaultClaimableAssetsEthers } from "@/hooks/useVaultClaimableAssetsEthers";
+import { KLogo } from "@/components/Header";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -396,7 +397,7 @@ export default function Vault1Page() {
         </Card>
 
         <Card className="flex flex-col items-center">
-          <img src="/globe.svg" alt="KTG" className="h-8 w-8 mb-2" />
+          <KLogo className="h-8 w-8 mb-2" />
           <div className="text-xs text-slate-400 font-semibold">KTG Airdrop Points</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{ktgPoints}</div>
         </Card>
