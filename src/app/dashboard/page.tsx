@@ -48,6 +48,7 @@ export default function DashboardPage() {
   const pointsAbi = [
     "function points(address) view returns (uint256)",
     "function pendingEarned(address) view returns (uint256)",
+    "function update(address user) returns (uint256)",
   ] as const;
 
   const shortAddr = (a: string) => (a && a.length > 10 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a);
@@ -80,6 +81,15 @@ export default function DashboardPage() {
       const susdkC = new ethers.Contract(VAULT1, susdkAbi, provider);
       const farmC = FARM ? new ethers.Contract(FARM, farmAbi, provider) : null;
       const pointsC = KTG_POINTS ? new ethers.Contract(KTG_POINTS, pointsAbi, provider) : null;
+
+      // Best-effort: realize points accrual so UI shows up-to-date value
+      try {
+        if (pointsC) {
+          await pointsC.update(addr);
+        }
+      } catch {
+        // ignore
+      }
 
       const [susdkDec, susdkBal, apr1e18Raw, pts, ptsPend, globalPendingFarm] = await Promise.all([
         susdkC.decimals() as Promise<number>,

@@ -67,6 +67,7 @@ export default function Vault1Page() {
   const ktgPointsAbi = [
     "function points(address) view returns (uint256)",
     "function pendingEarned(address) view returns (uint256)",
+    "function update(address user) returns (uint256)",
   ];
 
   const resetWalletState = () => {
@@ -198,6 +199,15 @@ export default function Vault1Page() {
         pointsC ? pointsC.points(address) : Promise.resolve(0n),
         pointsC ? pointsC.pendingEarned(address) : Promise.resolve(0n),
       ]);
+
+      // Best-effort: realize points accrual so UI shows up-to-date value
+      try {
+        if (pointsC) {
+          await pointsC.update(address);
+        }
+      } catch {
+        // ignore (may fail if not authorized on some deployments)
+      }
 
       setUsdkInVault(
         Number(formatUnits(usdkBalVault, usdkDec)).toLocaleString(undefined, {
