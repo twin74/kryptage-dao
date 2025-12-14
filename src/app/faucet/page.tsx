@@ -18,6 +18,8 @@ export default function FaucetPage() {
       switch (symbol) {
         case "USDC":
           return "/usdc.svg"; // local SVG
+        case "USDK":
+          return "/USDK.svg";
         case "WBTC":
           return "https://cdn.simpleicons.org/bitcoin"; // BTC icon for WBTC
         case "XAUT":
@@ -30,11 +32,12 @@ export default function FaucetPage() {
     };
     const list = [
       { symbol: "USDC", address: process.env.NEXT_PUBLIC_TOKEN_USDC as string, decimals: 18 },
+      { symbol: "USDK", address: process.env.NEXT_PUBLIC_TOKEN_USDK as string, decimals: 6 },
       { symbol: "WBTC", address: process.env.NEXT_PUBLIC_TOKEN_WBTC as string, decimals: 18 },
       { symbol: "XAUT", address: process.env.NEXT_PUBLIC_TOKEN_XAUT as string, decimals: 18 },
       { symbol: "SPYON", address: process.env.NEXT_PUBLIC_TOKEN_SPYON as string, decimals: 18 },
-    ].filter(t => !!t.address);
-    return list.map(t => ({ ...t, icon: iconFor(t.symbol) }));
+    ].filter((t) => !!t.address);
+    return list.map((t) => ({ ...t, icon: iconFor(t.symbol) }));
   }, []);
 
   const refreshPoints = async (walletAddr: string) => {
@@ -304,12 +307,15 @@ export default function FaucetPage() {
         </div>
         <ul className="mt-4 space-y-2">
           {tokens.map((t) => (
-            <li key={t.symbol} className="flex items-center justify-between rounded-md border border-slate-800 bg-slate-950/30 p-3">
+            <li
+              key={t.symbol}
+              className="flex items-center justify-between rounded-md border border-slate-800 bg-slate-950/30 p-3"
+            >
               <div className="flex items-center gap-3">
                 <img src={t.icon} alt={t.symbol} className="h-6 w-6 rounded" />
                 <div>
                   <div className="text-sm font-semibold">{t.symbol}</div>
-                  <div className="text-xs text-slate-400 font-mono">{t.address}</div>
+                  <div className="text-xs text-slate-400">Import to MetaMask</div>
                 </div>
               </div>
               <SecondaryButton onClick={() => importToken(t.symbol, t.address, t.decimals)}>Import</SecondaryButton>
