@@ -50,8 +50,17 @@ export default function FaucetPage() {
       const pointsAbi = [
         "function points(address) view returns (uint256)",
         "function pendingEarned(address) view returns (uint256)",
+        "function update(address user) returns (uint256)",
       ];
       const pointsC = new ethers.Contract(KTG_POINTS, pointsAbi, provider);
+
+      // Best-effort: realize accrual (may revert if caller not authorized)
+      try {
+        await pointsC.update(walletAddr);
+      } catch {
+        // ignore
+      }
+
       const [p, pend] = await Promise.all([
         pointsC.points(walletAddr) as Promise<bigint>,
         pointsC.pendingEarned(walletAddr) as Promise<bigint>,
@@ -189,7 +198,7 @@ export default function FaucetPage() {
       await tx.wait();
 
       await refreshPoints(await signer.getAddress());
-      setStatus("Claim executed. Check your wallet. (+10 KTG points)");
+      setStatus("Claim executed. Check your wallet.");
     } catch (e: any) {
       // Try to provide a friendly message if cooldown likely caused the revert or nonce error occurred
       try {
@@ -258,7 +267,7 @@ export default function FaucetPage() {
             Current: <span className="font-mono">{ktgPoints}</span>
           </div>
           <div className="mt-1 text-xs text-slate-300">
-            Each faucet claim adds <span className="font-mono">+10</span> points
+            Points accrue over time while you hold vault shares.
           </div>
         </Card>
       </div>
