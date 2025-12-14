@@ -244,15 +244,15 @@ export default function DashboardPage() {
         </Card>
 
         <Card className="flex flex-col items-center">
-          <div className="text-xs text-slate-400 font-semibold">Total deposited</div>
+          <div className="text-xs text-slate-400 font-semibold">Your Shares (sUSDK)</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.deposited : "-"}</div>
           <div className="mt-1 text-xs text-slate-400">Across all vaults</div>
         </Card>
 
         <Card className="flex flex-col items-center">
-          <div className="text-xs text-slate-400 font-semibold">Pending yield</div>
+          <div className="text-xs text-slate-400 font-semibold">Claimable USDK</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.pending : "-"}</div>
-          <div className="mt-1 text-xs text-slate-400">Claim/compound per-vault</div>
+          <div className="mt-1 text-xs text-slate-400">Across all vaults</div>
         </Card>
 
         <Card className="flex flex-col items-center">
