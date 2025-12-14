@@ -222,16 +222,16 @@ export default function Vault1Page() {
       // Show claimable in the top card from the same fresh read
       setClaimableUsdKDisplay(
         claimableNum.toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-          minimumFractionDigits: 4,
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
         })
       );
 
       // Claimable USDK for THIS user (shares -> assets)
       setPendingRewardsOnchain(
         claimableNum.toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-          minimumFractionDigits: 4,
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
         })
       );
 
@@ -240,16 +240,16 @@ export default function Vault1Page() {
       const globalPendingUsdk6 = (globalPendingFarm as bigint) / 1_000_000_000_000n;
       setPendingRewardsFarmEst(
         Number(formatUnits(globalPendingUsdk6, 6)).toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-          minimumFractionDigits: 4,
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
         })
       );
 
       // Total pending for user == claimable (do not include global farm pending)
       setPendingRewardsTotalEst(
         claimableNum.toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-          minimumFractionDigits: 4,
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
         })
       );
 
@@ -415,30 +415,12 @@ export default function Vault1Page() {
           <img src="/USDK.svg" alt="sUSDK" className="h-8 w-8 rounded mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Le tue Shares (sUSDK)</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{susdkBalance}</div>
-          <details className="mt-2 w-full rounded-md border border-slate-800 bg-slate-950/30 p-2 text-[11px] text-slate-300">
-            <summary className="cursor-pointer select-none text-slate-400">Debug</summary>
-            <div className="mt-2 space-y-1 break-all">
-              <div><span className="text-slate-500">address:</span> {address || "(none)"}</div>
-              <div><span className="text-slate-500">claimableUsdKDisplay:</span> {claimableUsdKDisplay}</div>
-              <div><span className="text-slate-500">hook.sharesFormatted:</span> {claimable.sharesFormatted}</div>
-              <div><span className="text-slate-500">hook.assetsFormatted:</span> {claimable.assetsFormatted}</div>
-              <div><span className="text-slate-500">hook.sharesRaw:</span> {claimable.sharesRaw.toString()}</div>
-              <div><span className="text-slate-500">hook.assetsRaw:</span> {claimable.assetsRaw.toString()}</div>
-              <div><span className="text-slate-500">hook.error:</span> {claimableError || "(none)"}</div>
-              <div><span className="text-slate-500">walletChainId:</span> {walletChainId === null ? "(unknown)" : String(walletChainId)}</div>
-            </div>
-          </details>
         </Card>
 
         <Card className="flex flex-col items-center">
           <img src="/USDK.svg" alt="USDK" className="h-8 w-8 mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Claimable USDK</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{claimableUsdKDisplay}</div>
-          {claimable.assetsRaw === 0n && claimableError && (
-            <div className="mt-1 text-[11px] text-amber-300/90 break-all text-center">
-              Claimable read error: {String(claimableError)}
-            </div>
-          )}
         </Card>
 
         <Card className="flex flex-col items-center">
