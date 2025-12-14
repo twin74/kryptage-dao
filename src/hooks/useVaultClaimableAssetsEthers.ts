@@ -1,8 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Contract, JsonRpcProvider, ethers } from "ethers";
 
-const VAULT_ADDRESS = process.env.NEXT_PUBLIC_STABLE_VAULT!;
-const SEPOLIA_RPC_URL = process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || process.env.SEPOLIA_RPC_URL;
+const VAULT_ADDRESS = process.env.NEXT_PUBLIC_STABLE_VAULT;
+
+const INFURA_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
+const FALLBACK_INFURA_RPC = INFURA_KEY ? `https://sepolia.infura.io/v3/${INFURA_KEY}` : undefined;
+
+const SEPOLIA_RPC_URL =
+  process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL ||
+  process.env.SEPOLIA_RPC_URL ||
+  FALLBACK_INFURA_RPC;
 
 // Minimal ERC4626-like / sUSDK ABI we need.
 const vaultAbi = [
@@ -35,10 +42,24 @@ export function useVaultClaimableAssetsEthers(userAddress?: string) {
     return new JsonRpcProvider(SEPOLIA_RPC_URL);
   }, []);
 
-  // Returns the freshly fetched data so callers can use it immediately
-  // without relying on a subsequent React render (avoids stale reads).
   const refetch = async (): Promise<VaultClaimableAssets> => {
-    if (!userAddress || !provider) {
+    // Diagnose missing config explicitly (avoid silent zeros)
+    if (!userAddress) {
+      setError(null);
+      setData(ZERO);
+      return ZERO;
+    }
+
+    if (!VAULT_ADDRESS) {
+      const msg = "Missing NEXT_PUBLIC_STABLE_VAULT (build-time env)";
+      setError(msg);
+      setData(ZERO);
+      return ZERO;
+    }
+
+    if (!SEPOLIA_RPC_URL || !provider) {
+      const msg = "Missing SEPOLIA RPC URL (set NEXT_PUBLIC_SEPOLIA_RPC_URL or SEPOLIA_RPC_URL or NEXT_PUBLIC_INFURA_API_KEY)";
+      setError(msg);
       setData(ZERO);
       return ZERO;
     }
@@ -47,6 +68,16 @@ export function useVaultClaimableAssetsEthers(userAddress?: string) {
     setError(null);
 
     try {
+      // Helpful client-side trace (shows effective config used in the deployed build)
+      if (typeof window !== "undefined") {
+        // eslint-disable-next-line no-console
+        console.debug("[useVaultClaimableAssetsEthers]", {
+          vault: VAULT_ADDRESS,
+          rpc: SEPOLIA_RPC_URL,
+          user: userAddress,
+        });
+      }
+
       const vault = new Contract(VAULT_ADDRESS, vaultAbi, provider);
       const [sharesRaw, dec] = await Promise.all([
         vault.balanceOf(userAddress) as Promise<bigint>,
@@ -58,9 +89,7 @@ export function useVaultClaimableAssetsEthers(userAddress?: string) {
       const next: VaultClaimableAssets = {
         sharesRaw,
         assetsRaw,
-        // shares are sUSDK (same decimals as vault shares)
         sharesFormatted: ethers.formatUnits(sharesRaw, dec),
-        // assets are USDK (USDK is 6 decimals in this project)
         assetsFormatted: ethers.formatUnits(assetsRaw, 6),
       };
 
