@@ -17,6 +17,7 @@ export default function AirdropPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [myPoints, setMyPoints] = useState<string>("0.0000");
 
   const load = async () => {
     setLoading(true);
@@ -33,11 +34,52 @@ export default function AirdropPage() {
     }
   };
 
+  const loadMyPoints = async () => {
+    try {
+      const KTG_POINTS = process.env.NEXT_PUBLIC_KTG_POINTS as string | undefined;
+      if (!KTG_POINTS || !(window as any).ethereum) {
+        setMyPoints("0.0000");
+        return;
+      }
+      const provider = new ethers.BrowserProvider((window as any).ethereum);
+      const signer = await provider.getSigner();
+      const walletAddr = await signer.getAddress();
+      const pointsAbi = [
+        "function points(address) view returns (uint256)",
+        "function pendingEarned(address) view returns (uint256)",
+        "function update(address user) returns (uint256)",
+      ];
+      const pointsC = new ethers.Contract(KTG_POINTS, pointsAbi, provider);
+
+      // Best-effort: realize accrual (may revert if caller not authorized)
+      try {
+        await pointsC.update(walletAddr);
+      } catch {
+        // ignore
+      }
+
+      const [p, pend] = await Promise.all([
+        pointsC.points(walletAddr) as Promise<bigint>,
+        pointsC.pendingEarned(walletAddr) as Promise<bigint>,
+      ]);
+      const total = (p ?? 0n) + (pend ?? 0n);
+      setMyPoints(
+        Number(ethers.formatUnits(total, 18)).toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+          minimumFractionDigits: 4,
+        })
+      );
+    } catch {
+      setMyPoints("0.0000");
+    }
+  };
+
   useEffect(() => {
     let alive = true;
     (async () => {
       if (!alive) return;
       await load();
+      await loadMyPoints();
     })();
     return () => {
       alive = false;
@@ -135,7 +177,7 @@ export default function AirdropPage() {
               <div className="h-full rounded-md border border-slate-800 bg-slate-900/30 p-3">
                 <div className="text-sm font-semibold text-slate-100">KTG Points</div>
                 <div className="mt-1 text-sm text-slate-300">
-                  Current: <span className="font-mono">0.0000</span>
+                  Current: <span className="font-mono">{myPoints}</span>
                 </div>
                 <div className="mt-1 text-sm text-slate-200">
                   Points accrue over time while you hold vault shares.
