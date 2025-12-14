@@ -17,6 +17,8 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /// @notice StableVault v2: share-based vault for USDK.
 /// @dev Shares (sUSDK) represent a pro-rata claim on USDK balance held by this vault.
+///      IMPORTANT: Underlying USDK uses 6 decimals, while shares (sUSDK) use 18 decimals.
+///      Conversions must apply a 1e12 scale factor (18-6) to avoid minting tiny share amounts.
 contract StableVault is Initializable, ERC20Upgradeable {
     IUSDK public usdk;
 
@@ -26,6 +28,10 @@ contract StableVault is Initializable, ERC20Upgradeable {
 
     bool public paused;
     bool private reentrancyLock;
+
+    uint8 internal constant ASSETS_DECIMALS = 6;
+    uint8 internal constant SHARES_DECIMALS = 18;
+    uint256 internal constant ASSETS_TO_SHARES_SCALE = 1e12; // 10^(18-6)
 
     event Paused(address indexed by);
     event Unpaused(address indexed by);
@@ -97,17 +103,39 @@ contract StableVault is Initializable, ERC20Upgradeable {
         return IERC20Minimal(address(usdk)).balanceOf(address(this));
     }
 
+    function _assetsToShares(uint256 assets) internal pure returns (uint256) {
+        // assets (6) -> shares (18)
+        return assets * ASSETS_TO_SHARES_SCALE;
+    }
+
+    function _sharesToAssets(uint256 shares) internal pure returns (uint256) {
+        // shares (18) -> assets (6)
+        return shares / ASSETS_TO_SHARES_SCALE;
+    }
+
+    /// @notice Convert USDK assets (6 decimals) to shares (18 decimals).
     function convertToShares(uint256 assets) public view returns (uint256) {
         uint256 supply = totalSupply();
         uint256 assetsBefore = totalAssets();
-        if (supply == 0 || assetsBefore == 0) return assets;
+
+        // initial deposit: 1 USDK asset unit (6) -> 1 share unit (18)
+        if (supply == 0 || assetsBefore == 0) return _assetsToShares(assets);
+
+        // Pro-rata: shares = assets * supply / totalAssets
+        // assets are 6 decimals, supply is 18 decimals -> result is 18 decimals.
         return (assets * supply) / assetsBefore;
     }
 
+    /// @notice Convert shares (18 decimals) to USDK assets (6 decimals).
     function convertToAssets(uint256 shares) public view returns (uint256) {
         uint256 supply = totalSupply();
         uint256 assetsNow = totalAssets();
-        if (supply == 0 || assetsNow == 0) return shares;
+
+        // if empty, map shares->assets by fixed scale
+        if (supply == 0 || assetsNow == 0) return _sharesToAssets(shares);
+
+        // Pro-rata: assets = shares * totalAssets / totalSupply
+        // shares are 18 decimals, assetsNow are 6 decimals -> result is 6 decimals.
         return (shares * assetsNow) / supply;
     }
 
