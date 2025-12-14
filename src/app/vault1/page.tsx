@@ -155,7 +155,6 @@ export default function Vault1Page() {
     if (!provider || !address) return;
     setLoading(true);
     clearEstimates();
-
     try {
       // Ensure wallet network matches Sepolia to avoid reading different chain (wallet) vs fixed RPC (hook)
       try {
@@ -213,9 +212,9 @@ export default function Vault1Page() {
         })
       );
 
-      // IMPORTANT: wait refetch so we don't use stale hook data in the same refresh cycle
-      await refetchClaimable();
-      const claimableNum = Number(claimable.assetsFormatted || "0");
+      // Get fresh claimable directly from refetch return (avoid stale hook state)
+      const freshClaimable = await refetchClaimable();
+      const claimableNum = Number(freshClaimable.assetsFormatted || "0");
 
       // Claimable USDK for THIS user (shares -> assets)
       setPendingRewardsOnchain(

@@ -18,13 +18,15 @@ export type VaultClaimableAssets = {
   assetsFormatted: string;
 };
 
+const ZERO: VaultClaimableAssets = {
+  sharesRaw: 0n,
+  assetsRaw: 0n,
+  sharesFormatted: "0",
+  assetsFormatted: "0",
+};
+
 export function useVaultClaimableAssetsEthers(userAddress?: string) {
-  const [data, setData] = useState<VaultClaimableAssets>({
-    sharesRaw: 0n,
-    assetsRaw: 0n,
-    sharesFormatted: "0",
-    assetsFormatted: "0",
-  });
+  const [data, setData] = useState<VaultClaimableAssets>(ZERO);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,8 +35,14 @@ export function useVaultClaimableAssetsEthers(userAddress?: string) {
     return new JsonRpcProvider(SEPOLIA_RPC_URL);
   }, []);
 
-  const refetch = async () => {
-    if (!userAddress || !provider) return;
+  // Returns the freshly fetched data so callers can use it immediately
+  // without relying on a subsequent React render (avoids stale reads).
+  const refetch = async (): Promise<VaultClaimableAssets> => {
+    if (!userAddress || !provider) {
+      setData(ZERO);
+      return ZERO;
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -47,22 +55,21 @@ export function useVaultClaimableAssetsEthers(userAddress?: string) {
 
       const assetsRaw = (await vault.convertToAssets(sharesRaw)) as bigint;
 
-      setData({
+      const next: VaultClaimableAssets = {
         sharesRaw,
         assetsRaw,
         // shares are sUSDK (same decimals as vault shares)
         sharesFormatted: ethers.formatUnits(sharesRaw, dec),
         // assets are USDK (USDK is 6 decimals in this project)
         assetsFormatted: ethers.formatUnits(assetsRaw, 6),
-      });
+      };
+
+      setData(next);
+      return next;
     } catch (e: any) {
       setError(e?.reason || e?.message || "Failed to read vault state");
-      setData({
-        sharesRaw: 0n,
-        assetsRaw: 0n,
-        sharesFormatted: "0",
-        assetsFormatted: "0",
-      });
+      setData(ZERO);
+      return ZERO;
     } finally {
       setIsLoading(false);
     }
