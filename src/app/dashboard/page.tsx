@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { Badge, Card, PageShell, PrimaryButton, SecondaryButton } from "@/components/UI";
+import { useVaultClaimableAssetsEthers } from "@/hooks/useVaultClaimableAssetsEthers";
 
 type VaultRow = {
   id: 1 | 2 | 3 | 4;
@@ -20,7 +21,9 @@ export default function DashboardPage() {
   const [address, setAddress] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
-  // Live (Vault 1 on-chain)
+  const { data: v1Claimable, isLoading: v1ClaimableLoading, refetch: refetchV1 } =
+    useVaultClaimableAssetsEthers(address || undefined);
+
   const [v1Deposited, setV1Deposited] = useState<string>("0.0");
   const [v1Pending, setV1Pending] = useState<string>("0.0000");
   const [v1Apy, setV1Apy] = useState<string>("-");
@@ -31,9 +34,17 @@ export default function DashboardPage() {
   const KTG_POINTS = process.env.NEXT_PUBLIC_KTG_POINTS as string | undefined;
   const FARM = process.env.NEXT_PUBLIC_STABLE_FARM as string | undefined;
 
-  const susdkAbi = ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"] as const;
-  const controllerAbi = ["function pendingRewards(address) view returns (uint256)"] as const;
-  const farmAbi = ["function apr1e18() view returns (uint256)"] as const;
+  const susdkAbi = [
+    "function balanceOf(address) view returns (uint256)",
+    "function decimals() view returns (uint8)",
+    "function convertToAssets(uint256 shares) view returns (uint256)",
+  ] as const;
+
+  const farmAbi = [
+    "function apr1e18() view returns (uint256)",
+    "function pendingRewards(address) view returns (uint256)",
+  ] as const;
+
   const pointsAbi = [
     "function points(address) view returns (uint256)",
     "function pendingEarned(address) view returns (uint256)",
@@ -49,6 +60,7 @@ export default function DashboardPage() {
     try {
       const provider = new ethers.BrowserProvider(eth);
       const accounts: string[] = await provider.send("eth_accounts", []);
+
       if (!accounts?.[0]) {
         setAddress("");
         setV1Deposited("0.0");
@@ -61,21 +73,30 @@ export default function DashboardPage() {
       const addr = accounts[0];
       setAddress(addr);
 
+      // Refresh claimable (shares -> assets) from the hook
+      // (this uses an RPC provider, so it works even if the wallet isn't on Sepolia)
+      void refetchV1();
+
       const susdkC = new ethers.Contract(VAULT1, susdkAbi, provider);
-      const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, provider);
       const farmC = FARM ? new ethers.Contract(FARM, farmAbi, provider) : null;
       const pointsC = KTG_POINTS ? new ethers.Contract(KTG_POINTS, pointsAbi, provider) : null;
 
-      const [susdkDec, susdkBal, pending, apr1e18Raw, pts, ptsPend] = await Promise.all([
+      const [susdkDec, susdkBal, apr1e18Raw, pts, ptsPend, globalPendingFarm] = await Promise.all([
         susdkC.decimals() as Promise<number>,
         susdkC.balanceOf(addr) as Promise<bigint>,
-        controllerC.pendingRewards(addr) as Promise<bigint>,
         farmC ? (farmC.apr1e18() as Promise<bigint>) : Promise.resolve(0n),
         pointsC ? (pointsC.points(addr) as Promise<bigint>) : Promise.resolve(0n),
         pointsC ? (pointsC.pendingEarned(addr) as Promise<bigint>) : Promise.resolve(0n),
+        farmC ? (farmC.pendingRewards(CONTROLLER) as Promise<bigint>) : Promise.resolve(0n),
       ]);
 
-      // APY (same computation used in /vault1)
+      setV1Deposited(
+        Number(ethers.formatUnits(susdkBal, susdkDec)).toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+          minimumFractionDigits: 2,
+        })
+      );
+
       try {
         const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
         setV1Apy(((aprPercent / 6) * 5).toFixed(2) + " %");
@@ -83,27 +104,16 @@ export default function DashboardPage() {
         setV1Apy("-");
       }
 
-      setV1Deposited(
-        Number(ethers.formatUnits(susdkBal, susdkDec)).toLocaleString(undefined, {
-          maximumFractionDigits: 1,
-          minimumFractionDigits: 1,
-        })
-      );
-
-      setV1Pending(
-        Number(ethers.formatUnits(pending, 6)).toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-          minimumFractionDigits: 4,
-        })
-      );
-
-      const totalPoints = pts + ptsPend;
+      const totalPoints = (pts as bigint) + (ptsPend as bigint);
       setKtgPoints(
         Number(ethers.formatUnits(totalPoints, 18)).toLocaleString(undefined, {
           maximumFractionDigits: 4,
           minimumFractionDigits: 4,
         })
       );
+
+      // Note: globalPendingFarm is not displayed here; kept for future analytics
+      void globalPendingFarm;
     } catch {
       // keep previous values
     } finally {
@@ -119,6 +129,24 @@ export default function DashboardPage() {
     return () => eth?.removeListener?.("accountsChanged", onAcc);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!address) return;
+    // Whenever hook updates, reflect claimable assets in UI.
+    setV1Deposited(
+      Number(v1Claimable.sharesFormatted).toLocaleString(undefined, {
+        maximumFractionDigits: 4,
+        minimumFractionDigits: 2,
+      })
+    );
+
+    setV1Pending(
+      Number(v1Claimable.assetsFormatted).toLocaleString(undefined, {
+        maximumFractionDigits: 4,
+        minimumFractionDigits: 4,
+      })
+    );
+  }, [address, v1Claimable]);
 
   const vaultRows = useMemo((): VaultRow[] => {
     return [

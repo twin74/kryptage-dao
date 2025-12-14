@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { KLogo } from "@/components/Header";
-import { UsdkIcon, SusdkIcon } from "@/components/TokenIcons";
 import { Card, PageShell } from "@/components/UI";
+import { useVaultClaimableAssetsEthers } from "@/hooks/useVaultClaimableAssetsEthers";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -36,28 +35,29 @@ export default function Vault1Page() {
   const usdcAbi = [
     "function decimals() view returns (uint8)",
     "function approve(address spender, uint256 amount) returns (bool)",
-    "function allowance(address owner, address spender) view returns (uint256)",
     "function balanceOf(address) view returns (uint256)",
   ];
-  const usdkAbi = [
-    "function balanceOf(address) view returns (uint256)",
-    "function decimals() view returns (uint8)",
-  ];
+
+  const usdkAbi = ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"];
+
+  // Vault (sUSDK shares)
   const susdkAbi = [
     "function totalSupply() view returns (uint256)",
     "function balanceOf(address) view returns (uint256)",
     "function decimals() view returns (uint8)",
+    "function totalAssets() view returns (uint256)",
+    "function convertToAssets(uint256 shares) view returns (uint256)",
   ];
+
   const controllerAbi = [
     "function depositUSDC(uint256 amount)",
     "function withdrawShares(uint256 shares)",
-    "function compoundGlobal()",
-    "function pendingRewards(address user) view returns (uint256)",
+    "function harvestAndSync()",
   ];
+
   const farmAbi = [
     "function pendingRewards(address) view returns (uint256)",
     "function apr1e18() view returns (uint256)",
-    "function stake(uint256 amount)",
   ];
   const ktgPointsAbi = [
     "function points(address) view returns (uint256)",
@@ -147,17 +147,18 @@ export default function Vault1Page() {
     setKtgPoints("0.0000");
   };
 
+  const { data: claimable, refetch: refetchClaimable } = useVaultClaimableAssetsEthers(address || undefined);
+
   const refresh = async () => {
     if (!provider || !address) return;
     setLoading(true);
-    // Prevent a brief flash of stale pre-tx numbers (especially after withdraw)
     clearEstimates();
+
     try {
       const usdkC = new ethers.Contract(USDK, usdkAbi, provider);
       const susdkC = new ethers.Contract(VAULT, susdkAbi, provider);
       const farmC = new ethers.Contract(FARM, farmAbi, provider);
       const usdcC = new ethers.Contract(USDC, usdcAbi, provider);
-      const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, provider);
 
       const [usdkDec, susdkDec, usdcDec, apr1e18Raw] = await Promise.all([
         usdkC.decimals(),
@@ -173,7 +174,6 @@ export default function Vault1Page() {
         susdkBalUser,
         susdkTotal,
         usdcBalUser,
-        userPendingOnchain,
         globalPendingFarm,
         onchainPoints,
         pendingPointsEarned,
@@ -182,7 +182,6 @@ export default function Vault1Page() {
         susdkC.balanceOf(address),
         susdkC.totalSupply(),
         usdcC.balanceOf(address),
-        controllerC.pendingRewards(address),
         farmC.pendingRewards(CONTROLLER),
         pointsC ? pointsC.points(address) : Promise.resolve(0n),
         pointsC ? pointsC.pendingEarned(address) : Promise.resolve(0n),
@@ -199,58 +198,44 @@ export default function Vault1Page() {
 
       setSusdkBalance(
         susdkBalUserNum.toLocaleString(undefined, {
-          maximumFractionDigits: 1,
-          minimumFractionDigits: 1,
+          maximumFractionDigits: 6,
+          minimumFractionDigits: 2,
         })
       );
 
-      // On-chain pending (controller, in USDK 6 decimali)
-      const userOnchainNum = Number(formatUnits(userPendingOnchain, 6));
+      // Keep claimable in sync (shares->assets) using fixed RPC provider hook
+      void refetchClaimable();
+
+      // Replace on-chain per-user estimate with hook result
+      const claimableNum = Number(claimable.assetsFormatted || "0");
       setPendingRewardsOnchain(
-        userOnchainNum.toLocaleString(undefined, {
+        claimableNum.toLocaleString(undefined, {
           maximumFractionDigits: 4,
           minimumFractionDigits: 4,
         })
       );
 
-      // Quota stimata dei rewards ancora in Farm per il controller (bigint-safe)
-      // IMPORTANT: UI-only estimate; do not attribute pre-existing global pending to new depositors.
-      let userFarmEstNum = 0;
-      try {
-        const hadSharesBeforeThisRefresh = prevSusdkBalUser > 0n;
-        if (hadSharesBeforeThisRefresh && susdkTotal > 0n && globalPendingFarm > 0n && susdkBalUser > 0n) {
-          const globalPendingUsdk6 = globalPendingFarm / 1_000_000_000_000n; // 1e12
-          const userFarmEstUsdk6 = (globalPendingUsdk6 * susdkBalUser) / susdkTotal;
-          userFarmEstNum = Number(formatUnits(userFarmEstUsdk6, 6));
-        }
-      } catch {
-        userFarmEstNum = 0;
-      }
-
+      // Farm pending (global, controller stake) shown as monitoring metric only
+      const globalPendingUsdk6 = (globalPendingFarm as bigint) / 1_000_000_000_000n;
       setPendingRewardsFarmEst(
-        userFarmEstNum.toLocaleString(undefined, {
+        Number(formatUnits(globalPendingUsdk6, 6)).toLocaleString(undefined, {
           maximumFractionDigits: 4,
           minimumFractionDigits: 4,
         })
       );
 
-      const totalEst = userOnchainNum + userFarmEstNum;
       setPendingRewardsTotalEst(
-        totalEst.toLocaleString(undefined, {
+        (claimableNum + Number(formatUnits(globalPendingUsdk6, 6))).toLocaleString(undefined, {
           maximumFractionDigits: 4,
           minimumFractionDigits: 4,
         })
       );
-
-      // Update prev balance for next refresh cycle
-      setPrevSusdkBalUser(susdkBalUser as bigint);
 
       setUsdcBalance(formatUnits(usdcBalUser, usdcDec));
 
       const aprPercent = Number(ethers.formatUnits(apr1e18Raw, 18));
       setApy(((aprPercent / 6) * 5).toFixed(2) + "%");
 
-      // KTG points: on-chain accumulated + pending (both 1e18)
       const pointsTotal1e18 = (onchainPoints as bigint) + (pendingPointsEarned as bigint);
       setKtgPoints(
         Number(formatUnits(pointsTotal1e18, 18)).toLocaleString(undefined, {
@@ -258,6 +243,8 @@ export default function Vault1Page() {
           minimumFractionDigits: 4,
         })
       );
+
+      setPrevSusdkBalUser(susdkBalUser as bigint);
     } finally {
       setLoading(false);
     }
@@ -342,16 +329,18 @@ export default function Vault1Page() {
     setStatus("Awaiting wallet confirmation...");
     try {
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
-      await (await controllerC.compoundGlobal()).wait();
+      await (await controllerC.harvestAndSync()).wait();
       setStatus(null);
-      setStatus("Compound successful.");
+      setStatus("Harvest & sync successful.");
       clearEstimates();
       await refresh();
     } catch (e: any) {
       if (isUserRejected(e)) {
         setStatus("Transaction rejected by user.");
+      } else if (e?.message?.toLowerCase().includes("cooldown")) {
+        setStatus("You must wait before the next harvest (cooldown active). Try again later.");
       } else {
-        setStatus("Compound failed. " + (e?.reason || e?.message || ""));
+        setStatus("Harvest failed. " + (e?.reason || e?.message || ""));
       }
     } finally {
       setLoading(false);
@@ -395,19 +384,19 @@ export default function Vault1Page() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="flex flex-col items-center">
-          <SusdkIcon className="h-8 w-8 rounded mb-2" />
+          <img src="/USDK.svg" alt="sUSDK" className="h-8 w-8 rounded mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Your USDK Staked</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{susdkBalance}</div>
         </Card>
 
         <Card className="flex flex-col items-center">
-          <UsdkIcon className="h-8 w-8 mb-2" />
+          <img src="/USDK.svg" alt="USDK" className="h-8 w-8 mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Yield earned (pending)</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{pendingRewardsTotalEst}</div>
         </Card>
 
         <Card className="flex flex-col items-center">
-          <KLogo className="h-8 w-8 mb-2" />
+          <img src="/globe.svg" alt="KTG" className="h-8 w-8 mb-2" />
           <div className="text-xs text-slate-400 font-semibold">KTG Airdrop Points</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{ktgPoints}</div>
         </Card>
@@ -415,7 +404,7 @@ export default function Vault1Page() {
 
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2 flex flex-col items-center">
-          <UsdkIcon className="h-8 w-8 mb-2" />
+          <img src="/USDK.svg" alt="USDK" className="h-8 w-8 mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Total USDK in Vault</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{usdkInVault}</div>
         </Card>
