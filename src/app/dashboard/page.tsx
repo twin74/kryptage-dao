@@ -194,21 +194,20 @@ export default function DashboardPage() {
   }, [v1Deposited, v1Pending, v1Apy]);
 
   const totals = useMemo(() => {
-    const sumDeposited = vaultRows.reduce((acc, v) => {
-      const n = Number(String(v.deposited).replace(/,/g, ""));
-      return acc + (Number.isFinite(n) ? n : 0);
-    }, 0);
+    // IMPORTANT: don't parse localized strings (e.g. "10.098,48"), it breaks (becomes 10.09848).
+    // Sum using raw numeric sources.
 
-    const sumPending = vaultRows.reduce((acc, v) => {
-      const n = Number(String(v.pendingYield).replace(/,/g, ""));
-      return acc + (Number.isFinite(n) ? n : 0);
-    }, 0);
+    const deposited = address ? v1Claimable.sharesRaw : 0n;
+    const pending = address ? v1Claimable.assetsRaw : 0n;
+
+    const depositedNum = Number(ethers.formatUnits(deposited, 18));
+    const pendingNum = Number(ethers.formatUnits(pending, 6));
 
     return {
-      deposited: sumDeposited.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
-      pending: sumPending.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+      deposited: depositedNum.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+      pending: pendingNum.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
     };
-  }, [vaultRows]);
+  }, [address, v1Claimable]);
 
   const tokenIconFor = (symbol: string) => {
     switch (symbol) {
