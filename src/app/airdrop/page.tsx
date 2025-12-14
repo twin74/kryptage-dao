@@ -36,35 +36,24 @@ export default function AirdropPage() {
 
   const loadMyPoints = async () => {
     try {
-      const KTG_POINTS = process.env.NEXT_PUBLIC_KTG_POINTS as string | undefined;
-      if (!KTG_POINTS || !(window as any).ethereum) {
+      if (!(window as any).ethereum) {
         setMyPoints("0.0000");
         return;
       }
       const provider = new ethers.BrowserProvider((window as any).ethereum);
       const signer = await provider.getSigner();
-      const walletAddr = await signer.getAddress();
-      const pointsAbi = [
-        "function points(address) view returns (uint256)",
-        "function pendingEarned(address) view returns (uint256)",
-        "function update(address user) returns (uint256)",
-      ];
-      const pointsC = new ethers.Contract(KTG_POINTS, pointsAbi, provider);
+      const walletAddr = (await signer.getAddress()).toLowerCase();
 
-      // Best-effort: realize accrual (may revert if caller not authorized)
-      try {
-        await pointsC.update(walletAddr);
-      } catch {
-        // ignore
-      }
+      // Use the same server-side method as the leaderboard (RPC + points+pending)
+      const res = await fetch("/api/airdrop/leaderboard?limit=200", { cache: "no-store" });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json?.error || "Failed to load points");
+      const entries = (json?.entries || []) as Entry[];
+      const mine = entries.find((e) => (e.wallet || "").toLowerCase() === walletAddr);
 
-      const [p, pend] = await Promise.all([
-        pointsC.points(walletAddr) as Promise<bigint>,
-        pointsC.pendingEarned(walletAddr) as Promise<bigint>,
-      ]);
-      const total = (p ?? 0n) + (pend ?? 0n);
+      const points1e18 = mine?.points1e18 || "0";
       setMyPoints(
-        Number(ethers.formatUnits(total, 18)).toLocaleString(undefined, {
+        Number(ethers.formatUnits(BigInt(points1e18), 18)).toLocaleString(undefined, {
           maximumFractionDigits: 4,
           minimumFractionDigits: 4,
         })
