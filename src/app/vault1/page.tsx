@@ -422,6 +422,19 @@ export default function Vault1Page() {
               Claimable read error: {String(claimableError)}
             </div>
           )}
+          <details className="mt-2 w-full rounded-md border border-slate-800 bg-slate-950/30 p-2 text-[11px] text-slate-300">
+            <summary className="cursor-pointer select-none text-slate-400">Debug</summary>
+            <div className="mt-2 space-y-1 break-all">
+              <div><span className="text-slate-500">address:</span> {address || "(none)"}</div>
+              <div><span className="text-slate-500">claimableUsdKDisplay:</span> {claimableUsdKDisplay}</div>
+              <div><span className="text-slate-500">hook.sharesFormatted:</span> {claimable.sharesFormatted}</div>
+              <div><span className="text-slate-500">hook.assetsFormatted:</span> {claimable.assetsFormatted}</div>
+              <div><span className="text-slate-500">hook.sharesRaw:</span> {claimable.sharesRaw.toString()}</div>
+              <div><span className="text-slate-500">hook.assetsRaw:</span> {claimable.assetsRaw.toString()}</div>
+              <div><span className="text-slate-500">hook.error:</span> {claimableError || "(none)"}</div>
+              <div><span className="text-slate-500">walletChainId:</span> {walletChainId === null ? "(unknown)" : String(walletChainId)}</div>
+            </div>
+          </details>
         </Card>
 
         <Card className="flex flex-col items-center">
