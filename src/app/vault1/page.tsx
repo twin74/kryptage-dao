@@ -217,6 +217,7 @@ export default function Vault1Page() {
       await refetchClaimable();
       const claimableNum = Number(claimable.assetsFormatted || "0");
 
+      // Claimable USDK for THIS user (shares -> assets)
       setPendingRewardsOnchain(
         claimableNum.toLocaleString(undefined, {
           maximumFractionDigits: 4,
@@ -224,7 +225,8 @@ export default function Vault1Page() {
         })
       );
 
-      // Farm pending (global, controller stake) shown as monitoring metric only
+      // Farm pending (global, controller stake) shown as monitoring metric only.
+      // NOTE: This is NOT user-specific yield and must NOT be added to user totals.
       const globalPendingUsdk6 = (globalPendingFarm as bigint) / 1_000_000_000_000n;
       setPendingRewardsFarmEst(
         Number(formatUnits(globalPendingUsdk6, 6)).toLocaleString(undefined, {
@@ -233,8 +235,9 @@ export default function Vault1Page() {
         })
       );
 
+      // Total pending for user == claimable (do not include global farm pending)
       setPendingRewardsTotalEst(
-        (claimableNum + Number(formatUnits(globalPendingUsdk6, 6))).toLocaleString(undefined, {
+        claimableNum.toLocaleString(undefined, {
           maximumFractionDigits: 4,
           minimumFractionDigits: 4,
         })
