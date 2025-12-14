@@ -149,7 +149,7 @@ export default function Vault1Page() {
     setKtgPoints("0.0000");
   };
 
-  const { data: claimable, refetch: refetchClaimable } = useVaultClaimableAssetsEthers(address || undefined);
+  const { data: claimable, error: claimableError, refetch: refetchClaimable } = useVaultClaimableAssetsEthers(address || undefined);
 
   const refresh = async () => {
     if (!provider || !address) return;
@@ -405,6 +405,12 @@ export default function Vault1Page() {
           <div className="text-xs text-slate-400 font-semibold">Le tue Shares (sUSDK)</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{susdkBalance}</div>
           <div className="mt-1 text-xs text-slate-500">Claimable USDK: {Number(claimable.assetsFormatted || "0").toFixed(4)}</div>
+          {/* Debug: show hook error if claimable stays at 0 due to RPC/revert */}
+          {claimable.assetsRaw === 0n && (
+            <div className="mt-1 text-[11px] text-amber-300/90 break-all text-center">
+              Claimable read error: {String(claimableError || "(none)")}
+            </div>
+          )}
         </Card>
 
         <Card className="flex flex-col items-center">
