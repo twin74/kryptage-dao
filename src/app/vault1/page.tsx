@@ -415,13 +415,6 @@ export default function Vault1Page() {
           <img src="/USDK.svg" alt="sUSDK" className="h-8 w-8 rounded mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Le tue Shares (sUSDK)</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{susdkBalance}</div>
-          <div className="mt-1 text-xs text-slate-500">Claimable USDK: {claimableUsdKDisplay}</div>
-          {/* Debug: show hook error if claimable stays at 0 due to RPC/revert */}
-          {claimable.assetsRaw === 0n && claimableError && (
-            <div className="mt-1 text-[11px] text-amber-300/90 break-all text-center">
-              Claimable read error: {String(claimableError)}
-            </div>
-          )}
           <details className="mt-2 w-full rounded-md border border-slate-800 bg-slate-950/30 p-2 text-[11px] text-slate-300">
             <summary className="cursor-pointer select-none text-slate-400">Debug</summary>
             <div className="mt-2 space-y-1 break-all">
@@ -439,8 +432,13 @@ export default function Vault1Page() {
 
         <Card className="flex flex-col items-center">
           <img src="/USDK.svg" alt="USDK" className="h-8 w-8 mb-2" />
-          <div className="text-xs text-slate-400 font-semibold">Yield earned (pending)</div>
-          <div className="mt-1 text-2xl font-semibold text-slate-100">{pendingRewardsTotalEst}</div>
+          <div className="text-xs text-slate-400 font-semibold">Claimable USDK</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{claimableUsdKDisplay}</div>
+          {claimable.assetsRaw === 0n && claimableError && (
+            <div className="mt-1 text-[11px] text-amber-300/90 break-all text-center">
+              Claimable read error: {String(claimableError)}
+            </div>
+          )}
         </Card>
 
         <Card className="flex flex-col items-center">
