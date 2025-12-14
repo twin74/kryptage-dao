@@ -12,6 +12,7 @@ export default function Vault1Page() {
   const [address, setAddress] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
+  const [walletChainId, setWalletChainId] = useState<number | null>(null);
 
   const [usdkInVault, setUsdkInVault] = useState<string>("0");
   const [susdkBalance, setSusdkBalance] = useState<string>("0");
@@ -156,6 +157,14 @@ export default function Vault1Page() {
     clearEstimates();
 
     try {
+      // Ensure wallet network matches Sepolia to avoid reading different chain (wallet) vs fixed RPC (hook)
+      try {
+        const net = await provider.getNetwork();
+        setWalletChainId(Number(net.chainId));
+      } catch {
+        setWalletChainId(null);
+      }
+
       const usdkC = new ethers.Contract(USDK, usdkAbi, provider);
       const susdkC = new ethers.Contract(VAULT, susdkAbi, provider);
       const farmC = new ethers.Contract(FARM, farmAbi, provider);
@@ -204,11 +213,10 @@ export default function Vault1Page() {
         })
       );
 
-      // Keep claimable in sync (shares->assets) using fixed RPC provider hook
-      void refetchClaimable();
-
-      // Replace on-chain per-user estimate with hook result
+      // IMPORTANT: wait refetch so we don't use stale hook data in the same refresh cycle
+      await refetchClaimable();
       const claimableNum = Number(claimable.assetsFormatted || "0");
+
       setPendingRewardsOnchain(
         claimableNum.toLocaleString(undefined, {
           maximumFractionDigits: 4,
@@ -374,6 +382,12 @@ export default function Vault1Page() {
       title="Stable Vault"
       subtitle="Deposit USDC, receive USDK, earn yield in USDK and KTG airdrop points."
     >
+      {walletChainId !== null && walletChainId !== 11155111 && (
+        <div className="mb-4 rounded-md border border-red-800 bg-red-950/40 text-red-200 p-3 text-sm">
+          Rete non corretta: sei su chainId {walletChainId}. Passa a <b>Sepolia</b> per vedere i dati corretti.
+        </div>
+      )}
+
       {!address && (
         <div className="rounded-md border border-amber-800 bg-amber-950/40 text-amber-200 p-3 text-sm">
           Wallet not connected.
@@ -386,8 +400,9 @@ export default function Vault1Page() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="flex flex-col items-center">
           <img src="/USDK.svg" alt="sUSDK" className="h-8 w-8 rounded mb-2" />
-          <div className="text-xs text-slate-400 font-semibold">Your USDK Staked</div>
+          <div className="text-xs text-slate-400 font-semibold">Le tue Shares (sUSDK)</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{susdkBalance}</div>
+          <div className="mt-1 text-xs text-slate-500">Claimable USDK: {Number(claimable.assetsFormatted || "0").toFixed(4)}</div>
         </Card>
 
         <Card className="flex flex-col items-center">
