@@ -137,7 +137,9 @@ export default function AirdropPage() {
                 <div className="mt-1 text-sm text-slate-300">
                   Current: <span className="font-mono">0.0000</span>
                 </div>
-                <div className="mt-1 text-sm text-slate-200">Subscribing to the newsletter adds +10 points.</div>
+                <div className="mt-1 text-sm text-slate-200">
+                  Points accrue over time while you hold vault shares.
+                </div>
               </div>
             </div>
           </div>
