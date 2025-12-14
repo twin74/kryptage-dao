@@ -33,7 +33,11 @@ interface IStableVault {
 }
 
 interface IKtgPoints {
+    // legacy
     function update(address user) external returns (uint256);
+
+    // new: shares-based points
+    function setShares(address user, uint256 newShares) external;
 }
 
 contract StableController {
@@ -169,8 +173,15 @@ contract StableController {
 
     function _updatePoints(address user) internal {
         if (points == address(0)) return;
-        try IKtgPoints(points).update(user) {
+
+        // Prefer new shares-based points.
+        try IKtgPoints(points).setShares(user, vault.balanceOf(user)) {
+            return;
         } catch {
+            // fallback to legacy implementation
+            try IKtgPoints(points).update(user) {
+            } catch {
+            }
         }
     }
 

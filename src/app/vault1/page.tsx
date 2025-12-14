@@ -346,30 +346,6 @@ export default function Vault1Page() {
     }
   };
 
-  const onCompound = async () => {
-    if (!signer) return;
-    setLoading(true);
-    setStatus("Awaiting wallet confirmation...");
-    try {
-      const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
-      await (await controllerC.harvestAndSync()).wait();
-      setStatus(null);
-      setStatus("Harvest & sync successful.");
-      clearEstimates();
-      await refresh();
-    } catch (e: any) {
-      if (isUserRejected(e)) {
-        setStatus("Transaction rejected by user.");
-      } else if (e?.message?.toLowerCase().includes("cooldown")) {
-        setStatus("You must wait before the next harvest (cooldown active). Try again later.");
-      } else {
-        setStatus("Harvest failed. " + (e?.reason || e?.message || ""));
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const sanitizeNumericInput = (v: string) => {
     // remove thousands separators/spaces, keep digits and at most one decimal separator
     // accept both "." and "," as decimal separators, normalize to "." for consistency
@@ -448,7 +424,14 @@ export default function Vault1Page() {
         <h2 className="text-lg font-semibold">Actions</h2>
 
         <div className="mt-4 grid grid-cols-1 gap-6">
-          <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).amount.value; onDeposit(v); }}>
+          <form
+            className="space-y-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const v = (e.target as any).amount.value;
+              onDeposit(v);
+            }}
+          >
             <label className="block text-sm font-medium text-slate-200" htmlFor="vault-deposit">
               Deposit USDC
             </label>
@@ -480,7 +463,14 @@ export default function Vault1Page() {
             </div>
           </form>
 
-          <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); const v = (e.target as any).shares.value; onWithdraw(v); }}>
+          <form
+            className="space-y-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const v = (e.target as any).shares.value;
+              onWithdraw(v);
+            }}
+          >
             <label className="block text-sm font-medium text-slate-200" htmlFor="vault-withdraw">
               Withdraw USDK
             </label>
@@ -511,17 +501,6 @@ export default function Vault1Page() {
               </button>
             </div>
           </form>
-
-          <div className="flex gap-2">
-            <button
-              type="button"
-              className="rounded-md border border-slate-700 bg-slate-950/30 px-4 py-2 text-sm text-slate-200 hover:bg-slate-900 disabled:opacity-50"
-              onClick={onCompound}
-              disabled={loading}
-            >
-              Compound
-            </button>
-          </div>
         </div>
 
         {status && (

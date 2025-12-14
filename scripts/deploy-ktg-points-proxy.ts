@@ -107,3 +107,10 @@ main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
+
+/**
+ * NOTE:
+ * This file deploys the legacy KtgPointsUpgradeable (portfolio-score model).
+ *
+ * For the new shares-based model, use `scripts/deploy-ktg-points-shares.ts`.
+ */
