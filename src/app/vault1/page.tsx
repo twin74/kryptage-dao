@@ -201,7 +201,8 @@ export default function Vault1Page() {
 
       setUsdkInVault(
         Number(formatUnits(usdkBalVault, usdkDec)).toLocaleString(undefined, {
-          maximumFractionDigits: 0,
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
         })
       );
 
@@ -210,7 +211,7 @@ export default function Vault1Page() {
 
       setSusdkBalance(
         susdkBalUserNum.toLocaleString(undefined, {
-          maximumFractionDigits: 6,
+          maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         })
       );
@@ -413,7 +414,7 @@ export default function Vault1Page() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="flex flex-col items-center">
           <img src="/USDK.svg" alt="sUSDK" className="h-8 w-8 rounded mb-2" />
-          <div className="text-xs text-slate-400 font-semibold">Le tue Shares (sUSDK)</div>
+          <div className="text-xs text-slate-400 font-semibold">Your Shares (sUSDK)</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{susdkBalance}</div>
         </Card>
 

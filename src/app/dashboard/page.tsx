@@ -92,7 +92,7 @@ export default function DashboardPage() {
 
       setV1Deposited(
         Number(ethers.formatUnits(susdkBal, susdkDec)).toLocaleString(undefined, {
-          maximumFractionDigits: 4,
+          maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         })
       );
@@ -107,8 +107,8 @@ export default function DashboardPage() {
       const totalPoints = (pts as bigint) + (ptsPend as bigint);
       setKtgPoints(
         Number(ethers.formatUnits(totalPoints, 18)).toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-          minimumFractionDigits: 4,
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
         })
       );
 
@@ -135,15 +135,15 @@ export default function DashboardPage() {
     // Whenever hook updates, reflect claimable assets in UI.
     setV1Deposited(
       Number(v1Claimable.sharesFormatted).toLocaleString(undefined, {
-        maximumFractionDigits: 4,
+        maximumFractionDigits: 2,
         minimumFractionDigits: 2,
       })
     );
 
     setV1Pending(
       Number(v1Claimable.assetsFormatted).toLocaleString(undefined, {
-        maximumFractionDigits: 4,
-        minimumFractionDigits: 4,
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
       })
     );
   }, [address, v1Claimable]);
@@ -205,8 +205,8 @@ export default function DashboardPage() {
     }, 0);
 
     return {
-      deposited: sumDeposited.toLocaleString(undefined, { maximumFractionDigits: 1, minimumFractionDigits: 1 }),
-      pending: sumPending.toLocaleString(undefined, { maximumFractionDigits: 4, minimumFractionDigits: 4 }),
+      deposited: sumDeposited.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
+      pending: sumPending.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
     };
   }, [vaultRows]);
 
@@ -238,21 +238,21 @@ export default function DashboardPage() {
           <div className="text-xs text-slate-400 font-semibold">Wallet</div>
           <div className="mt-1 text-base font-semibold text-slate-100">{address ? shortAddr(address) : "-"}</div>
           <div className="mt-3">
-            <SecondaryButton disabled={loading} onClick={load}>
-              Refresh
-            </SecondaryButton>
+            <PrimaryButton disabled={loading} onClick={load}>
+              {loading ? "Loading..." : "Reload"}
+            </PrimaryButton>
           </div>
         </Card>
 
         <Card className="flex flex-col items-center">
           <div className="text-xs text-slate-400 font-semibold">Total deposited</div>
-          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? v1Deposited : "-"}</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.deposited : "-"}</div>
           <div className="mt-1 text-xs text-slate-400">Across all vaults</div>
         </Card>
 
         <Card className="flex flex-col items-center">
           <div className="text-xs text-slate-400 font-semibold">Pending yield</div>
-          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? v1Pending : "-"}</div>
+          <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.pending : "-"}</div>
           <div className="mt-1 text-xs text-slate-400">Claim/compound per-vault</div>
         </Card>
 
@@ -282,8 +282,8 @@ export default function DashboardPage() {
               <tr className="text-left text-xs text-slate-400">
                 <th className="py-2 pr-4">Vault</th>
                 <th className="py-2 pr-4">Asset</th>
-                <th className="py-2 pr-4">Deposited</th>
-                <th className="py-2 pr-4">Pending yield</th>
+                <th className="py-2 pr-4">Le tue Shares (sUSDK)</th>
+                <th className="py-2 pr-4">Claimable USDK</th>
                 <th className="py-2 pr-4">APY</th>
                 <th className="py-2 pr-0 text-right">Action</th>
               </tr>
