@@ -23,7 +23,7 @@ export default function AirdropPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/airdrop/leaderboard?limit=10", { cache: "no-store" });
+      const res = await fetch("/api/airdrop/leaderboard?limit=10&includeUnverified=1", { cache: "no-store" });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.error || "Failed to load leaderboard");
       setEntries((json?.entries || []) as Entry[]);

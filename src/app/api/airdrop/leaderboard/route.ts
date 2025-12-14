@@ -18,6 +18,8 @@ export async function GET(req: NextRequest) {
     const limitParam = Number(searchParams.get("limit") || "10");
     const limit = Number.isFinite(limitParam) ? Math.max(1, Math.min(100, limitParam)) : 10;
 
+    const includeUnverified = searchParams.get("includeUnverified") === "1";
+
     const rpcUrl = process.env.SEPOLIA_RPC_URL;
     const pointsAddress = process.env.NEXT_PUBLIC_KTG_POINTS;
     if (!rpcUrl || !pointsAddress) {
@@ -27,10 +29,12 @@ export async function GET(req: NextRequest) {
     const client = await clientPromise;
     const db = client.db("kryptage");
 
-    // Only MongoDB users (optionally restrict to verified)
+    // Only MongoDB users; by default restrict to verified.
+    const filter = includeUnverified ? {} : { verified: true };
+
     const cursor = db
       .collection("faucet_users")
-      .find({ verified: true }, { projection: { wallet: 1 } });
+      .find(filter, { projection: { wallet: 1 } });
 
     const users = await cursor.toArray();
     const wallets = users
