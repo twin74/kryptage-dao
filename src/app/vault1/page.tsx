@@ -482,7 +482,7 @@ export default function Vault1Page() {
             }}
           >
             <label className="block text-sm font-medium text-slate-200" htmlFor="vault-withdraw">
-              Withdraw USDK
+              Burn sUSDK • Get USDK
             </label>
             <div className="flex items-center gap-2">
               <div className="relative w-full">

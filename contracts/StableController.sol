@@ -203,6 +203,7 @@ contract StableController {
         require(initialized, "NOT_INIT");
         require(usdcAmount > 0, "AMOUNT_ZERO");
 
+        // Harvest points on the previous shares balance (if any)
         _updatePoints(msg.sender);
 
         require(usdc.transferFrom(msg.sender, address(this), usdcAmount), "USDC_XFER_FAIL");
@@ -219,6 +220,9 @@ contract StableController {
         // deposit into vault -> shares minted proportionally
         uint256 sharesOut = vault.depositAssets(usdkAssets, msg.sender);
 
+        // Sync points with the new shares balance
+        _updatePoints(msg.sender);
+
         emit Deposited(msg.sender, usdcAmount, usdkAssets, sharesOut);
     }
 
@@ -228,10 +232,14 @@ contract StableController {
         require(initialized, "NOT_INIT");
         require(shares > 0, "AMOUNT_ZERO");
 
+        // Harvest points on the previous shares balance
         _updatePoints(msg.sender);
 
         // Redeem shares -> sends USDK to user
         uint256 usdkOut = vault.redeemShares(shares, msg.sender, msg.sender);
+
+        // Sync points with the new shares balance after burn
+        _updatePoints(msg.sender);
 
         // Convert USDK assets back to USDC units (USDK=6, USDC=18)
         uint8 usdcDec = usdc.decimals();
