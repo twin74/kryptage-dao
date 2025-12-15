@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
+import { Math } from "@openzeppelin/contracts/utils/math/Math.sol";
+
 interface IERC20 {
     function balanceOf(address) external view returns (uint256);
     function transfer(address to, uint256 amount) external returns (bool);
@@ -30,6 +32,8 @@ interface IStableVault {
     function totalAssets() external view returns (uint256);
     function convertToAssets(uint256 shares) external view returns (uint256);
     function setOwner(address newOwner) external;
+
+    function mintShares(address to, uint256 shares) external;
 }
 
 interface IKtgPoints {
@@ -69,7 +73,15 @@ contract StableController {
     uint256 public harvestCooldown; // seconds; set to 60 for 1/min
 
     event Deposited(address indexed user, uint256 usdcIn, uint256 usdkMinted, uint256 sharesOut);
-    event Harvested(uint256 usdcClaimed, uint256 usdcRestaked, uint256 usdkMintedToVault, uint256 usdcToTreasury);
+    /// @notice Emitted on harvest.
+    /// @dev `feeUsdcEquivalent` is an accounting unit only; no USDC is transferred to treasury in this flow.
+    event Harvested(
+        uint256 usdcClaimed,
+        uint256 usdcReinvested,
+        uint256 usdkMintedToVault,
+        uint256 feeUsdcEquivalent,
+        uint256 feeSharesMinted
+    );
     event Withdrawn(address indexed user, uint256 sharesBurned, uint256 usdkOut, uint256 usdcToPool);
 
     event Paused(address indexed by);
@@ -259,8 +271,8 @@ contract StableController {
     // Keeper flow
     // -------------------------
 
-    /// @notice Claims accrued USDC rewards, re-stakes them (auto-compound), mints 5/6 as USDK to the vault,
-    ///         and sends the remaining 1/6 USDC to treasury.
+    /// @notice Claims accrued USDC rewards, re-stakes 100% (auto-compound), mints 100% as USDK to the vault,
+    ///         and mints a performance fee to treasury in shares (no underlying moved).
     function harvestAndSync() external whenNotPaused nonReentrant {
         require(initialized, "NOT_INIT");
         if (harvestCooldown > 0) {
@@ -268,33 +280,42 @@ contract StableController {
         }
         lastHarvest = block.timestamp;
 
-        // claim rewards in USDC to controller
         uint256 claimed = farm.claim(address(this));
         if (claimed == 0) {
-            emit Harvested(0, 0, 0, 0);
+            emit Harvested(0, 0, 0, 0, 0);
             return;
         }
 
-        // Split claimed: 5/6 compounded (restaked) and minted as USDK to vault, 1/6 to treasury.
-        uint256 usdcToTreasury = claimed / 6;
-        uint256 usdcToCompound = claimed - usdcToTreasury; // 5/6 (rounded)
+        uint256 feeUsdc = claimed / 6;
 
-        // pay treasury first
-        if (usdcToTreasury > 0) {
-            require(usdc.transfer(treasury, usdcToTreasury), "TREASURY_XFER_FAIL");
-        }
-
-        // restake 5/6 into the farm (auto-compound)
+        // reinvest 100% rewards
         usdc.approve(address(farm), 0);
-        require(usdc.approve(address(farm), usdcToCompound), "USDC_APPROVE_FAIL");
-        farm.stake(usdcToCompound);
+        require(usdc.approve(address(farm), claimed), "USDC_APPROVE_FAIL");
+        farm.stake(claimed);
 
-        // mint 5/6 (in USDK units) as yield to the vault (assets increase => share price up)
-        uint256 usdkToVault = _scaleToUSDK(usdcToCompound);
+        // mint 100% reward as USDK to vault
+        uint256 usdkToVault = _scaleToUSDK(claimed);
         if (usdkToVault > 0) {
             usdk.mint(address(vault), usdkToVault);
         }
 
-        emit Harvested(claimed, usdcToCompound, usdkToVault, usdcToTreasury);
+        // fee in shares (skip instead of reverting on edge cases)
+        uint256 feeShares = 0;
+        if (feeUsdc > 0) {
+            uint256 S = vault.totalSupply();
+            if (S > 0) {
+                uint256 A = vault.totalAssets();
+                uint256 f = _scaleToUSDK(feeUsdc);
+                if (f > 0 && A > f) {
+                    feeShares = Math.mulDiv(f, S, (A - f), Math.Rounding.Ceil);
+                    if (feeShares > 0) {
+                        require(treasury != address(0), "BAD_TREASURY");
+                        vault.mintShares(treasury, feeShares);
+                    }
+                }
+            }
+        }
+
+        emit Harvested(claimed, claimed, usdkToVault, feeUsdc, feeShares);
     }
 }

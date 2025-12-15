@@ -41,6 +41,9 @@ contract StableVault is Initializable, ERC20Upgradeable {
     event Deposited(address indexed caller, address indexed receiver, uint256 assets, uint256 shares);
     event Redeemed(address indexed caller, address indexed receiver, address indexed owner, uint256 shares, uint256 assets);
 
+    /// @notice Minted fee shares to a recipient (performance fee).
+    event FeeSharesMinted(address indexed to, uint256 shares);
+
     modifier onlyController() {
         require(msg.sender == controller, "NOT_CONTROLLER");
         _;
@@ -169,5 +172,15 @@ contract StableVault is Initializable, ERC20Upgradeable {
         _burn(owner_, shares);
         require(IERC20Minimal(address(usdk)).transfer(receiver, assets), "USDK_TRANSFER_FAIL");
         emit Redeemed(msg.sender, receiver, owner_, shares, assets);
+    }
+
+    /// @notice Mint shares to a recipient.
+    /// @dev Controller-only hook used to charge performance fees in shares without moving underlying assets.
+    function mintShares(address to, uint256 shares) external onlyController whenNotPaused nonReentrant {
+        require(initialized, "NOT_INIT");
+        require(to != address(0), "BAD_TO");
+        require(shares > 0, "AMOUNT_ZERO");
+        _mint(to, shares);
+        emit FeeSharesMinted(to, shares);
     }
 }
