@@ -507,7 +507,7 @@ export default function Vault1Page() {
                 </button>
               </div>
               <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>
-                Withdraw
+                Burn
               </button>
             </div>
           </form>
