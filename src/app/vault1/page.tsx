@@ -492,7 +492,7 @@ export default function Vault1Page() {
                   type="text"
                   inputMode="decimal"
                   pattern="[0-9]*[.,]?[0-9]*"
-                  placeholder="USDK to withdraw"
+                  placeholder="Burn sUSDK"
                   className="w-full rounded-md border border-slate-700 bg-slate-950/30 px-3 py-2 text-slate-100 appearance-none pr-14"
                 />
                 <button
