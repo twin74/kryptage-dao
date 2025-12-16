@@ -21,6 +21,7 @@ interface IStableFarm {
 
 interface IUSDK {
     function mint(address to, uint256 amount) external;
+    function burnFrom(address from, uint256 amount) external;
     function decimals() external view returns (uint8);
 }
 
@@ -72,6 +73,9 @@ contract StableController {
     uint256 public lastHarvest;
     uint256 public harvestCooldown; // seconds; set to 60 for 1/min
 
+    uint256 public constant BPS_DENOM = 10_000;
+    uint256 public swapFeeBps;
+
     event Deposited(address indexed user, uint256 usdcIn, uint256 usdkMinted, uint256 sharesOut);
     /// @notice Emitted on harvest.
     /// @dev `feeUsdcEquivalent` is an accounting unit only; no USDC is transferred to treasury in this flow.
@@ -92,6 +96,15 @@ contract StableController {
     event UsdcPoolSet(address indexed oldPool, address indexed newPool);
     event TreasurySet(address indexed oldTreasury, address indexed newTreasury);
     event HarvestCooldownSet(uint256 secondsCooldown);
+    event SwapFeeSet(uint256 feeBps);
+    event SwappedUSDCForUSDK(address indexed user, uint256 usdcIn, uint256 usdkOut);
+    event SwappedUSDKForUSDC(
+        address indexed user,
+        uint256 usdkIn,
+        uint256 usdcGrossOut,
+        uint256 feeUsdc,
+        uint256 usdcNetOut
+    );
 
     modifier onlyOwner() {
         require(msg.sender == owner, "NOT_OWNER");
@@ -128,6 +141,10 @@ contract StableController {
 
         harvestCooldown = 60; // default: 1/min
         lastHarvest = 0;
+
+        // default swap fee on exit (USDK->USDC) = 0.20%
+        swapFeeBps = 20;
+        emit SwapFeeSet(swapFeeBps);
     }
 
     function setOwner(address _owner) external onlyOwner {
@@ -156,6 +173,12 @@ contract StableController {
     function setHarvestCooldown(uint256 secondsCooldown) external onlyOwner {
         harvestCooldown = secondsCooldown;
         emit HarvestCooldownSet(secondsCooldown);
+    }
+
+    function setSwapFeeBps(uint256 feeBps) external onlyOwner {
+        require(feeBps >= 10 && feeBps <= 30, "FEE_BPS_RANGE");
+        swapFeeBps = feeBps;
+        emit SwapFeeSet(feeBps);
     }
 
     function pause() external onlyOwner {
@@ -204,6 +227,14 @@ contract StableController {
         if (usdcDec == usdkDec) return usdcAmount;
         if (usdcDec > usdkDec) return usdcAmount / (10 ** (usdcDec - usdkDec));
         return usdcAmount * (10 ** (usdkDec - usdcDec));
+    }
+
+    function _scaleToUSDC(uint256 usdkAmount) internal view returns (uint256) {
+        uint8 usdcDec = usdc.decimals();
+        uint8 usdkDec = usdk.decimals();
+        if (usdcDec == usdkDec) return usdkAmount;
+        if (usdcDec > usdkDec) return usdkAmount * (10 ** (usdcDec - usdkDec));
+        return usdkAmount / (10 ** (usdkDec - usdcDec));
     }
 
     // -------------------------
@@ -317,5 +348,60 @@ contract StableController {
         }
 
         emit Harvested(claimed, claimed, usdkToVault, feeUsdc, feeShares);
+    }
+
+    function previewSwapUSDKForUSDC(uint256 usdkIn)
+        external
+        view
+        returns (uint256 usdcNetOut, uint256 feeUsdc, uint256 usdcGrossOut)
+    {
+        usdcGrossOut = _scaleToUSDC(usdkIn);
+        feeUsdc = (usdcGrossOut * swapFeeBps) / BPS_DENOM;
+        usdcNetOut = usdcGrossOut - feeUsdc;
+    }
+
+    function previewSwapUSDCForUSDK(uint256 usdcIn) external view returns (uint256 usdkOut) {
+        usdkOut = _scaleToUSDK(usdcIn);
+    }
+
+    /// @notice Fixed 1:1 swap (no fee) USDC -> USDK.
+    /// @dev USDC is transferred into this controller then forwarded to `usdcPool` as the reserve.
+    function swapUSDCForUSDK(uint256 usdcIn) external whenNotPaused nonReentrant returns (uint256 usdkOut) {
+        require(initialized, "NOT_INIT");
+        require(usdcIn > 0, "AMOUNT_ZERO");
+
+        require(usdc.transferFrom(msg.sender, address(this), usdcIn), "USDC_XFER_FAIL");
+        require(usdc.transfer(usdcPool, usdcIn), "USDC_POOL_XFER_FAIL");
+
+        usdkOut = _scaleToUSDK(usdcIn);
+        require(usdkOut > 0, "ZERO_OUT");
+
+        usdk.mint(msg.sender, usdkOut);
+        emit SwappedUSDCForUSDK(msg.sender, usdcIn, usdkOut);
+    }
+
+    /// @notice Fixed 1:1 swap (exit fee) USDK -> USDC.
+    /// @dev Fee is paid in USDC to `treasury`. USDC is pulled from `usdcPool` (pool must approve controller).
+    function swapUSDKForUSDC(uint256 usdkIn) external whenNotPaused nonReentrant returns (uint256 usdcNetOut) {
+        require(initialized, "NOT_INIT");
+        require(usdkIn > 0, "AMOUNT_ZERO");
+        require(treasury != address(0), "BAD_TREASURY");
+
+        uint256 usdcGrossOut = _scaleToUSDC(usdkIn);
+        require(usdcGrossOut > 0, "ZERO_OUT");
+
+        uint256 feeUsdc = (usdcGrossOut * swapFeeBps) / BPS_DENOM;
+        usdcNetOut = usdcGrossOut - feeUsdc;
+
+        // burn first (needs USDK allowance to controller)
+        usdk.burnFrom(msg.sender, usdkIn);
+
+        // pay out from pool (pool must approve controller)
+        require(usdc.transferFrom(usdcPool, msg.sender, usdcNetOut), "USDC_POOL_USER_FAIL");
+        if (feeUsdc > 0) {
+            require(usdc.transferFrom(usdcPool, treasury, feeUsdc), "USDC_POOL_FEE_FAIL");
+        }
+
+        emit SwappedUSDKForUSDC(msg.sender, usdkIn, usdcGrossOut, feeUsdc, usdcNetOut);
     }
 }
