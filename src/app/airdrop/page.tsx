@@ -2,7 +2,7 @@
 
 import { ethers } from "ethers";
 import { Card, PageShell, SecondaryButton } from "@/components/UI";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Entry = {
   wallet: string;
@@ -18,6 +18,9 @@ export default function AirdropPage() {
   const [error, setError] = useState<string | null>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [myPoints, setMyPoints] = useState<string>("0.0000");
+  const [newsletterEmail, setNewsletterEmail] = useState<string>("");
+  const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "submitting" | "pending" | "confirmed" | "error">("idle");
+  const [newsletterMessage, setNewsletterMessage] = useState<string>("");
 
   const load = async () => {
     setLoading(true);
@@ -86,6 +89,50 @@ export default function AirdropPage() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const s = params.get("newsletter");
+    if (s === "confirmed") {
+      setNewsletterStatus("confirmed");
+      setNewsletterMessage("Subscription confirmed.");
+    }
+  }, []);
+
+  const subscribeNewsletter = async () => {
+    const email = newsletterEmail.trim();
+    if (!email) {
+      setNewsletterStatus("error");
+      setNewsletterMessage("Enter your email.");
+      return;
+    }
+
+    setNewsletterStatus("submitting");
+    setNewsletterMessage("Sending confirmation email...");
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setNewsletterStatus("error");
+        setNewsletterMessage(data?.error || "Subscription failed");
+        return;
+      }
+      if (data?.status === "confirmed") {
+        setNewsletterStatus("confirmed");
+        setNewsletterMessage("Already confirmed.");
+      } else {
+        setNewsletterStatus("pending");
+        setNewsletterMessage("Check your email to confirm.");
+      }
+    } catch {
+      setNewsletterStatus("error");
+      setNewsletterMessage("Network error");
+    }
+  };
 
   return (
     <PageShell
@@ -164,13 +211,21 @@ export default function AirdropPage() {
                   type="email"
                   placeholder="you@example.com"
                   className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100"
-                  disabled
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  disabled={newsletterStatus === "submitting" || newsletterStatus === "pending" || newsletterStatus === "confirmed"}
                 />
-                <SecondaryButton disabled className="sm:w-56">
-                  Subscribe (coming soon)
+                <SecondaryButton
+                  onClick={() => void subscribeNewsletter()}
+                  disabled={newsletterStatus === "submitting" || newsletterStatus === "pending" || newsletterStatus === "confirmed"}
+                  className="sm:w-56"
+                >
+                  {newsletterStatus === "submitting" ? "Sending..." : newsletterStatus === "confirmed" ? "Subscribed" : "Subscribe"}
                 </SecondaryButton>
               </div>
-              <div className="mt-2 text-xs text-slate-400">UI preview  on-chain integration coming next.</div>
+              <div className="mt-2 text-xs text-slate-400">
+                {newsletterMessage || "Confirm via email (double opt-in)."}
+              </div>
             </div>
 
             <div className="md:col-span-1">
