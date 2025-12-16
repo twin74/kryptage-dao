@@ -13,6 +13,19 @@ type Ethereumish = {
 
 type EthWindow = Window & { ethereum?: Ethereumish };
 
+export function KLogo({ className = '' }: { className?: string }) {
+  return (
+    <Image
+      src="/apple-touch-icon.png"
+      alt="Kryptage DAO"
+      width={32}
+      height={32}
+      className={className}
+      priority
+    />
+  );
+}
+
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
@@ -93,14 +106,7 @@ export default function Header() {
     <header className="border-b border-slate-800 bg-slate-950 text-white">
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/apple-touch-icon.png"
-            alt="Kryptage DAO"
-            width={32}
-            height={32}
-            className="h-8 w-8 rounded"
-            priority
-          />
+          <KLogo className="h-8 w-8 rounded" />
           <span className="font-semibold">Kryptage DAO</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm flex-1 justify-center">
