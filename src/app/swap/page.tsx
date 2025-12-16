@@ -288,9 +288,11 @@ export default function SwapPage() {
               <button
                 type="button"
                 onClick={flip}
+                aria-label="Flip swap direction"
+                title="Flip USDC ↔ USDK"
                 className="rounded-full border border-slate-800 bg-slate-950/30 px-3 py-1 text-sm text-slate-200 hover:bg-slate-900"
               >
-                
+                ↔
               </button>
             </div>
 
@@ -307,7 +309,7 @@ export default function SwapPage() {
                       Receive: <b>{previewNetOut}</b> {to}
                     </div>
                     <div className="text-xs text-slate-400">
-                      Gross: {previewGrossOut} {to}  Fee: {previewFeeOut} {to}
+                      Gross: {previewGrossOut} {to}  Fee: {previewFeeOut} {to}
                     </div>
                   </div>
                 ) : (
@@ -333,9 +335,9 @@ export default function SwapPage() {
           <div className="text-sm font-semibold text-slate-100">Notes</div>
           <ul className="mt-3 space-y-2 text-sm text-slate-300 list-disc list-inside">
             <li>USDC has 18 decimals; USDK has 6 decimals.</li>
-            <li>USDC  USDK swaps are fixed 1:1 in value.</li>
-            <li>USDK  USDC includes a small liquidity/ops fee.</li>
-            <li>For USDK  USDC, the reserve wallet ({"usdcPool"}) must approve the controller to transfer USDC.</li>
+            <li>USDC ↔ USDK swaps are fixed 1:1 in value.</li>
+            <li>USDK ↔ USDC includes a small liquidity/ops fee.</li>
+            <li>For USDK ↔ USDC, the reserve wallet ({"usdcPool"}) must approve the controller to transfer USDC.</li>
           </ul>
           <div className="mt-4">
             <Link href="/vault" className="text-sm text-blue-400 hover:text-blue-300">
