@@ -117,6 +117,10 @@ contract StableVault is Initializable, ERC20Upgradeable {
     }
 
     /// @notice Convert USDK assets (6 decimals) to shares (18 decimals).
+    /// @dev IMPORTANT: This assumes `assets` are NOT already included in `totalAssets()`.
+    ///      In this protocol flow the controller mints USDK to the vault BEFORE calling `depositAssets()`,
+    ///      so `convertToShares()` is suitable for previews/UI, but MUST NOT be used for pricing/minting
+    ///      inside `depositAssets()`.
     function convertToShares(uint256 assets) public view returns (uint256) {
         uint256 supply = totalSupply();
         uint256 assetsBefore = totalAssets();
@@ -142,16 +146,43 @@ contract StableVault is Initializable, ERC20Upgradeable {
         return (shares * assetsNow) / supply;
     }
 
+    /// @notice Preview shares minted for a deposit when `assets` are not yet in the vault.
+    /// @dev Equivalent to `convertToShares` but kept for explicit UX intent.
+    function previewDeposit(uint256 assets) external view returns (uint256 shares) {
+        return convertToShares(assets);
+    }
+
     // -------- Controller entrypoints --------
 
     /// @notice Comptroller deposits `assets` USDK into the vault for `receiver`.
     /// @dev Assumes the USDK tokens are already in the vault (minted to vault by controller).
-    function depositAssets(uint256 assets, address receiver) external onlyController whenNotPaused nonReentrant returns (uint256 shares) {
+    function depositAssets(uint256 assets, address receiver)
+        external
+        onlyController
+        whenNotPaused
+        nonReentrant
+        returns (uint256 shares)
+    {
         require(initialized, "NOT_INIT");
         require(receiver != address(0), "BAD_RECEIVER");
         require(assets > 0, "AMOUNT_ZERO");
 
-        shares = convertToShares(assets);
+        // IMPORTANT: In this protocol the controller mints USDK to the vault *before* calling depositAssets.
+        // Therefore `totalAssets()` at this point already includes `assets`.
+        // We must compute shares using assetsBeforeDeposit to avoid charging the depositor
+        // a price-per-share that includes their own deposit.
+        uint256 supply = totalSupply();
+        uint256 assetsNow = totalAssets();
+        require(assetsNow >= assets, "BAD_ASSETS");
+        uint256 assetsBefore = assetsNow - assets;
+
+        // initial deposit: 1 USDK asset unit (6) -> 1 share unit (18)
+        if (supply == 0 || assetsBefore == 0) {
+            shares = _assetsToShares(assets);
+        } else {
+            // Pro-rata: shares = assets * supply / assetsBeforeDeposit
+            shares = (assets * supply) / assetsBefore;
+        }
         require(shares > 0, "ZERO_SHARES");
 
         _mint(receiver, shares);
