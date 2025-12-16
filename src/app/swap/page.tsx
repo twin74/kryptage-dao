@@ -334,7 +334,6 @@ export default function SwapPage() {
         <Card>
           <div className="text-sm font-semibold text-slate-100">Notes</div>
           <ul className="mt-3 space-y-2 text-sm text-slate-300 list-disc list-inside">
-            <li>USDC has 18 decimals; USDK has 6 decimals.</li>
             <li>USDC ↔ USDK swaps are fixed 1:1 in value.</li>
             <li>USDK ↔ USDC includes a small liquidity/ops fee.</li>
             <li>For USDK ↔ USDC, the reserve wallet ({"usdcPool"}) must approve the controller to transfer USDC.</li>
