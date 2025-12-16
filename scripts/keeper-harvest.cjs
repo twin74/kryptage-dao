@@ -16,13 +16,18 @@ dotenv.config();
 
 const { ethers } = require("ethers");
 
-const RPC_URL = process.env.SEPOLIA_RPC_URL;
+const RPC_URL =
+  process.env.SEPOLIA_RPC_URL ||
+  process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL ||
+  (process.env.NEXT_PUBLIC_INFURA_API_KEY
+    ? `https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`
+    : undefined);
 const PRIVATE_KEY = process.env.DEPLOY_PRIVATE_KEY;
 const CONTROLLER = process.env.NEXT_PUBLIC_STABLE_CONTROLLER;
 
 const INTERVAL_MS = Number(process.env.KEEPER_INTERVAL_MS || 300_000);
 
-if (!RPC_URL) throw new Error("Missing SEPOLIA_RPC_URL in .env");
+if (!RPC_URL) throw new Error("Missing SEPOLIA_RPC_URL (or NEXT_PUBLIC_SEPOLIA_RPC_URL / NEXT_PUBLIC_INFURA_API_KEY) in .env");
 if (!PRIVATE_KEY) throw new Error("Missing DEPLOY_PRIVATE_KEY in .env");
 if (!CONTROLLER) throw new Error("Missing NEXT_PUBLIC_STABLE_CONTROLLER in .env");
 
@@ -54,7 +59,7 @@ async function main() {
 
       if (now < nextAllowed) {
         const wait = nextAllowed - now;
-        console.log(`[skip] cooldown active, next in ~${wait}s`);
+        console.log(`[skip] cooldown active, next in ~${wait}s (lastHarvest=${lastHarvest} cooldown=${cooldown})`);
         return;
       }
 
@@ -63,11 +68,12 @@ async function main() {
       console.log("[tx] hash:", tx.hash);
 
       const receipt = await tx.wait();
-      console.log(
-        `[ok] block=${receipt.blockNumber} gasUsed=${receipt.gasUsed.toString()}`
-      );
+      console.log(`[ok] block=${receipt.blockNumber} gasUsed=${receipt.gasUsed.toString()}`);
     } catch (e) {
-      console.error("[err]", e);
+      const msg = e?.shortMessage || e?.reason || e?.message || String(e);
+      console.error("[err]", msg);
+      // uncomment for full dump
+      // console.error(e);
     }
   }
 

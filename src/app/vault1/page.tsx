@@ -377,6 +377,15 @@ export default function Vault1Page() {
     return fracPart.length ? `${intPart}.${fracPart}` : intPart;
   };
 
+  const floorToDecimals = (valueStr: string, decimals: number) => {
+    const cleaned = sanitizeNumericInput(valueStr);
+    if (!cleaned) return "0";
+    const [intPartRaw, fracRaw = ""] = cleaned.split(".");
+    const intPart = (intPartRaw || "0").replace(/^0+(?=\d)/, "") || "0";
+    const frac = fracRaw.replace(/[^0-9]/g, "").slice(0, Math.max(0, decimals));
+    return decimals > 0 ? `${intPart}.${frac}` : intPart;
+  };
+
   return (
     <PageShell
       title="Stable Vault"
@@ -461,7 +470,8 @@ export default function Vault1Page() {
                   className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-900"
                   onClick={(e) => {
                     const form = (e.currentTarget.closest("form") as any);
-                    if (form && form.amount) form.amount.value = sanitizeNumericInput(usdcBalance);
+                    // Deposit: floor to 1 decimal
+                    if (form && form.amount) form.amount.value = floorToDecimals(usdcBalance, 1);
                   }}
                 >
                   Max
@@ -500,7 +510,8 @@ export default function Vault1Page() {
                   className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-900"
                   onClick={(e) => {
                     const form = (e.currentTarget.closest("form") as any);
-                    if (form && form.shares) form.shares.value = sanitizeNumericInput(susdkBalance);
+                    // Burn: floor to 2 decimals
+                    if (form && form.shares) form.shares.value = floorToDecimals(susdkBalance, 2);
                   }}
                 >
                   Max
