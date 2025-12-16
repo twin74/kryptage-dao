@@ -13,6 +13,7 @@ type Ethereumish = {
 
 type EthWindow = Window & { ethereum?: Ethereumish };
 
+// Back-compat named export: some pages import { KLogo } from "@/components/Header".
 export function KLogo({ className = '' }: { className?: string }) {
   return (
     <Image
