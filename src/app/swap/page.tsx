@@ -44,6 +44,9 @@ export default function SwapPage() {
   const [previewFeeOut, setPreviewFeeOut] = useState<string>("0");
   const [previewNetOut, setPreviewNetOut] = useState<string>("0");
 
+  const [usdcBalRaw, setUsdcBalRaw] = useState<bigint>(0n);
+  const [usdkBalRaw, setUsdkBalRaw] = useState<bigint>(0n);
+
   const tokens = useMemo((): Record<string, TokenInfo> => {
     return {
       USDC: { symbol: "USDC", address: USDC, decimals: 18 },
@@ -110,6 +113,29 @@ export default function SwapPage() {
   useEffect(() => {
     void loadFeeBps();
   }, [CONTROLLER]);
+
+  const loadBalances = async () => {
+    const eth = (window as any)?.ethereum;
+    if (!eth || !address) return;
+    try {
+      const provider = new ethers.BrowserProvider(eth);
+      const usdc = new ethers.Contract(USDC, erc20Abi, provider);
+      const usdk = new ethers.Contract(USDK, erc20Abi, provider);
+      const [bUsdc, bUsdk]: [bigint, bigint] = await Promise.all([
+        usdc.balanceOf(address),
+        usdk.balanceOf(address),
+      ]);
+      setUsdcBalRaw(bUsdc);
+      setUsdkBalRaw(bUsdk);
+    } catch {
+      // ignore
+    }
+  };
+
+  useEffect(() => {
+    void loadBalances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, USDC, USDK]);
 
   const updatePreview = async () => {
     try {
@@ -207,6 +233,14 @@ export default function SwapPage() {
     }
   };
 
+  const onMax = async () => {
+    if (!address) return;
+    await loadBalances();
+    const t = tokens[from];
+    const raw = from === "USDC" ? usdcBalRaw : usdkBalRaw;
+    setAmountIn(ethers.formatUnits(raw, t.decimals));
+  };
+
   const feePct = (feeBps / 100).toFixed(2);
 
   return (
@@ -231,13 +265,23 @@ export default function SwapPage() {
                 <div className="text-xs text-slate-400">From</div>
                 <div className="text-xs text-slate-400 font-mono">{from}</div>
               </div>
-              <input
-                value={amountIn}
-                onChange={(e) => setAmountIn(e.target.value)}
-                inputMode="decimal"
-                placeholder={`Amount in ${from}`}
-                className="mt-2 w-full rounded-md border border-slate-800 bg-slate-950/30 px-3 py-2 text-slate-100 placeholder:text-slate-500"
-              />
+              <div className="relative mt-2">
+                <input
+                  value={amountIn}
+                  onChange={(e) => setAmountIn(e.target.value)}
+                  inputMode="decimal"
+                  placeholder={`Amount in ${from}`}
+                  className="w-full rounded-md border border-slate-800 bg-slate-950/30 px-3 py-2 pr-16 text-slate-100 placeholder:text-slate-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => void onMax()}
+                  disabled={!address || loading}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-800 bg-slate-950/40 px-2 py-1 text-xs text-slate-200 hover:bg-slate-900 disabled:opacity-50"
+                >
+                  Max
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center justify-center">
