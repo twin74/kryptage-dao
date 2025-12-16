@@ -521,8 +521,8 @@ export default function Vault1Page() {
                   className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-900"
                   onClick={(e) => {
                     const form = (e.currentTarget.closest("form") as any);
-                    // Burn: floor to 2 decimals
-                    if (form && form.shares) form.shares.value = floorToDecimals(susdkBalance, 2);
+                    // Burn: floor to 1 decimal
+                    if (form && form.shares) form.shares.value = floorToDecimals(susdkBalance, 1);
                   }}
                 >
                   Max
