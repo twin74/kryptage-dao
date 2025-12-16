@@ -15,7 +15,7 @@
 
   <path d="M32 4 L54 16 L54 40 L32 52 L10 40 L10 16 Z" fill="url(#hexGrad)"/>
 
-  <g clip-path="url(#hexClip)" fill="url(#kGrad)">
+  <g clip-path="url(#hexClip)" fill="url(#kGrad)" stroke="#0b1220" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
     <path d="M18 10 H28 V54 H18 Z"/>
     <path d="M28 32 L54 12 V24 L36 34 Z"/>
     <path d="M28 32 L36 30 L54 40 V54 L31 38 Z"/>
