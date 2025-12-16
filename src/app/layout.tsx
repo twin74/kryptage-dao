@@ -18,6 +18,22 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
   description: "Kryptage DAO frontend",
+  icons: {
+    icon: [{ url: "/favicon.ico" }],
+    apple: [{ url: "/apple-touch-icon.png" }],
+  },
+  openGraph: {
+    title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
+    description: "Kryptage DAO frontend",
+    images: [{ url: "/og.png" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
+    description: "Kryptage DAO frontend",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({

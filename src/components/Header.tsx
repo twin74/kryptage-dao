@@ -1,5 +1,6 @@
 "use client";
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { BrowserProvider, getAddress } from 'ethers';
 
@@ -92,7 +93,14 @@ export default function Header() {
     <header className="border-b border-slate-800 bg-slate-950 text-white">
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <KLogo className="h-8 w-8" />
+          <Image
+            src="/apple-touch-icon.png"
+            alt="Kryptage DAO"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded"
+            priority
+          />
           <span className="font-semibold">Kryptage DAO</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm flex-1 justify-center">
@@ -142,21 +150,3 @@ export default function Header() {
     </header>
   );
 }
-
-function KLogo({ className = '' }: { className?: string }) {
-  // Hexagonal K logo SVG
-  return (
-    <svg viewBox="0 0 120 120" className={className} xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stopColor="#0ea5e9" />
-          <stop offset="100%" stopColor="#1d4ed8" />
-        </linearGradient>
-      </defs>
-      <polygon points="60,5 110,35 110,85 60,115 10,85 10,35" fill="#0f172a" stroke="url(#g)" strokeWidth="6" />
-      <path d="M40 30 v60 M40 60 l40 -30 M40 60 l40 30" stroke="url(#g)" strokeWidth="10" strokeLinecap="round" fill="none" />
-    </svg>
-  );
-}
-
-export { KLogo };
