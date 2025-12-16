@@ -21,7 +21,7 @@ export default function FaucetPage() {
         case "USDK":
           return "/USDK.svg";
         case "sUSDK":
-          return "/USDK.svg";
+          return "/sUSDK.svg";
         case "WBTC":
           return "https://cdn.simpleicons.org/bitcoin"; // BTC icon for WBTC
         case "XAUT":
