@@ -23,6 +23,12 @@ export default function Vault1Page() {
   const [usdcBalance, setUsdcBalance] = useState<string>("0");
   const [ktgPoints, setKtgPoints] = useState<string>("0.0000");
 
+  // Raw on-chain balances/decimals (for MAX buttons + tx safety)
+  const [usdcBalanceRaw, setUsdcBalanceRaw] = useState<bigint>(0n);
+  const [usdcDecimals, setUsdcDecimals] = useState<number>(6);
+  const [susdkBalanceRaw, setSusdkBalanceRaw] = useState<bigint>(0n);
+  const [susdkDecimals, setSusdkDecimals] = useState<number>(18);
+
   // Claimable USDK displayed in the top card (string already formatted for UI)
   const [claimableUsdKDisplay, setClaimableUsdKDisplay] = useState<string>("0.0000");
 
@@ -180,6 +186,10 @@ export default function Vault1Page() {
         farmC.apr1e18(),
       ]);
 
+      // keep raw decimals for MAX buttons / txs
+      setUsdcDecimals(Number(usdcDec));
+      setSusdkDecimals(Number(susdkDec));
+
       const pointsC = KTG_POINTS ? new ethers.Contract(KTG_POINTS, ktgPointsAbi, provider) : null;
 
       const [
@@ -199,6 +209,10 @@ export default function Vault1Page() {
         pointsC ? pointsC.points(address) : Promise.resolve(0n),
         pointsC ? pointsC.pendingEarned(address) : Promise.resolve(0n),
       ]);
+
+      // keep raw balances for MAX buttons
+      setUsdcBalanceRaw(usdcBalUser);
+      setSusdkBalanceRaw(susdkBalUser);
 
       // Best-effort: realize points accrual so UI shows up-to-date value
       try {
@@ -481,8 +495,8 @@ export default function Vault1Page() {
                   className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-900"
                   onClick={(e) => {
                     const form = (e.currentTarget.closest("form") as any);
-                    // Deposit: floor to 1 decimal
-                    if (form && form.amount) form.amount.value = floorToDecimals(usdcBalance, 1);
+                    // Deposit MAX: use exact on-chain USDC balance (no format->parse round-trip)
+                    if (form && form.amount) form.amount.value = ethers.formatUnits(usdcBalanceRaw, usdcDecimals);
                   }}
                 >
                   Max
@@ -521,8 +535,8 @@ export default function Vault1Page() {
                   className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-900"
                   onClick={(e) => {
                     const form = (e.currentTarget.closest("form") as any);
-                    // Burn: floor to 1 decimal
-                    if (form && form.shares) form.shares.value = floorToDecimals(susdkBalance, 1);
+                    // Burn MAX: use exact on-chain sUSDK balance (no format->parse round-trip)
+                    if (form && form.shares) form.shares.value = ethers.formatUnits(susdkBalanceRaw, susdkDecimals);
                   }}
                 >
                   Max
