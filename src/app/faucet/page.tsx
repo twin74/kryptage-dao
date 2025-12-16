@@ -345,7 +345,7 @@ export default function FaucetPage() {
                   <div className="text-xs text-slate-400">Import to MetaMask</div>
                 </div>
               </div>
-              <div className="text-xs text-slate-500">–</div>
+              <SecondaryButton onClick={() => importToken(t.symbol, t.address, t.decimals)}>Import</SecondaryButton>
             </li>
           ))}
         </ul>
