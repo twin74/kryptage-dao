@@ -319,6 +319,18 @@ export default function FaucetPage() {
       <Card className="mt-6">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Available tokens</h2>
+          <SecondaryButton
+            disabled={!isConnected || tokens.length === 0}
+            onClick={async () => {
+              for (const t of tokens) {
+                // Sequential (MetaMask prompts are modal and must be handled one-by-one)
+                // eslint-disable-next-line no-await-in-loop
+                await importToken(t.symbol, t.address, t.decimals);
+              }
+            }}
+          >
+            Import all
+          </SecondaryButton>
         </div>
         <ul className="mt-4 space-y-2">
           {tokens.map((t) => (
@@ -333,7 +345,7 @@ export default function FaucetPage() {
                   <div className="text-xs text-slate-400">Import to MetaMask</div>
                 </div>
               </div>
-              <SecondaryButton onClick={() => importToken(t.symbol, t.address, t.decimals)}>Import</SecondaryButton>
+              <div className="text-xs text-slate-500">–</div>
             </li>
           ))}
         </ul>
