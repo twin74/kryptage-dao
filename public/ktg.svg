@@ -16,13 +16,15 @@
   <!-- Hexagon background -->
   <path d="M32 4 L54 16 L54 40 L32 52 L10 40 L10 16 Z" fill="url(#hexGrad)"/>
 
-  <!-- Stylized K (touching edges) -->
-  <g clip-path="url(#hexClip)">
+  <!-- K (more 'classic' proportions, still touching edges) -->
+  <g clip-path="url(#hexClip)" fill="url(#kGrad)">
     <!-- left stem -->
-    <path d="M20 12 L29 12 L29 52 L20 52 Z" fill="url(#kGrad)"/>
-    <!-- upper arm -->
-    <path d="M29 32 L54 14 L54 24 L34 36 Z" fill="url(#kGrad)"/>
-    <!-- lower arm -->
-    <path d="M29 32 L34 28 L54 40 L54 52 L31 38 Z" fill="url(#kGrad)"/>
+    <path d="M18 10 H28 V54 H18 Z"/>
+
+    <!-- upper diagonal (from mid to top-right) -->
+    <path d="M28 32 L54 12 V24 L36 34 Z"/>
+
+    <!-- lower diagonal (from mid to bottom-right) -->
+    <path d="M28 32 L36 30 L54 40 V54 L31 38 Z"/>
   </g>
 </svg>
