@@ -20,6 +20,8 @@ export default function FaucetPage() {
           return "/usdc.svg"; // local SVG
         case "USDK":
           return "/USDK.svg";
+        case "sUSDK":
+          return "/USDK.svg";
         case "WBTC":
           return "https://cdn.simpleicons.org/bitcoin"; // BTC icon for WBTC
         case "XAUT":
@@ -30,13 +32,16 @@ export default function FaucetPage() {
           return "https://cdn.simpleicons.org/circle";
       }
     };
+
     const list = [
       { symbol: "USDC", address: process.env.NEXT_PUBLIC_TOKEN_USDC as string, decimals: 18 },
       { symbol: "USDK", address: process.env.NEXT_PUBLIC_TOKEN_USDK as string, decimals: 6 },
+      { symbol: "sUSDK", address: process.env.NEXT_PUBLIC_TOKEN_SUSDK as string, decimals: 18 },
       { symbol: "WBTC", address: process.env.NEXT_PUBLIC_TOKEN_WBTC as string, decimals: 18 },
       { symbol: "XAUT", address: process.env.NEXT_PUBLIC_TOKEN_XAUT as string, decimals: 18 },
       { symbol: "SPYON", address: process.env.NEXT_PUBLIC_TOKEN_SPYON as string, decimals: 18 },
     ].filter((t) => !!t.address);
+
     return list.map((t) => ({ ...t, icon: iconFor(t.symbol) }));
   }, []);
 
@@ -248,16 +253,22 @@ export default function FaucetPage() {
     >
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2">
-          <div className="font-semibold text-slate-100">
-            Need Sepolia ETH?{" "}
-            <a
-              href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-400 hover:text-blue-300"
-            >
-              Open Sepolia faucet
-            </a>
+          <div className="flex items-start justify-between gap-3">
+            <div className="font-semibold text-slate-100">
+              Need Sepolia ETH?{" "}
+              <a
+                href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-400 hover:text-blue-300"
+              >
+                Open Sepolia faucet
+              </a>
+            </div>
+
+            <SecondaryButton disabled={!isConnected} onClick={async () => address && refreshPoints(address)}>
+              Refresh points
+            </SecondaryButton>
           </div>
         </Card>
 
@@ -266,9 +277,7 @@ export default function FaucetPage() {
           <div className="mt-1">
             Current: <span className="font-mono">{ktgPoints}</span>
           </div>
-          <div className="mt-1 text-xs text-slate-300">
-            Points accrue over time while you hold vault shares.
-          </div>
+          <div className="mt-1 text-xs text-slate-300">Points accrue over time while you hold vault shares.</div>
         </Card>
       </div>
 
@@ -310,9 +319,6 @@ export default function FaucetPage() {
       <Card className="mt-6">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Available tokens</h2>
-          <SecondaryButton disabled={!isConnected} onClick={async () => address && refreshPoints(address)}>
-            Refresh points
-          </SecondaryButton>
         </div>
         <ul className="mt-4 space-y-2">
           {tokens.map((t) => (
