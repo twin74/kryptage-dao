@@ -391,6 +391,17 @@ export default function Vault1Page() {
       title="Stable Vault"
       subtitle="Deposit USDC, receive USDK, earn yield in USDK and KTG airdrop points."
     >
+      <div className="mb-4 flex items-center justify-end">
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          disabled={loading || !address}
+          className="rounded-md border border-slate-800 bg-slate-950/30 px-3 py-1.5 text-sm text-slate-200 hover:bg-slate-900 disabled:opacity-50"
+        >
+          Refresh
+        </button>
+      </div>
+
       {walletChainId !== null && walletChainId !== 11155111 && (
         <div className="mb-4 rounded-md border border-red-800 bg-red-950/40 text-red-200 p-3 text-sm">
           Rete non corretta: sei su chainId {walletChainId}. Passa a <b>Sepolia</b> per vedere i dati corretti.

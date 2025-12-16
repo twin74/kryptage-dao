@@ -236,6 +236,12 @@ export default function DashboardPage() {
 
   return (
     <PageShell title="Dashboard" subtitle="A complete portfolio overview across all vaults.">
+      <div className="mb-4 flex items-center justify-end">
+        <SecondaryButton disabled={loading} onClick={load}>
+          Refresh
+        </SecondaryButton>
+      </div>
+
       {!address && (
         <div className="rounded-md border border-amber-800 bg-amber-950/40 text-amber-200 p-3 text-sm">
           Wallet not connected. Connect from the header to see your dashboard.
