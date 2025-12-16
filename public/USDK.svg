@@ -1,4 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <circle cx="32" cy="32" r="30" fill="#14532d" stroke="#14532d" stroke-width="4"/>
-  <text x="32" y="42" text-anchor="middle" font-size="36" fill="#e2e8f0" font-family="Arial, Helvetica, sans-serif" font-weight="bold">K</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="USDK">
+  <defs>
+    <linearGradient id="hexGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#166534"/>
+    </linearGradient>
+    <linearGradient id="kGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bbf7d0"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <clipPath id="hexClip">
+      <path d="M32 4 L54 16 L54 40 L32 52 L10 40 L10 16 Z" />
+    </clipPath>
+  </defs>
+
+  <path d="M32 4 L54 16 L54 40 L32 52 L10 40 L10 16 Z" fill="url(#hexGrad)"/>
+
+  <g clip-path="url(#hexClip)" fill="url(#kGrad)">
+    <path d="M18 10 H28 V54 H18 Z"/>
+    <path d="M28 32 L54 12 V24 L36 34 Z"/>
+    <path d="M28 32 L36 30 L54 40 V54 L31 38 Z"/>
+  </g>
 </svg>
