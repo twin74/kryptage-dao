@@ -16,7 +16,7 @@ type EthWindow = Window & { ethereum?: Ethereumish };
 export function KLogo({ className = '' }: { className?: string }) {
   return (
     <Image
-      src="/apple-touch-icon.png"
+      src="/ktg.svg"
       alt="Kryptage DAO"
       width={32}
       height={32}
