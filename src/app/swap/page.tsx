@@ -340,7 +340,7 @@ export default function SwapPage() {
             <li>For USDK ↔ USDC, the reserve wallet ({"usdcPool"}) must approve the controller to transfer USDC.</li>
           </ul>
           <div className="mt-4">
-            <Link href="/vault" className="text-sm text-blue-400 hover:text-blue-300">
+            <Link href="/vault" className="inline-flex items-center justify-center rounded-md border border-slate-800 bg-slate-950/30 px-3 py-2 text-sm text-slate-200 hover:bg-slate-900">
               Browse vaults
             </Link>
           </div>
