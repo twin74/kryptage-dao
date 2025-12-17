@@ -262,6 +262,18 @@ export default function SwapPage() {
       console.debug("[swap] no window.ethereum");
       return;
     }
+
+    // Ensure the dapp is connected (otherwise MetaMask won't open for approve/swap in some cases)
+    // This will trigger the MetaMask connect prompt if needed.
+    try {
+      console.debug("[swap] eth_requestAccounts");
+      await eth.request({ method: "eth_requestAccounts" });
+    } catch (e) {
+      console.debug("[swap] eth_requestAccounts rejected", e);
+      setStatus("Connect wallet in header");
+      return;
+    }
+
     if (!CONTROLLER) {
       setStatus("Missing NEXT_PUBLIC_STABLE_CONTROLLER");
       console.debug("[swap] missing controller env");
