@@ -10,8 +10,32 @@ export default function FaucetPage() {
   const [status, setStatus] = useState<string | null>(null);
   const [verified, setVerified] = useState(false);
   const [ktgPoints, setKtgPoints] = useState<string>("0.0000");
+  const [claiming, setClaiming] = useState(false);
 
   const KTG_POINTS = process.env.NEXT_PUBLIC_KTG_POINTS as string | undefined;
+
+  const claimStatusPrefix = (s: string | null) => {
+    if (!s) return null;
+    return /^claim\b/i.test(s) || /^you must wait\b/i.test(s) || /^error during claim\b/i.test(s);
+  };
+
+  useEffect(() => {
+    if (!status || !claimStatusPrefix(status)) return;
+    if (claiming) return;
+
+    // Auto-reset claim-related label back to default after a short delay
+    const t = window.setTimeout(() => {
+      setStatus((prev) => (prev && claimStatusPrefix(prev) ? null : prev));
+    }, 4500);
+
+    return () => window.clearTimeout(t);
+  }, [status, claiming]);
+
+  const claimButtonLabel = (() => {
+    if (claiming) return "Claiming...";
+    if (status && claimStatusPrefix(status)) return status;
+    return "Execute Claim";
+  })();
 
   const tokens = useMemo(() => {
     const iconFor = (symbol: string) => {
@@ -179,6 +203,7 @@ export default function FaucetPage() {
   }
 
   async function claim() {
+    setClaiming(true);
     setStatus("Claim in progress...");
     try {
       if (!(window as any).ethereum) throw new Error("Wallet not available");
@@ -222,6 +247,8 @@ export default function FaucetPage() {
         }
       } catch {}
       setStatus("Error during claim. Please try again later.");
+    } finally {
+      setClaiming(false);
     }
   }
 
@@ -312,8 +339,8 @@ export default function FaucetPage() {
         <Card className="mt-6">
           <div className="space-y-2">
             <p className="text-sm text-emerald-300">Email verified. You can proceed with the claim.</p>
-            <PrimaryButton onClick={claim} disabled={!isConnected} className="w-full">
-              Execute Claim
+            <PrimaryButton onClick={claim} disabled={!isConnected || claiming} className="w-full">
+              {claimButtonLabel}
             </PrimaryButton>
           </div>
         </Card>
@@ -354,7 +381,7 @@ export default function FaucetPage() {
         </ul>
       </Card>
 
-      {status && (
+      {status && !claimStatusPrefix(status) && (
         <div className="mt-6 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-sm text-slate-200">{status}</div>
       )}
     </PageShell>
