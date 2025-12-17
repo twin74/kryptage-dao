@@ -71,6 +71,8 @@ export default function SwapPage() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
 
+  const [approving, setApproving] = useState(false);
+
   const [from, setFrom] = useState<TokenInfo["symbol"]>("USDC");
   const [amountIn, setAmountIn] = useState<string>("");
 
@@ -218,6 +220,9 @@ export default function SwapPage() {
     const allowance: bigint = await t.allowance(owner, spender);
     if (allowance >= needed) return;
 
+    setApproving(true);
+    setStatus("Approve in wallet...");
+
     // Approve max and wait deterministically for mining
     const approveTx = await t.approve(spender, ethers.MaxUint256);
     const provider = signer.provider as ethers.Provider | null;
@@ -229,6 +234,8 @@ export default function SwapPage() {
 
     // Small delay helps some wallets/providers propagate state
     await new Promise((r) => setTimeout(r, 350));
+
+    setApproving(false);
   };
 
   const swap = async () => {
@@ -277,20 +284,14 @@ export default function SwapPage() {
           return;
         }
 
-        // Ensure allowance; if swap still fails with insufficient allowance, prompt user to retry.
+        // 1) Always trigger approval first if needed (this opens MetaMask)
         await ensureAllowance(USDK, user, CONTROLLER, safeIn, signer);
-        try {
-          const tx = await controller.swapUSDKForUSDC(safeIn);
-          await tx.wait();
-          setStatus("Swap successful (USDK → USDC)");
-        } catch (e: any) {
-          const m = String(e?.shortMessage || e?.reason || e?.message || "");
-          if (/insufficient_allowance|insufficient allowance/i.test(m)) {
-            setStatus("Approve required (retry)");
-            return;
-          }
-          throw e;
-        }
+
+        // 2) Then execute the swap (second MetaMask confirmation)
+        setStatus("Confirm swap in wallet...");
+        const tx = await controller.swapUSDKForUSDC(safeIn);
+        await tx.wait();
+        setStatus("Swap successful (USDK → USDC)");
       }
 
       setAmountIn("");
@@ -298,6 +299,7 @@ export default function SwapPage() {
     } catch (e: any) {
       setStatus(friendlySwapError(e));
     } finally {
+      setApproving(false);
       setLoading(false);
     }
   };
@@ -410,8 +412,8 @@ export default function SwapPage() {
 
             <div className="flex items-center justify-end gap-2">
               <SecondaryButton disabled>{address ? "Wallet connected" : "Connect wallet in header"}</SecondaryButton>
-              <PrimaryButton onClick={swap} disabled={loading || !address}>
-                {loading ? "Swapping..." : "Swap"}
+              <PrimaryButton onClick={swap} disabled={loading || approving || !address}>
+                {approving ? "Approving..." : loading ? "Swapping..." : "Swap"}
               </PrimaryButton>
             </div>
 
