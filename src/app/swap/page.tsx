@@ -55,7 +55,11 @@ function friendlySwapError(e: any): string {
     return "Transaction would fail";
   }
 
-  return "Swap failed";
+  // Fallback with minimal diagnostics
+  const code = e?.code ? String(e.code) : "";
+  const sm = e?.shortMessage ? String(e.shortMessage) : "";
+  const tail = [code && `code=${code}`, sm && `msg=${sm}`].filter(Boolean).join(" ");
+  return tail ? `Swap failed (${tail})` : "Swap failed";
 }
 
 export default function SwapPage() {
