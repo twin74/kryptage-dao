@@ -13,6 +13,9 @@ export default function Vault1Page() {
   const [status, setStatus] = useState<string | null>(null);
   const [walletChainId, setWalletChainId] = useState<number | null>(null);
 
+  const [depositing, setDepositing] = useState(false);
+  const [withdrawing, setWithdrawing] = useState(false);
+
   const [usdkInVault, setUsdkInVault] = useState<string>("0");
   const [susdkBalance, setSusdkBalance] = useState<string>("0");
   const [pendingRewardsOnchain, setPendingRewardsOnchain] = useState<string>("0");
@@ -310,10 +313,53 @@ export default function Vault1Page() {
     );
   };
 
+  const isDepositStatus = (s: string | null) => {
+    if (!s) return false;
+    const t = s.toLowerCase();
+    // short labels shown on the Deposit button
+    return (
+      t === "confirm in wallet" ||
+      t === "depositing..." ||
+      t === "success" ||
+      t === "cooldown" ||
+      t === "insufficient funds" ||
+      t === "rejected" ||
+      t === "failed"
+    );
+  };
+
+  const isWithdrawStatus = (s: string | null) => {
+    if (!s) return false;
+    const t = s.toLowerCase();
+    // short labels shown on the Burn button
+    return (
+      t === "confirm in wallet" ||
+      t === "burning..." ||
+      t === "success" ||
+      t === "cooldown" ||
+      t === "insufficient funds" ||
+      t === "rejected" ||
+      t === "failed"
+    );
+  };
+
+  const depositButtonLabel = (() => {
+    if (depositing) return "Depositing...";
+    if (status && isDepositStatus(status)) return status;
+    return "Deposit";
+  })();
+
+  const withdrawButtonLabel = (() => {
+    if (withdrawing) return "Burning...";
+    if (status && isWithdrawStatus(status)) return status;
+    return "Burn";
+  })();
+
   const onDeposit = async (amountStr: string) => {
     if (!provider || !signer) return;
+    setDepositing(true);
     setLoading(true);
-    setStatus("Awaiting wallet confirmation...");
+    setStatus("Confirm in wallet");
     try {
       const usdcC = new ethers.Contract(USDC, usdcAbi, signer);
       const dec = await usdcC.decimals();
@@ -321,51 +367,52 @@ export default function Vault1Page() {
       await (await usdcC.approve(CONTROLLER, amount)).wait();
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
       await (await controllerC.depositUSDC(amount)).wait();
-      setStatus(null);
-      setStatus("Deposit successful. Check your wallet.");
+      setStatus("Success");
       clearEstimates();
       await refresh();
     } catch (e: any) {
       if (isUserRejected(e)) {
-        setStatus("Transaction rejected by user.");
+        setStatus("Rejected");
       } else if (e?.message?.toLowerCase().includes("cooldown")) {
-        setStatus("You must wait before your next deposit (cooldown active). Try again later.");
+        setStatus("Cooldown");
       } else if (e?.message?.toLowerCase().includes("insufficient")) {
-        setStatus("Insufficient balance for deposit.");
+        setStatus("Insufficient funds");
       } else {
-        setStatus("Deposit failed. " + (e?.reason || e?.message || ""));
+        setStatus("Failed");
       }
     } finally {
       setLoading(false);
+      setDepositing(false);
     }
   };
 
   const onWithdraw = async (sharesStr: string) => {
     if (!signer) return;
+    setWithdrawing(true);
     setLoading(true);
-    setStatus("Awaiting wallet confirmation...");
+    setStatus("Confirm in wallet");
     try {
       const susdkC = new ethers.Contract(VAULT, susdkAbi, signer);
       const dec = await susdkC.decimals();
       const shares = ethers.parseUnits(sharesStr || "0", dec);
       const controllerC = new ethers.Contract(CONTROLLER, controllerAbi, signer);
       await (await controllerC.withdrawShares(shares)).wait();
-      setStatus(null);
-      setStatus("Withdraw successful. Check your wallet.");
+      setStatus("Success");
       clearEstimates();
       await refresh();
     } catch (e: any) {
       if (isUserRejected(e)) {
-        setStatus("Transaction rejected by user.");
+        setStatus("Rejected");
       } else if (e?.message?.toLowerCase().includes("cooldown")) {
-        setStatus("You must wait before your next withdrawal (cooldown active). Try again later.");
+        setStatus("Cooldown");
       } else if (e?.message?.toLowerCase().includes("insufficient")) {
-        setStatus("Insufficient balance for withdrawal.");
+        setStatus("Insufficient funds");
       } else {
-        setStatus("Withdraw failed. " + (e?.reason || e?.message || ""));
+        setStatus("Failed");
       }
     } finally {
       setLoading(false);
+      setWithdrawing(false);
     }
   };
 
@@ -501,8 +548,11 @@ export default function Vault1Page() {
                   Max
                 </button>
               </div>
-              <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>
-                Deposit
+              <button
+                className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28"
+                disabled={loading || depositing || withdrawing}
+              >
+                {depositButtonLabel}
               </button>
             </div>
           </form>
@@ -541,14 +591,17 @@ export default function Vault1Page() {
                   Max
                 </button>
               </div>
-              <button className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28" disabled={loading}>
-                Burn
+              <button
+                className="rounded-md bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 disabled:opacity-50 w-28"
+                disabled={loading || depositing || withdrawing}
+              >
+                {withdrawButtonLabel}
               </button>
             </div>
           </form>
         </div>
 
-        {status && (
+        {status && !isDepositStatus(status) && !isWithdrawStatus(status) && (
           <div className="mt-4 rounded-md border border-slate-800 bg-slate-950/30 p-3 text-sm text-slate-200">
             {status}
           </div>
