@@ -41,7 +41,7 @@ function friendlySwapError(e: any): string {
   }
 
   // Allowance issues (some tokens revert with a string)
-  if (/insufficient_allowance|insufficient allowance/i.test(msg)) {
+  if (/insufficient_allowance|insufficient allowance/i.test(msg) || /insufficient_allowance|insufficient allowance/i.test(data)) {
     return "Approve required";
   }
 
@@ -234,23 +234,36 @@ export default function SwapPage() {
     setStatus("Approve in wallet...");
     console.debug("[swap] ensureAllowance:approve:request");
 
-    // Approve max and wait deterministically for mining
+    // Send approval
     const approveTx = await t.approve(spender, ethers.MaxUint256);
     console.debug("[swap] ensureAllowance:approve:sent", { hash: approveTx.hash });
 
-    const provider = signer.provider as ethers.Provider | null;
-    if (provider) {
-      await provider.waitForTransaction(approveTx.hash);
-    } else {
-      await approveTx.wait();
+    // Always wait for confirmation via the BrowserProvider (more reliable with injected wallets)
+    try {
+      const browserProvider = signer.provider as ethers.Provider | null;
+      if (browserProvider) {
+        await browserProvider.waitForTransaction(approveTx.hash);
+      } else {
+        await approveTx.wait();
+      }
+    } finally {
+      // Small delay helps state propagate
+      await new Promise((r) => setTimeout(r, 350));
     }
 
-    console.debug("[swap] ensureAllowance:approve:mined", { hash: approveTx.hash });
-
-    // Small delay helps some wallets/providers propagate state
-    await new Promise((r) => setTimeout(r, 350));
+    // Re-check allowance after mining (some tokens require reset-to-zero flows; also protects against silent failures)
+    const allowanceAfter: bigint = await t.allowance(owner, spender);
+    console.debug("[swap] ensureAllowance:allowanceAfter", {
+      allowanceAfter: allowanceAfter.toString(),
+      needed: needed.toString(),
+      ok: allowanceAfter >= needed,
+    });
 
     setApproving(false);
+
+    if (allowanceAfter < needed) {
+      throw new Error("INSUFFICIENT_ALLOWANCE");
+    }
   };
 
   const swap = async () => {
