@@ -355,6 +355,24 @@ export default function Vault1Page() {
     return "Burn";
   })();
 
+  useEffect(() => {
+    if (!status) return;
+    if (depositing || withdrawing) return;
+    if (!isDepositStatus(status) && !isWithdrawStatus(status)) return;
+
+    const t = window.setTimeout(() => {
+      setStatus((prev) => {
+        if (!prev) return prev;
+        // only clear action-related statuses
+        if (isDepositStatus(prev) || isWithdrawStatus(prev)) return null;
+        return prev;
+      });
+    }, 4500);
+
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, depositing, withdrawing]);
+
   const onDeposit = async (amountStr: string) => {
     if (!provider || !signer) return;
     setDepositing(true);
