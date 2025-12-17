@@ -25,6 +25,39 @@ function sanitizeNumericInput(raw: string) {
   return fracPart.length ? `${intPart}.${fracPart}` : intPart;
 }
 
+function clampRawAmountToBalance(raw: bigint, balance: bigint) {
+  if (balance <= 0n) return 0n;
+  if (raw <= balance) return raw;
+  return balance;
+}
+
+function friendlySwapError(e: any): string {
+  const msg: string = String(e?.shortMessage || e?.reason || e?.message || "");
+  const data: string = String(e?.data || e?.error?.data || e?.info?.error?.data || "");
+
+  // Custom error selector for OpenZeppelin ERC20InsufficientBalance(address,uint256,uint256)
+  if ((data && data.startsWith("0xe450d38c")) || msg.toLowerCase().includes("insufficientbalance")) {
+    return "Insufficient funds";
+  }
+
+  // Common allowance issues
+  if (msg.toLowerCase().includes("insufficient allowance") || msg.toLowerCase().includes("insufficientallowance")) {
+    return "Insufficient allowance";
+  }
+
+  // User rejected / cancelled
+  if ((e?.code === 4001) || /user rejected|user denied|rejected the request/i.test(msg)) {
+    return "Transaction rejected";
+  }
+
+  // Gas estimation reverts (generic)
+  if (/estimategas|cannot estimate gas|call_exception/i.test(msg)) {
+    return "Transaction would fail";
+  }
+
+  return "Swap failed";
+}
+
 export default function SwapPage() {
   const USDK = process.env.NEXT_PUBLIC_TOKEN_USDK as string;
   const USDC = process.env.NEXT_PUBLIC_TOKEN_USDC as string;
@@ -212,14 +245,26 @@ export default function SwapPage() {
 
       if (from === "USDC") {
         const usdcIn = ethers.parseUnits(cleaned, tokens.USDC.decimals);
-        await ensureAllowance(USDC, user, CONTROLLER, usdcIn, signer);
-        const tx = await controller.swapUSDCForUSDK(usdcIn);
+        const safeIn = clampRawAmountToBalance(usdcIn, usdcBalRaw);
+        if (safeIn === 0n) {
+          setStatus("Insufficient USDC balance");
+          return;
+        }
+        await ensureAllowance(USDC, user, CONTROLLER, safeIn, signer);
+        const tx = await controller.swapUSDCForUSDK(safeIn);
         await tx.wait();
         setStatus("Swap successful (USDC → USDK)");
       } else {
+        // For USDK burnFrom, some tokens/proxies can be strict; leave 1 minimal unit to avoid edge-case rounding/UI mismatch.
         const usdkIn = ethers.parseUnits(cleaned, tokens.USDK.decimals);
-        await ensureAllowance(USDK, user, CONTROLLER, usdkIn, signer);
-        const tx = await controller.swapUSDKForUSDC(usdkIn);
+        const maxSpendable = usdkBalRaw > 1n ? usdkBalRaw - 1n : usdkBalRaw;
+        const safeIn = usdkIn > maxSpendable ? maxSpendable : usdkIn;
+        if (safeIn === 0n) {
+          setStatus("Insufficient USDK balance");
+          return;
+        }
+        await ensureAllowance(USDK, user, CONTROLLER, safeIn, signer);
+        const tx = await controller.swapUSDKForUSDC(safeIn);
         await tx.wait();
         setStatus("Swap successful (USDK → USDC)");
       }
@@ -227,7 +272,7 @@ export default function SwapPage() {
       setAmountIn("");
       await loadFeeBps();
     } catch (e: any) {
-      setStatus(e?.reason || e?.message || "Swap failed");
+      setStatus(friendlySwapError(e));
     } finally {
       setLoading(false);
     }
@@ -237,7 +282,15 @@ export default function SwapPage() {
     if (!address) return;
     await loadBalances();
     const t = tokens[from];
-    const raw = from === "USDC" ? usdcBalRaw : usdkBalRaw;
+
+    if (from === "USDK") {
+      // Keep 1 minimal unit to avoid insufficient-balance reverts caused by UI rounding or strict checks.
+      const raw = usdkBalRaw > 1n ? usdkBalRaw - 1n : usdkBalRaw;
+      setAmountIn(ethers.formatUnits(raw, t.decimals));
+      return;
+    }
+
+    const raw = usdcBalRaw;
     setAmountIn(ethers.formatUnits(raw, t.decimals));
   };
 
@@ -314,7 +367,18 @@ export default function SwapPage() {
                   </div>
                 ) : (
                   <div>
-                    Receive: <b>{amountIn || "0"}</b> {to}
+                    Receive: <b>{(() => {
+                      const cleaned = sanitizeNumericInput(amountIn);
+                      if (!cleaned || Number(cleaned) <= 0) return "0";
+                      try {
+                        const usdcIn = ethers.parseUnits(cleaned, tokens.USDC.decimals);
+                        // 1:1 in value; controller scales internally, but UI should show correct decimals on output
+                        const usdkOut = ethers.formatUnits(usdcIn, tokens.USDK.decimals);
+                        return usdkOut;
+                      } catch {
+                        return "0";
+                      }
+                    })()}</b> {to}
                   </div>
                 )}
               </div>
