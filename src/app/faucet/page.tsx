@@ -273,7 +273,10 @@ export default function FaucetPage() {
         </Card>
 
         <Card>
-          <div className="font-semibold">KTG Points</div>
+          <div className="flex items-center gap-2">
+            <img src="/ktg.svg" alt="KTG" className="h-5 w-5" />
+            <div className="font-semibold">KTG Points</div>
+          </div>
           <div className="mt-1">
             Current: <span className="font-mono">{ktgPoints}</span>
           </div>
