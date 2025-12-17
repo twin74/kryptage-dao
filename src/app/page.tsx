@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { Badge, Card, PageShell, PrimaryButton, SecondaryButton } from "@/components/UI";
 
 export default function Home() {

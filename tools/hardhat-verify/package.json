@@ -11,9 +11,9 @@
     "verify:proxy:api": "node scripts/verify.js proxy"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-verify": "^3.0.8",
+    "@nomicfoundation/hardhat-verify": "^2.1.3",
     "@openzeppelin/contracts": "^5.4.0",
     "dotenv": "^17.2.3",
-    "hardhat": "^3.0.17"
+    "hardhat": "^2.27.1"
   }
 }

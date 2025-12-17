@@ -88,6 +88,7 @@ export default function SwapPage() {
 
   const tokens = useMemo((): Record<string, TokenInfo> => {
     return {
+      // Sepolia USDC in this project is 6 decimals (USDT-style); using 18 breaks parse/format and can prevent tx flows.
       USDC: { symbol: "USDC", address: USDC, decimals: 18 },
       USDK: { symbol: "USDK", address: USDK, decimals: 6 },
     };
@@ -216,21 +217,35 @@ export default function SwapPage() {
   }, [amountIn, from, feeBps]);
 
   const ensureAllowance = async (tokenAddr: string, owner: string, spender: string, needed: bigint, signer: ethers.Signer) => {
+    console.debug("[swap] ensureAllowance:start", { tokenAddr, owner, spender, needed: needed.toString() });
+
     const t = new ethers.Contract(tokenAddr, erc20Abi, signer);
     const allowance: bigint = await t.allowance(owner, spender);
+
+    console.debug("[swap] ensureAllowance:allowance", {
+      allowance: allowance.toString(),
+      needed: needed.toString(),
+      ok: allowance >= needed,
+    });
+
     if (allowance >= needed) return;
 
     setApproving(true);
     setStatus("Approve in wallet...");
+    console.debug("[swap] ensureAllowance:approve:request");
 
     // Approve max and wait deterministically for mining
     const approveTx = await t.approve(spender, ethers.MaxUint256);
+    console.debug("[swap] ensureAllowance:approve:sent", { hash: approveTx.hash });
+
     const provider = signer.provider as ethers.Provider | null;
     if (provider) {
       await provider.waitForTransaction(approveTx.hash);
     } else {
       await approveTx.wait();
     }
+
+    console.debug("[swap] ensureAllowance:approve:mined", { hash: approveTx.hash });
 
     // Small delay helps some wallets/providers propagate state
     await new Promise((r) => setTimeout(r, 350));
@@ -240,63 +255,98 @@ export default function SwapPage() {
 
   const swap = async () => {
     const eth = (window as any)?.ethereum;
+    console.debug("[swap] click", { from, to, amountIn });
+
     if (!eth) {
       setStatus("Connect wallet in header");
+      console.debug("[swap] no window.ethereum");
       return;
     }
     if (!CONTROLLER) {
       setStatus("Missing NEXT_PUBLIC_STABLE_CONTROLLER");
+      console.debug("[swap] missing controller env");
       return;
     }
 
     const cleaned = sanitizeNumericInput(amountIn);
     if (!cleaned || Number(cleaned) <= 0) {
       setStatus("Enter an amount");
+      console.debug("[swap] invalid amount", { cleaned });
       return;
     }
 
     setLoading(true);
     setStatus("Awaiting wallet confirmation...");
+
     try {
+      console.debug("[swap] provider:init");
       const provider = new ethers.BrowserProvider(eth);
+
+      console.debug("[swap] signer:get");
       const signer = await provider.getSigner();
+
+      console.debug("[swap] signer:address:get");
       const user = await signer.getAddress();
+      console.debug("[swap] user", { user });
 
       const controller = new ethers.Contract(CONTROLLER, controllerAbi, signer);
+      console.debug("[swap] controller", { CONTROLLER });
 
       if (from === "USDC") {
+        console.debug("[swap] path USDC->USDK", { decimals: tokens.USDC.decimals });
         const usdcIn = ethers.parseUnits(cleaned, tokens.USDC.decimals);
         const safeIn = clampRawAmountToBalance(usdcIn, usdcBalRaw);
+        console.debug("[swap] usdcIn", { usdcIn: usdcIn.toString(), safeIn: safeIn.toString(), bal: usdcBalRaw.toString() });
+
         if (safeIn === 0n) {
           setStatus("Insufficient USDC balance");
+          console.debug("[swap] insufficient USDC");
           return;
         }
+
+        setStatus("Checking allowance...");
         await ensureAllowance(USDC, user, CONTROLLER, safeIn, signer);
+
+        setStatus("Confirm swap in wallet...");
+        console.debug("[swap] swapUSDCForUSDK:send", { safeIn: safeIn.toString() });
         const tx = await controller.swapUSDCForUSDK(safeIn);
+        console.debug("[swap] swapUSDCForUSDK:sent", { hash: tx.hash });
         await tx.wait();
+        console.debug("[swap] swapUSDCForUSDK:mined", { hash: tx.hash });
+
         setStatus("Swap successful (USDC → USDK)");
       } else {
+        console.debug("[swap] path USDK->USDC", { decimals: tokens.USDK.decimals });
         const usdkIn = ethers.parseUnits(cleaned, tokens.USDK.decimals);
         const maxSpendable = usdkBalRaw > 1n ? usdkBalRaw - 1n : usdkBalRaw;
         const safeIn = usdkIn > maxSpendable ? maxSpendable : usdkIn;
+        console.debug("[swap] usdkIn", { usdkIn: usdkIn.toString(), safeIn: safeIn.toString(), bal: usdkBalRaw.toString() });
+
         if (safeIn === 0n) {
           setStatus("Insufficient USDK balance");
+          console.debug("[swap] insufficient USDK");
           return;
         }
 
-        // 1) Always trigger approval first if needed (this opens MetaMask)
+        setStatus("Checking allowance...");
+        console.debug("[swap] ensureAllowance USDK:start");
         await ensureAllowance(USDK, user, CONTROLLER, safeIn, signer);
+        console.debug("[swap] ensureAllowance USDK:done");
 
-        // 2) Then execute the swap (second MetaMask confirmation)
         setStatus("Confirm swap in wallet...");
+        console.debug("[swap] swapUSDKForUSDC:send", { safeIn: safeIn.toString() });
         const tx = await controller.swapUSDKForUSDC(safeIn);
+        console.debug("[swap] swapUSDKForUSDC:sent", { hash: tx.hash });
         await tx.wait();
+        console.debug("[swap] swapUSDKForUSDC:mined", { hash: tx.hash });
+
         setStatus("Swap successful (USDK → USDC)");
       }
 
       setAmountIn("");
       await loadFeeBps();
     } catch (e: any) {
+      console.error("[swap] failed", e);
       setStatus(friendlySwapError(e));
     } finally {
       setApproving(false);
