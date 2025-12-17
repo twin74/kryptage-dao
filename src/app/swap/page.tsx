@@ -40,9 +40,9 @@ function friendlySwapError(e: any): string {
     return "Insufficient funds";
   }
 
-  // Common allowance issues
-  if (msg.toLowerCase().includes("insufficient allowance") || msg.toLowerCase().includes("insufficientallowance")) {
-    return "Insufficient allowance";
+  // Allowance issues (some tokens revert with a string)
+  if (/insufficient_allowance|insufficient allowance/i.test(msg)) {
+    return "Approve required";
   }
 
   // User rejected / cancelled
@@ -217,8 +217,18 @@ export default function SwapPage() {
     const t = new ethers.Contract(tokenAddr, erc20Abi, signer);
     const allowance: bigint = await t.allowance(owner, spender);
     if (allowance >= needed) return;
-    // approve max
-    await (await t.approve(spender, ethers.MaxUint256)).wait();
+
+    // Approve max and wait deterministically for mining
+    const approveTx = await t.approve(spender, ethers.MaxUint256);
+    const provider = signer.provider as ethers.Provider | null;
+    if (provider) {
+      await provider.waitForTransaction(approveTx.hash);
+    } else {
+      await approveTx.wait();
+    }
+
+    // Small delay helps some wallets/providers propagate state
+    await new Promise((r) => setTimeout(r, 350));
   };
 
   const swap = async () => {
@@ -259,7 +269,6 @@ export default function SwapPage() {
         await tx.wait();
         setStatus("Swap successful (USDC → USDK)");
       } else {
-        // For USDK burnFrom, some tokens/proxies can be strict; leave 1 minimal unit to avoid edge-case rounding/UI mismatch.
         const usdkIn = ethers.parseUnits(cleaned, tokens.USDK.decimals);
         const maxSpendable = usdkBalRaw > 1n ? usdkBalRaw - 1n : usdkBalRaw;
         const safeIn = usdkIn > maxSpendable ? maxSpendable : usdkIn;
@@ -267,10 +276,21 @@ export default function SwapPage() {
           setStatus("Insufficient USDK balance");
           return;
         }
+
+        // Ensure allowance; if swap still fails with insufficient allowance, prompt user to retry.
         await ensureAllowance(USDK, user, CONTROLLER, safeIn, signer);
-        const tx = await controller.swapUSDKForUSDC(safeIn);
-        await tx.wait();
-        setStatus("Swap successful (USDK → USDC)");
+        try {
+          const tx = await controller.swapUSDKForUSDC(safeIn);
+          await tx.wait();
+          setStatus("Swap successful (USDK → USDC)");
+        } catch (e: any) {
+          const m = String(e?.shortMessage || e?.reason || e?.message || "");
+          if (/insufficient_allowance|insufficient allowance/i.test(m)) {
+            setStatus("Approve required (retry)");
+            return;
+          }
+          throw e;
+        }
       }
 
       setAmountIn("");
