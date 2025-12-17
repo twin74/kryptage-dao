@@ -353,10 +353,8 @@ export default function SwapPage() {
           return;
         }
 
-        setStatus("Checking allowance...");
-        console.debug("[swap] ensureAllowance USDK:start");
-        await ensureAllowance(USDK, user, CONTROLLER, safeIn, signer);
-        console.debug("[swap] ensureAllowance USDK:done");
+        // NOTE: USDK.burnFrom() in this project is role-gated (BURNER_ROLE) and does NOT use ERC20 allowance.
+        // Therefore we must NOT ask users to approve USDK here.
 
         setStatus("Confirm swap in wallet...");
         console.debug("[swap] swapUSDKForUSDC:send", { safeIn: safeIn.toString() });
@@ -472,10 +470,11 @@ export default function SwapPage() {
                       const cleaned = sanitizeNumericInput(amountIn);
                       if (!cleaned || Number(cleaned) <= 0) return "0";
                       try {
-                        const usdcIn = ethers.parseUnits(cleaned, tokens.USDC.decimals);
-                        // 1:1 in value; controller scales internally, but UI should show correct decimals on output
-                        const usdkOut = ethers.formatUnits(usdcIn, tokens.USDK.decimals);
-                        return usdkOut;
+                        // Input is in USDC decimals (18). Output should be in USDK decimals (6).
+                        // Make the preview match the controller's internal scaling.
+                        const usdcInRaw = ethers.parseUnits(cleaned, tokens.USDC.decimals);
+                        const usdkOutRaw = usdcInRaw / 10n ** BigInt(tokens.USDC.decimals - tokens.USDK.decimals);
+                        return ethers.formatUnits(usdkOutRaw, tokens.USDK.decimals);
                       } catch {
                         return "0";
                       }
