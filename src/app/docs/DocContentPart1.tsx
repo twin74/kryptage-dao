@@ -207,6 +207,23 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
             <br />
             Always do your own research and never invest more than you can afford to lose.
           </P>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 2) Kryptage Ecosystem</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">
+              Learn how the protocol is structured, where yield comes from, and how value flows through the ecosystem.
+            </p>
+            <div className="mt-4">
+              <a
+                href="#ecosystem"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 2
+              </a>
+            </div>
+          </div>
         </div>
       );
 
