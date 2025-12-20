@@ -253,15 +253,6 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
             <br />
             Always do your own research and never invest more than you can afford to lose.
           </P>
-
-          <div className="mt-6">
-            <Link
-              href="#ecosystem"
-              className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100"
-            >
-              Next: 2) Ecosystem →
-            </Link>
-          </div>
         </div>
       );
 
