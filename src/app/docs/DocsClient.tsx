@@ -912,6 +912,194 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         </div>
       );
 
+    case "ktg":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">🪙 5) $KTG Token</h1>
+              <P>
+                $KTG is the governance and coordination token of the Kryptage ecosystem.
+                <br />
+                It aligns users, contributors, and the DAO around long-term, sustainable growth — without relying on inflationary emissions.
+              </P>
+              <P>$KTG is designed to reward participation, alignment, and responsibility, not short-term speculation.</P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>📌 Token Overview</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
+            <table className="w-full text-sm">
+              <tbody className="divide-y divide-slate-200">
+                <tr>
+                  <td className="px-4 py-2 text-slate-900 font-semibold">Token name</td>
+                  <td className="px-4 py-2 text-slate-700">Kryptage Token</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900 font-semibold">Ticker</td>
+                  <td className="px-4 py-2 text-slate-700">KTG</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900 font-semibold">Category</td>
+                  <td className="px-4 py-2 text-slate-700">Governance &amp; Utility</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900 font-semibold">Issuance</td>
+                  <td className="px-4 py-2 text-slate-700">DAO-controlled</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900 font-semibold">Inflation</td>
+                  <td className="px-4 py-2 text-slate-700">None by default</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <P className="mt-4 text-slate-900 font-semibold">$KTG does not represent:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>❌ Ownership of a company</Li>
+            <Li>❌ Guaranteed profit rights</Li>
+            <Li>❌ Automatic revenue distribution</Li>
+          </ul>
+          <P className="mt-4">$KTG represents voice, alignment, and long-term optionality.</P>
+
+          <SectionTitle>🧠 What $KTG Is Used For</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/Wj3mC2n/fl11.png" alt="$KTG utility overview" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🗳️ Governance</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Propose and vote on KIPs (Kryptage Improvement Proposals)</Li>
+            <Li>Control protocol parameters</Li>
+            <Li>Approve new strategies and Vaults</Li>
+            <Li>Allocate Treasury resources</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">⚙️ Protocol Utility</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Access advanced features (Pro Mode)</Li>
+            <Li>Boost governance weight via locking</Li>
+            <Li>Participate in incentive programs (when active)</Li>
+            <Li>Fees discount</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🧩 Alignment Mechanism</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Incentivizes long-term behavior</Li>
+            <Li>Discourages mercenary capital</Li>
+            <Li>Rewards contributors and ecosystem builders</Li>
+          </ul>
+
+          <SectionTitle>⭐ KTG Points — Participation Before Tokens</SectionTitle>
+          <P>Before full token activation, Kryptage uses KTG Points.</P>
+          <P className="mt-4 text-slate-900 font-semibold">What are KTG Points?</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Non-transferable</Li>
+            <Li>Off-chain or semi-on-chain</Li>
+            <Li>Earned through participation</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">How points are earned</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Using Vaults</Li>
+            <Li>Participating in governance</Li>
+            <Li>Contributing to the ecosystem</Li>
+            <Li>Community building</Li>
+          </ul>
+
+          <P className="mt-4">Points reward behavior, not speculation.</P>
+          <P className="mt-4 text-slate-900 font-semibold">KTG Points are designed to:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Bootstrap governance</Li>
+            <Li>Measure alignment</Li>
+            <Li>Convert into $KTG under DAO rules</Li>
+          </ul>
+
+          <SectionTitle>🧮 Tokenomics (High-Level)</SectionTitle>
+          <P>While final parameters are DAO-defined, core principles include:</P>
+          <P className="mt-4 text-slate-900 font-semibold">Supply philosophy</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Fixed/Capped supply</Li>
+            <Li>No perpetual emissions</Li>
+            <Li>Gradual unlocks</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Allocation buckets (illustrative)</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Contributors &amp; Builders</Li>
+            <Li>DAO Treasury</Li>
+            <Li>Ecosystem growth</Li>
+            <Li>KTG Points conversion</Li>
+          </ul>
+
+          <P className="mt-4">Tokenomics are a governance outcome, not a marketing promise.</P>
+
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/MkwwC2x9/fl12.png" alt="Tokenomics allocation" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <SectionTitle>⏳ Vesting &amp; Unlock Logic</SectionTitle>
+          <P>To ensure sustainability:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Tokens vest over time (Linear vesting)</Li>
+            <Li>Long-term contributors are favored</Li>
+            <Li>Sudden supply shocks are avoided</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Vesting mechanics are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Transparent</Li>
+            <Li>On-chain where possible</Li>
+            <Li>Governed by DAO votes</Li>
+          </ul>
+
+          <SectionTitle>🗳️ Governance Power &amp; Delegation</SectionTitle>
+          <P>$KTG holders can:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Vote directly</Li>
+            <Li>Delegate voting power</Li>
+            <Li>Participate in working groups</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Governance evolves in phases:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Founder-led</Li>
+            <Li>Council-based</Li>
+            <Li>Full DAO</Li>
+          </ul>
+          <P className="mt-4">Decentralization is progressive, not abrupt.</P>
+
+          <SectionTitle>🔒 Locking, Staking &amp; Future Utility</SectionTitle>
+          <P>Future DAO-approved utilities may include:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Time-locking for increased voting power</Li>
+            <Li>Fee-sharing mechanisms</Li>
+            <Li>Backstop roles for protocol safety</Li>
+          </ul>
+          <P className="mt-4">Nothing is automatic — all features require governance approval.</P>
+
+          <SectionTitle>⚠️ Important Notes &amp; Disclosures</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>$KTG is not an investment contract</Li>
+            <Li>Governance power ≠ profit guarantee</Li>
+            <Li>Participation implies responsibility</Li>
+            <Li>The value of $KTG emerges from protocol success, not speculation.</Li>
+          </ul>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 6) Kryptage DAO — how governance works</Li>
+            <Li>➡️ 7) Developers — contracts &amp; integrations</Li>
+            <Li>➡️ 8) Safety &amp; Risk — audits &amp; safeguards</Li>
+          </ul>
+        </div>
+      );
+
     default:
       return (
         <div>
