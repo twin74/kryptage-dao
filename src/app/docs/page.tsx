@@ -1,7 +1,6 @@
 // NOTE: keep this file as a Server Component (no "use client")
-import { PageShell, Card, Badge } from "@/components/UI";
+import { PageShell, Badge } from "@/components/UI";
 import Link from "next/link";
-import { Suspense } from "react";
 import DocsClient from "./DocsClient";
 
 type DocChapterId =
@@ -701,17 +700,10 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
   }
 }
 
-export default function DocsPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
-  const selectedRaw = typeof searchParams?.ch === "string" ? searchParams.ch : Array.isArray(searchParams?.ch) ? searchParams?.ch[0] : null;
-  const selected = isValidId(selectedRaw) ? selectedRaw : CHAPTERS[0].id;
-
+export default function DocsPage() {
   return (
     <PageShell title="Docs" subtitle="Learn how Kryptage works, step-by-step.">
-      <Suspense fallback={<div className="text-sm text-slate-500">Loading…</div>}>
-        <DocsClient>
-          <DocContent chapter={selected} />
-        </DocsClient>
-      </Suspense>
+      <DocsClient />
     </PageShell>
   );
 }
