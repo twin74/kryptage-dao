@@ -1100,6 +1100,207 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         </div>
       );
 
+    case "dao":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">🏛️ 6) Kryptage DAO</h1>
+              <P>
+                Kryptage DAO is the governance layer of the protocol.
+                <br />
+                It ensures that control, upgrades, and value allocation are progressively decentralized and aligned with the long-term health of the ecosystem.
+              </P>
+              <P>The DAO is not just a voting system — it is the operating system of Kryptage.</P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>🎯 Purpose of the DAO</SectionTitle>
+          <P>Kryptage DAO exists to:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Define the long-term vision of the protocol</Li>
+            <Li>Protect users and USDK stability</Li>
+            <Li>Balance growth, risk, and sustainability</Li>
+            <Li>Coordinate contributors and builders</Li>
+          </ul>
+          <P className="mt-4">The DAO governs rules, not users.</P>
+
+          <SectionTitle>🧠 Core Principles</SectionTitle>
+          <P>The DAO is built around a few non-negotiable principles:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Governance before speculation</Li>
+            <Li>Modular &amp; auditable decisions</Li>
+            <Li>Transparency by default</Li>
+            <Li>Risk-first mindset</Li>
+            <Li>Progressive decentralization</Li>
+          </ul>
+
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/spL1PT5H/fl13.png" alt="DAO core principles" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <SectionTitle>🗳️ Governance Scope — What the DAO Controls</SectionTitle>
+          <P>The DAO has authority over:</P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🪙 Monetary Layer</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>USDK mint/burn parameters</Li>
+            <Li>Peg mechanisms</Li>
+            <Li>Yield Reserve policies</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🏦 Product Layer</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Vault creation and shutdown</Li>
+            <Li>Strategy whitelisting</Li>
+            <Li>Risk thresholds and limits</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🏦 Treasury</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Budget allocation</Li>
+            <Li>Contributor compensation</Li>
+            <Li>Ecosystem grants</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">⚙️ Protocol Upgrades</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Smart contract upgrades</Li>
+            <Li>New modules</Li>
+            <Li>Emergency procedures</Li>
+          </ul>
+
+          <SectionTitle>🧾 Kryptage Improvement Proposals (KIPs)</SectionTitle>
+          <P>All major decisions flow through KIPs.</P>
+          <P className="mt-4 text-slate-900 font-semibold">KIP lifecycle</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Draft — idea discussion</Li>
+            <Li>Review — risk &amp; feasibility checks</Li>
+            <Li>Vote — on-chain or snapshot</Li>
+            <Li>Execution — automated or multisig</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">KIPs ensure:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Clear accountability</Li>
+            <Li>Public discussion</Li>
+            <Li>Immutable records</Li>
+          </ul>
+
+          <SectionTitle>🧑‍🔧 Contributors &amp; Working Groups</SectionTitle>
+          <P>Kryptage DAO coordinates work via contributors, not employees.</P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">Contributor roles</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Protocol engineers</Li>
+            <Li>Risk analysts</Li>
+            <Li>Community stewards</Li>
+            <Li>Governance facilitators</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">Compensation model</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Performance-based</Li>
+            <Li>DAO-approved budgets</Li>
+            <Li>Transparent payouts</Li>
+          </ul>
+          <P className="mt-4">Work is permissionless. Compensation is earned.</P>
+
+          <SectionTitle>🏦 DAO Treasury — Mandate &amp; Transparency</SectionTitle>
+          <P>The Treasury is the economic backbone of the DAO.</P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">Inflows</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Vault performance fees</Li>
+            <Li>Protocol-level revenues</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">Outflows</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Contributor compensation</Li>
+            <Li>Audits &amp; security</Li>
+            <Li>Ecosystem growth</Li>
+            <Li>Stability reserves</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">All treasury movements are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>On-chain</Li>
+            <Li>Publicly auditable</Li>
+            <Li>Governed by DAO votes</Li>
+          </ul>
+
+          <SectionTitle>🧯 Emergency Powers &amp; Safeguards</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/spQTrWkp/fl14.png" alt="Emergency powers and safeguards" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <P className="mt-4">While decentralization is the goal, safety comes first.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Emergency mechanisms</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Temporary pausing of Vaults</Li>
+            <Li>Strategy exits</Li>
+            <Li>Mint/burn throttling</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">These powers are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Limited in scope</Li>
+            <Li>Time-bound</Li>
+            <Li>Accountable to the DAO</Li>
+          </ul>
+
+          <P className="mt-4">Centralization is used only to buy time, not control outcomes.</P>
+
+          <SectionTitle>⏳ Progressive Decentralization Roadmap</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/39tnk4Wh/fl15.png" alt="Progressive decentralization roadmap" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">Phase 1 — Bootstrap</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Core team + multisig</Li>
+            <Li>Conservative parameters</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">Phase 2 — Council</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Elected risk &amp; strategy councils</Li>
+            <Li>Partial DAO control</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">Phase 3 — Full DAO</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>On-chain governance</Li>
+            <Li>Permissionless proposals</Li>
+            <Li>Treasury fully DAO-managed</Li>
+          </ul>
+
+          <SectionTitle>👤 Who Should Participate?</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>$KTG holders</Li>
+            <Li>Contributors</Li>
+            <Li>Strategic partners</Li>
+            <Li>Long-term aligned users</Li>
+          </ul>
+
+          <P className="mt-4">Governance is not mandatory — but alignment is rewarded.</P>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 7) Developers — smart contracts &amp; integrations</Li>
+            <Li>➡️ 8) Safety &amp; Risk — audits &amp; safeguards</Li>
+            <Li>➡️ 9) Compliance &amp; Legal — high-level framework</Li>
+          </ul>
+        </div>
+      );
+
     default:
       return (
         <div>
