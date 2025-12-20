@@ -2085,6 +2085,136 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         </div>
       );
 
+    case "contacts":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">📬 11) Contacts &amp; Links</h1>
+              <P>
+                This section gathers all official Kryptage resources in one place.
+                <br />
+                To stay safe, always verify that you are interacting only with links listed here.
+              </P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>⚠️ Security Notice</SectionTitle>
+          <P className="mt-4 text-slate-900 font-semibold">Kryptage will never DM you first, ask for private keys, or request off-chain payments.</P>
+
+          <SectionTitle>🌐 Official Resources</SectionTitle>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🧠 Documentation</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>
+              Docs: <span className="font-mono">kryptage.com/docs</span>
+            </Li>
+            <Li>
+              Protocol Dashboard: <span className="font-mono">kryptage.com</span>
+            </Li>
+            <Li>
+              Governance (KIPs): <span className="font-mono">kryptage.com/governance</span>
+            </Li>
+          </ul>
+          <P className="mt-4">Always check URLs carefully to avoid phishing.</P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🐦 Social &amp; Community</h3>
+          <P className="mt-4 text-slate-900 font-semibold">Official Channels</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>X (Twitter): @DeFiforDummies</Li>
+            <Li>Discord: Kryptage Community</Li>
+            <Li>Telegram: Kryptage Announcements</Li>
+            <Li>Website: kryptage.com</Li>
+          </ul>
+          <P className="mt-4">Community channels are used for:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Protocol updates</Li>
+            <Li>Governance discussions</Li>
+            <Li>Educational content</Li>
+            <Li>Community support (non-custodial)</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🏛️ Governance &amp; DAO</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Voting: Snapshot / On-chain (when enabled)</Li>
+            <Li>Proposals: Kryptage Improvement Proposals (KIPs)</Li>
+            <Li>Discussions: Governance forum / Discord</Li>
+          </ul>
+          <P className="mt-4">Governance participation is permissionless but responsibility-driven.</P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🧑‍💻 Developers &amp; Open Source</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>
+              GitHub: <span className="font-mono">github.com/twin74</span>
+            </Li>
+            <Li>
+              Developer Docs: <span className="font-mono">docs.kryptage.com/docs</span>
+            </Li>
+            <Li>Contract Verification: Linked from GitHub &amp; Docs</Li>
+          </ul>
+          <P className="mt-4">Developers are encouraged to:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Review code</Li>
+            <Li>Submit issues</Li>
+            <Li>Propose improvements via KIPs</Li>
+          </ul>
+
+          <SectionTitle>✉️ Contact &amp; Support</SectionTitle>
+          <P className="mt-4 text-slate-900 font-semibold">Official Contact</P>
+          <P>
+            Email: <span className="font-mono">info@kryptage.com</span>
+          </P>
+          <P className="mt-4 text-slate-900 font-semibold">For:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Partnerships</Li>
+            <Li>Integrations</Li>
+            <Li>Security disclosures</Li>
+          </ul>
+          <P className="mt-4">Never share sensitive information via email or chat.</P>
+
+          <SectionTitle>🛡️ Security &amp; Reporting</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>
+              Security disclosures: <span className="font-mono">info@kryptage.com</span>
+            </Li>
+            <Li>Responsible disclosure policy: Available in Docs</Li>
+            <Li>Bug bounty: When announced</Li>
+          </ul>
+          <P className="mt-4">Security reports are treated with priority and confidentiality.</P>
+
+          <SectionTitle>⚠️ Anti-Scam Reminder</SectionTitle>
+          <P className="mt-4 text-slate-900 font-semibold">Kryptage will never:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Ask for private keys</Li>
+            <Li>Offer guaranteed returns</Li>
+            <Li>Request direct messages for support</Li>
+            <Li>Run surprise airdrops via DMs</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">If in doubt:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Verify links here</Li>
+            <Li>Ask publicly in official channels</Li>
+            <Li>Do not rush</Li>
+          </ul>
+
+          <SectionTitle>🧠 Final Note</SectionTitle>
+          <P>
+            Kryptage is built:
+            <br />
+            In public
+            <br />
+            On-chain
+            <br />
+            With the community
+          </P>
+          <P className="mt-4">Thank you for being part of the Kryptage DAO.</P>
+          <P className="mt-4 text-slate-900 font-semibold">Stable. Transparent. DAO-Governed.</P>
+        </div>
+      );
+
+
     default:
       return (
         <div>
