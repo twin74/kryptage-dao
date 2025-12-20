@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Badge, Card } from "@/components/UI";
 
 type DocChapterId =
@@ -479,6 +479,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
 
 export default function DocsClient() {
   const [selected, setSelected] = useState<DocChapterId>(CHAPTERS[0].id);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const update = () => setSelected(getHashChapter());
@@ -486,6 +487,15 @@ export default function DocsClient() {
     window.addEventListener("hashchange", update);
     return () => window.removeEventListener("hashchange", update);
   }, []);
+
+  useEffect(() => {
+    // Ensure that changing chapter always starts from the top (desktop + mobile).
+    // Desktop: scroll the content panel; Mobile: scroll the page.
+    contentRef.current?.scrollTo({ top: 0, behavior: "auto" });
+    if (!contentRef.current) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+  }, [selected]);
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:h-[calc(100vh-220px)]">
@@ -510,7 +520,9 @@ export default function DocsClient() {
       </Card>
 
       <Card className="md:col-span-3 bg-white border-slate-200 md:overflow-y-auto md:h-full">
-        <DocContent chapter={selected} />
+        <div ref={contentRef} className="h-full overflow-y-auto p-6">
+          <DocContent chapter={selected} />
+        </div>
       </Card>
     </div>
   );
