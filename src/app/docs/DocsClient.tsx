@@ -54,8 +54,8 @@ function P({ children, className = "" }: { children: React.ReactNode; className?
   return <p className={`mt-3 text-sm leading-6 text-slate-700 ${className}`}>{children}</p>;
 }
 
-function Li({ children }: { children: React.ReactNode }) {
-  return <li className="mt-2 text-sm leading-6 text-slate-700">{children}</li>;
+function Li({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <li className={`mt-2 text-sm leading-6 text-slate-700 ${className}`}>{children}</li>;
 }
 
 function DocContent({ chapter }: { chapter: DocChapterId }) {
@@ -463,6 +463,296 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
             <Li>➡️ 3) USDK Stablecoin — deep dive into mechanics</Li>
             <Li>➡️ 4) Vaults & Strategies — how yield is generated</Li>
             <Li>➡️ 5) $KTG Token — governance & incentives</Li>
+          </ul>
+        </div>
+      );
+
+    case "usdk":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">💵 3) USDK Stablecoin</h1>
+              <P>
+                USDK is the core monetary primitive of the Kryptage ecosystem.
+                <br />
+                It is a fully redeemable, 1:1 stablecoin designed to combine price stability, capital efficiency, and non-inflationary yield generation.
+              </P>
+              <P>
+                USDK is <b>not</b> stabilized by yield.
+                <br />
+                Its stability is enforced by deterministic on-chain backing, while yield is generated on top of the core mechanism.
+              </P>
+              <P>
+                Unlike algorithmic or emission-driven stablecoins, USDK is built to be:
+                <br />
+                <b>Structurally conservative</b> / <b>Fully transparent</b> / <b>Risk-managed by design</b>
+              </P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>🪙 What is USDK (and what it is not)</SectionTitle>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">✅ What USDK is</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>A 1:1 redeemable stablecoin</Li>
+            <Li>Fully backed by USDC / USDT at all times</Li>
+            <Li>Integrated with Vault-based capital deployment</Li>
+            <Li>Designed to generate external, non-reflexive yield</Li>
+            <Li>Governed by Kryptage DAO</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">❌ What USDK is not</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>❌ Not an algorithmic stablecoin</Li>
+            <Li>❌ Not partially collateralized</Li>
+            <Li>❌ Not dependent on yield for redemption</Li>
+            <Li>❌ Not dependent on token emissions</Li>
+            <Li>❌ Not discretionary or off-chain managed</Li>
+          </ul>
+
+          <P className="mt-4">
+            USDK does not rely on reflexivity.
+            <br />
+            Redemption comes from structure, not from yield.
+          </P>
+
+          <SectionTitle>🧾 USDK Mint &amp; Burn Lifecycle</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/ns2GBnQs/fl6.png" alt="USDK mint and burn lifecycle" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🔼 Minting USDK</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>User deposits USDC or USDT</Li>
+            <Li>Smart contract mints USDK 1:1</Li>
+            <Li>USDK is sent to the Vault</Li>
+            <Li>Underlying capital becomes productive</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🔽 Burning USDK</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>User burns USDK</Li>
+            <Li>USDK supply is reduced</Li>
+            <Li>User receives USDC or USDT 1:1</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Key properties</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Always reversible</Li>
+            <Li>Fully on-chain</Li>
+            <Li>Auditable at any time</Li>
+          </ul>
+
+          <SectionTitle>🧷 USDK Mechanism — How USDK Really Works</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/jk9ZRV3X/fl7.png" alt="USDK mechanism" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <P className="mt-4">
+            USDK is not stabilized by arbitrage layers or abstract reserves.
+            <br />
+            Its stability comes from a direct, deterministic 1:1 backing at all times, enforced by smart contracts.
+          </P>
+          <P>
+            For every USDK in circulation, there is always one USDC or USDT deployed and retrievable.
+            <br />
+            There is no algorithmic peg defense and no discretionary reserve usage.
+          </P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🔼 Deposit &amp; Mint Flow (Creation of USDK)</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>User deposits USDC or USDT into the Vault</Li>
+            <Li>The Controller smart contract mints exactly 1 USDK</Li>
+            <Li>The minted USDK is credited to the user inside the Vault</Li>
+            <Li>The deposited USDC/USDT is sent by the Controller to an external yield farm</Li>
+            <Li>The underlying capital becomes productive and generates yield</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Key property</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>USDK is minted only if an equivalent USDC/USDT is deployed</Li>
+            <Li>Minting is fully deterministic and reversible</Li>
+          </ul>
+
+          <SectionTitle>🌾 Yield Generation — What Yield Really Is</SectionTitle>
+          <P>Yield is generated outside the USDK accounting logic.</P>
+          <P className="mt-4 text-slate-900 font-semibold">Yield comes from:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Stable farms</Li>
+            <Li>Lending markets</Li>
+            <Li>Low-risk structured positions</Li>
+          </ul>
+
+          <ul className="mt-4 list-disc list-inside">
+            <Li>Yield is not required to maintain the USDK peg</Li>
+            <Li>Yield is excess value, not collateral</Li>
+            <Li>USDK would remain perfectly redeemable even with zero yield</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🔽 Withdraw, Burn &amp; Swap Flow (Redemption of USDK)</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>User withdraws USDK from the Vault</Li>
+            <Li>
+              The Controller immediately:
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Withdraws the corresponding USDC/USDT from the external farm</Li>
+                <Li>The withdrawn USDC/USDT is sent to the Swap</Li>
+              </ul>
+            </Li>
+            <Li>
+              The user swaps:
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>1 USDK → 1 USDC or USDT</Li>
+                <Li>USDK is burned, supply is reduced</Li>
+              </ul>
+            </Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Why the 1:1 always works</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>USDK exists only because USDC/USDT exists</Li>
+            <Li>The Swap is never undercollateralized</Li>
+            <Li>There is no price discovery on USDK itself</Li>
+          </ul>
+
+          <SectionTitle>🔄 The Swap — Not a Peg Defense, but a Redemption Gate</SectionTitle>
+          <P>
+            The swap is not used to maintain price via liquidity depth.
+            <br />
+            It exists to:
+          </P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Convert USDK back to USDC/USDT</Li>
+            <Li>Enforce hard 1:1 redemption</Li>
+            <Li>Guarantee immediate exit</Li>
+          </ul>
+          <P>USDK does not “float” and does not rely on market incentives to stay at $1.</P>
+
+          <SectionTitle>🛡️ The Role of Yield — Safety Cushion, Not Collateral</SectionTitle>
+          <P>Yield has three functions, none of which are required for redemption:</P>
+          <ol className="mt-3 list-decimal list-inside">
+            <Li>
+              <b>Safety Buffer</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Absorbs stress during adverse conditions</Li>
+                <Li>Covers slippage, temporary inefficiencies, or delays</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>Platform Growth</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Funds development</Li>
+                <Li>Funds audits and infrastructure</Li>
+                <Li>Sustains DAO operations</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>System Resilience</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Improves confidence</Li>
+                <Li>Allows conservative behavior during volatility</Li>
+              </ul>
+            </Li>
+          </ol>
+          <P className="mt-4">Yield is a plus, not a dependency.</P>
+
+          <SectionTitle>⚖️ Risk Control — What Is Actually Managed</SectionTitle>
+          <P>Risk management focuses on capital deployment, not on the peg.</P>
+          <P className="mt-4 text-slate-900 font-semibold">Controlled variables:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Where USDC/USDT is deployed</Li>
+            <Li>How much capital per strategy</Li>
+            <Li>Exposure caps</Li>
+            <Li>Exit conditions</Li>
+          </ul>
+          <P className="mt-4 text-slate-900 font-semibold">If risk increases:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Capital is withdrawn from external farms</Li>
+            <Li>Exposure is reduced</Li>
+            <Li>No impact on USDK redeemability</Li>
+          </ul>
+          <P>Risk is managed upstream, before it can affect users.</P>
+
+          <SectionTitle>🧠 The Correct Mental Model for USDK</SectionTitle>
+          <P>
+            USDK is best understood as:
+            <br />
+            <b>A vault receipt token</b>
+            <br />
+            With guaranteed 1:1 underlying
+            <br />
+            Plus external yield on top
+          </P>
+          <P className="mt-4 text-slate-900 font-semibold">Not:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>❌ An algorithmic stablecoin</Li>
+            <Li>❌ A partially collateralized stable</Li>
+            <Li>❌ A reflexive peg system</Li>
+          </ul>
+
+          <SectionTitle>🧩 Why This Design Is Strong</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50">
+                <tr>
+                  <th className="px-4 py-2 text-left text-slate-900">Aspect</th>
+                  <th className="px-4 py-2 text-left text-slate-900">USDK</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Backing</td>
+                  <td className="px-4 py-2 text-slate-700">Hard 1:1 USDC/USDT</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Redemption</td>
+                  <td className="px-4 py-2 text-slate-700">Immediate</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Peg Defense</td>
+                  <td className="px-4 py-2 text-slate-700">Structural, not market-based</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Yield</td>
+                  <td className="px-4 py-2 text-slate-700">Extra, not required</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Failure Mode</td>
+                  <td className="px-4 py-2 text-slate-700">Graceful (yield → 0, peg intact)</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Trust Model</td>
+                  <td className="px-4 py-2 text-slate-700">Smart-contract enforced</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <SectionTitle>🔐 Final Principle</SectionTitle>
+          <P>
+            Yield must exist before it is distributed —
+            <br />
+            but redemption must exist even without yield.
+          </P>
+
+          <SectionTitle>👤 Who Is USDK For?</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>👤 Retail users → stable, passive yield</Li>
+            <Li>🏦 DAOs → treasury management</Li>
+            <Li>🏢 Institutions → yield-bearing stable exposure</Li>
+            <Li>🔗 Protocols → composable stablecoin layer</Li>
+          </ul>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Now that you understand USDK, continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 4) Products &amp; Vaults — how yield is generated</Li>
+            <Li>➡️ 5) $KTG Token — governance &amp; incentives</Li>
+            <Li>➡️ 6) Kryptage DAO — decentralization in practice</Li>
           </ul>
         </div>
       );
