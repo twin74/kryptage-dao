@@ -83,7 +83,35 @@ export default function DocsClient() {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:h-[calc(100vh-220px)]">
-      <Card className="md:col-span-1 bg-white border-slate-200 md:sticky md:top-6 md:self-start">
+      {/* Mobile TOC */}
+      <Card className="md:hidden bg-white border-slate-200">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="text-xs font-semibold text-slate-700">Table of Contents</div>
+            <div className="mt-1 text-xs text-slate-500">Select a section</div>
+          </div>
+
+          <select
+            value={selected}
+            onChange={(e) => {
+              const next = e.target.value as DocChapterId;
+              setSelected(next);
+              if (typeof window !== "undefined") window.location.hash = `#${next}`;
+            }}
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
+            aria-label="Select documentation section"
+          >
+            {CHAPTERS.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      </Card>
+
+      {/* Desktop TOC (unchanged) */}
+      <Card className="hidden md:block md:col-span-1 bg-white border-slate-200 md:sticky md:top-6 md:self-start">
         <div className="text-xs font-semibold text-slate-700">Table of Contents</div>
         <div className="mt-3 space-y-1">
           {CHAPTERS.map((c) => {
