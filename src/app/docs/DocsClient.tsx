@@ -1390,7 +1390,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
             <Li>Monitored by Risk Manager</Li>
           </ul>
 
-          <P className="mt-4 text-slate-900 font-semibold">Examples</P>
+          <P className="mt-4 text-slate-900 font-semibold">
           <ul className="mt-2 list-disc list-inside">
             <Li>Stable lending adapters</Li>
             <Li>Liquidity provision modules</Li>
@@ -2108,13 +2108,13 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <h3 className="mt-6 text-lg font-semibold text-slate-900">🧠 Documentation</h3>
           <ul className="mt-3 list-disc list-inside">
             <Li>
-              Docs: <span className="font-mono">kryptage.com/docs</span>
+              Docs: <a href="https://kryptage.com/docs" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">kryptage.com/docs</a>
             </Li>
             <Li>
-              Protocol Dashboard: <span className="font-mono">kryptage.com</span>
+              Protocol Dashboard: <a href="https://kryptage.com" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">kryptage.com</a>
             </Li>
             <Li>
-              Governance (KIPs): <span className="font-mono">kryptage.com/governance</span>
+              Governance (KIPs): <a href="https://kryptage.com/governance" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">kryptage.com/governance</a>
             </Li>
           </ul>
           <P className="mt-4">Always check URLs carefully to avoid phishing.</P>
@@ -2125,7 +2125,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
             <Li>X (Twitter): @DeFiforDummies</Li>
             <Li>Discord: Kryptage Community</Li>
             <Li>Telegram: Kryptage Announcements</Li>
-            <Li>Website: kryptage.com</Li>
+            <Li>Website: <a href="https://kryptage.com" target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-slate-900">kryptage.com</a></Li>
           </ul>
           <P className="mt-4">Community channels are used for:</P>
           <ul className="mt-2 list-disc list-inside">
@@ -2146,10 +2146,10 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <h3 className="mt-6 text-lg font-semibold text-slate-900">🧑‍💻 Developers &amp; Open Source</h3>
           <ul className="mt-3 list-disc list-inside">
             <Li>
-              GitHub: <span className="font-mono">github.com/twin74</span>
+              GitHub: <a href="https://github.com/twin74" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">github.com/twin74</a>
             </Li>
             <Li>
-              Developer Docs: <span className="font-mono">docs.kryptage.com/docs</span>
+              Developer Docs: <a href="https://docs.kryptage.com/docs" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">docs.kryptage.com/docs</a>
             </Li>
             <Li>Contract Verification: Linked from GitHub &amp; Docs</Li>
           </ul>
@@ -2163,7 +2163,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <SectionTitle>✉️ Contact &amp; Support</SectionTitle>
           <P className="mt-4 text-slate-900 font-semibold">Official Contact</P>
           <P>
-            Email: <span className="font-mono">info@kryptage.com</span>
+            Email: <a href="mailto:info@kryptage.com" className="font-mono underline underline-offset-4 hover:text-slate-900">info@kryptage.com</a>
           </P>
           <P className="mt-4 text-slate-900 font-semibold">For:</P>
           <ul className="mt-2 list-disc list-inside">
@@ -2176,7 +2176,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <SectionTitle>🛡️ Security &amp; Reporting</SectionTitle>
           <ul className="mt-3 list-disc list-inside">
             <Li>
-              Security disclosures: <span className="font-mono">info@kryptage.com</span>
+              Security disclosures: <a href="mailto:info@kryptage.com" className="font-mono underline underline-offset-4 hover:text-slate-900">info@kryptage.com</a>
             </Li>
             <Li>Responsible disclosure policy: Available in Docs</Li>
             <Li>Bug bounty: When announced</Li>
