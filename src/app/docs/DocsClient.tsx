@@ -1301,6 +1301,226 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         </div>
       );
 
+    case "developers":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">🧑‍💻 7) Developers — Smart Contracts &amp; Integrations</h1>
+              <P>
+                Kryptage is built as a developer-first DeFi infrastructure.
+                <br />
+                Its smart contracts are modular, composable, and governance-controlled, designed to support both direct integrations and advanced protocol-level use cases.
+              </P>
+              <P className="mt-4 text-slate-900 font-semibold">This section is for:</P>
+              <ul className="mt-2 list-disc list-inside">
+                <Li>Protocol developers</Li>
+                <Li>Integrators &amp; partners</Li>
+                <Li>DAOs &amp; on-chain treasuries</Li>
+                <Li>Auditors &amp; researchers</Li>
+              </ul>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>🧩 Smart Contract Architecture (High-Level)</SectionTitle>
+          <P>Kryptage follows a layered and modular architecture:</P>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/Kxbh4b3H/fl16.png" alt="Smart contract architecture" className="w-full h-auto" loading="lazy" />
+          </div>
+          <P className="mt-4">Each contract has:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>A single responsibility</Li>
+            <Li>Clearly defined permissions</Li>
+            <Li>Minimal trust assumptions</Li>
+          </ul>
+
+          <SectionTitle>🪙 USDK Contract — Monetary Primitive</SectionTitle>
+          <P className="mt-4 text-slate-900 font-semibold">Responsibilities</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Mint USDK 1:1 from approved stablecoins</Li>
+            <Li>Burn USDK for redemption</Li>
+            <Li>Enforce mint/burn limits</Li>
+            <Li>Interface with Peg Pool &amp; Vaults</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Key properties</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Non-algorithmic</Li>
+            <Li>Fully collateralized</Li>
+            <Li>DAO-governed parameters</Li>
+          </ul>
+
+          <P className="mt-4">USDK acts as the base settlement layer for the entire protocol.</P>
+
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/PZDGxS4Y/fl17.png" alt="USDK monetary primitive" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <SectionTitle>🏦 Vault Contracts — ERC-4626 Compatible</SectionTitle>
+          <P>Kryptage Vaults follow the ERC-4626 standard wherever possible.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Vault responsibilities</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Accept USDK deposits</Li>
+            <Li>Mint and burn Vault Shares</Li>
+            <Li>Track NAV and yield</Li>
+            <Li>Route funds to Strategies</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Developer benefits</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Standardized interfaces</Li>
+            <Li>Plug-and-play integrations</Li>
+            <Li>Compatibility with DeFi tooling</Li>
+          </ul>
+
+          <P className="mt-4">Vaults abstract complexity without hiding risk.</P>
+
+          <SectionTitle>🌾 Strategy Contracts — Yield Modules</SectionTitle>
+          <P>Strategies define how capital is deployed.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Strategy design rules</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Stateless where possible</Li>
+            <Li>Explicit risk limits</Li>
+            <Li>Governance-whitelisted</Li>
+            <Li>Monitored by Risk Manager</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Examples</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Stable lending adapters</Li>
+            <Li>Liquidity provision modules</Li>
+            <Li>Hedged yield strategies</Li>
+          </ul>
+
+          <P className="mt-4">Strategies can be:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Added</Li>
+            <Li>Paused</Li>
+            <Li>Removed</Li>
+          </ul>
+          <P className="mt-4">via governance without affecting user funds.</P>
+
+          <SectionTitle>🛡️ Risk Manager — On-Chain Safety Logic</SectionTitle>
+          <P>The Risk Manager is a core system contract.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">What it does</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Enforces LTV ceilings</Li>
+            <Li>Caps exposure per strategy</Li>
+            <Li>Monitors volatility thresholds</Li>
+            <Li>Triggers deleveraging or exits</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Why it matters</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Reduces tail-risk</Li>
+            <Li>Prevents silent insolvency</Li>
+            <Li>Makes risk explicit and auditable</Li>
+          </ul>
+
+          <P className="mt-4">Risk is code, not discretion.</P>
+
+          <SectionTitle>🔐 Roles &amp; Permissions</SectionTitle>
+          <P>Kryptage uses strict role separation:</P>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50">
+                <tr>
+                  <th className="px-4 py-2 text-left text-slate-900">Role</th>
+                  <th className="px-4 py-2 text-left text-slate-900">Capability</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                <tr>
+                  <td className="px-4 py-2 font-mono text-slate-900">DAO</td>
+                  <td className="px-4 py-2 text-slate-700">Parameter changes</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-mono text-slate-900">Multisig</td>
+                  <td className="px-4 py-2 text-slate-700">Emergency actions</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-mono text-slate-900">Vault</td>
+                  <td className="px-4 py-2 text-slate-700">Capital routing</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-mono text-slate-900">Strategy</td>
+                  <td className="px-4 py-2 text-slate-700">Yield execution</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-mono text-slate-900">Keeper</td>
+                  <td className="px-4 py-2 text-slate-700">Automation (bounded)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <P className="mt-4 text-slate-900 font-semibold">All privileged roles are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Visible on-chain</Li>
+            <Li>Time-limited where possible</Li>
+            <Li>Accountable to governance</Li>
+          </ul>
+
+          <SectionTitle>🔌 Integration Guide (B2B &amp; Protocols)</SectionTitle>
+          <P>Kryptage supports Yield-as-a-Service integrations.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Typical integrations</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Deposit USDK → receive yield-bearing shares</Li>
+            <Li>Use Vault Shares as collateral</Li>
+            <Li>Treasury optimization for DAOs</Li>
+            <Li>White-label yield products</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Integration surfaces</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Smart contract calls</Li>
+            <Li>Read-only on-chain data</Li>
+            <Li>Governance participation</Li>
+          </ul>
+
+          <P className="mt-4">Kryptage is infrastructure, not just an app.</P>
+
+          <SectionTitle>🧪 Testnets, Deployments &amp; Verification</SectionTitle>
+          <P>When available, developers will find:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>📍 Contract addresses</Li>
+            <Li>🔎 Verified source code</Li>
+            <Li>🧪 Testnet deployments</Li>
+            <Li>📘 Integration examples</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">All deployments follow:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Reproducible builds</Li>
+            <Li>Open-source standards</Li>
+            <Li>Audit-first practices</Li>
+          </ul>
+
+          <SectionTitle>🧠 Developer Principles</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>🧩 Modularity over monoliths</Li>
+            <Li>🔍 Explicit risk over hidden leverage</Li>
+            <Li>🛡️ Safety before optimization</Li>
+            <Li>🗳️ Governance-controlled evolution</Li>
+          </ul>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 8) Safety &amp; Risk — audits, controls &amp; safeguards</Li>
+            <Li>➡️ 9) Compliance &amp; Legal — high-level framework</Li>
+            <Li>➡️ 10) FAQ — common questions</Li>
+          </ul>
+        </div>
+      );
+
     default:
       return (
         <div>
