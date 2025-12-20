@@ -1521,6 +1521,210 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         </div>
       );
 
+    case "safety":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">🛡️ 8) Safety &amp; Risk</h1>
+              <P>
+                Security and risk management are foundational to Kryptage.
+                <br />
+                The protocol is designed to minimize tail risk, protect USDK stability, and ensure predictable behavior under stress, even in adverse market conditions.
+              </P>
+              <P>This section explains how risks are identified, mitigated, and managed — transparently and on-chain.</P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>🧠 Risk Philosophy</SectionTitle>
+          <P>Kryptage follows a risk-first DeFi design:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Safety over APY</Li>
+            <Li>Explicit risk over hidden leverage</Li>
+            <Li>Bounded exposure over open-ended strategies</Li>
+            <Li>Modular containment over monolithic systems</Li>
+          </ul>
+          <P className="mt-4">If a risk cannot be measured, it is not deployed.</P>
+
+          <SectionTitle>🔍 Risk Categories</SectionTitle>
+          <P>Kryptage models and mitigates several risk classes:</P>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/1fz5s3v5/fl18.png" alt="Risk categories" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <ol className="mt-4 list-decimal list-inside">
+            <Li className="mt-2">
+              <b>Smart Contract Risk</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Bugs or vulnerabilities in code</Li>
+                <Li>Mitigated via audits, formal reviews, and modular design</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>Market Risk</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Sudden volatility or depegging events</Li>
+                <Li>Mitigated via conservative strategies and buffers</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>Liquidity Risk</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Insufficient liquidity during redemptions</Li>
+                <Li>Mitigated via Peg Pools and reserves</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>Oracle Risk</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Incorrect price feeds</Li>
+                <Li>Mitigated via robust oracle selection and validation</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>Governance Risk</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Malicious or rushed decisions</Li>
+                <Li>Mitigated via timelocks and proposal review processes</Li>
+              </ul>
+            </Li>
+          </ol>
+
+          <SectionTitle>🧪 Audits &amp; Code Reviews</SectionTitle>
+          <P>All critical contracts undergo:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Independent security audits</Li>
+            <Li>Internal reviews</Li>
+            <Li>Continuous monitoring</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Audit principles:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Public audit reports</Li>
+            <Li>Transparent remediation</Li>
+            <Li>No silent fixes</Li>
+          </ul>
+          <P className="mt-4">Security is a process, not a checkbox.</P>
+
+          <SectionTitle>🛡️ On-Chain Risk Controls</SectionTitle>
+          <P>The Risk Manager enforces constraints in real time:</P>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/bjHZ3Ygh/fl19.png" alt="On-chain risk controls" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <ul className="mt-4 list-disc list-inside">
+            <Li>📉 Maximum LTV per strategy</Li>
+            <Li>📊 Exposure caps per protocol</Li>
+            <Li>⚠️ Volatility thresholds</Li>
+            <Li>🧮 Capital concentration limits</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">If limits are breached:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Positions are scaled down</Li>
+            <Li>Capital is rebalanced</Li>
+            <Li>Emergency exits are triggered</Li>
+          </ul>
+
+          <SectionTitle>🧯 Emergency Controls &amp; Incident Response</SectionTitle>
+          <P>Emergency actions (last resort)</P>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/xSnNZpfY/fl20.png" alt="Emergency controls" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <ul className="mt-4 list-disc list-inside">
+            <Li>Pause Vault deposits</Li>
+            <Li>Disable new minting</Li>
+            <Li>Exit strategies safely</Li>
+            <Li>Isolate affected modules</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Emergency powers are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Limited in scope</Li>
+            <Li>Time-bound</Li>
+            <Li>Accountable to the DAO</Li>
+          </ul>
+          <P className="mt-4">Emergency tools exist to preserve optionality, not control users.</P>
+
+          <SectionTitle>🏦 Yield Reserve &amp; Safety Buffers</SectionTitle>
+          <P>Kryptage maintains multiple buffers:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Yield Reserve funded by real yield</Li>
+            <Li>Liquidity buffers in Peg Pools</Li>
+            <Li>Conservative capital deployment ratios</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">These buffers:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Absorb losses</Li>
+            <Li>Smooth volatility</Li>
+            <Li>Protect USDK peg</Li>
+          </ul>
+
+          <SectionTitle>📉 Stress Scenarios &amp; Protocol Behavior</SectionTitle>
+          <P className="mt-4 text-slate-900 font-semibold">Example scenarios</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Sudden market drawdown</Li>
+            <Li>Stablecoin depeg</Li>
+            <Li>External protocol failure</Li>
+            <Li>Oracle outage</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Expected behavior</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Automatic deleveraging</Li>
+            <Li>Capital preservation</Li>
+            <Li>Graceful degradation</Li>
+            <Li>Transparent communication</Li>
+          </ul>
+
+          <P className="mt-4">
+            The goal is not zero risk —
+            <br />
+            it is predictable outcomes.
+          </P>
+
+          <SectionTitle>👤 User Best Practices</SectionTitle>
+          <P>Users are encouraged to:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Use hardware wallets</Li>
+            <Li>Diversify exposure</Li>
+            <Li>Monitor protocol updates</Li>
+            <Li>Understand Vault risk profiles</Li>
+          </ul>
+          <P className="mt-4">Self-custody implies responsibility.</P>
+
+          <SectionTitle>🔍 Transparency &amp; Monitoring</SectionTitle>
+          <P>All critical data is:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>On-chain</Li>
+            <Li>Public</Li>
+            <Li>Verifiable</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">This includes:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Vault balances</Li>
+            <Li>Strategy exposure</Li>
+            <Li>Risk parameters</Li>
+            <Li>Treasury movements</Li>
+          </ul>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 9) Compliance &amp; Legal (High-Level)</Li>
+            <Li>➡️ 10) FAQ</Li>
+            <Li>➡️ 11) Contacts &amp; Links</Li>
+          </ul>
+        </div>
+      );
+
     default:
       return (
         <div>
