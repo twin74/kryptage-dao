@@ -757,6 +757,161 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         </div>
       );
 
+    case "products":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">🏦 4) Products — Vaults &amp; Yield Strategies</h1>
+              <P>
+                Kryptage Vaults are the core yield-generating products of the ecosystem.
+                <br />
+                They transform USDK deposits into sustainable, risk-managed returns, without requiring users to actively manage positions.
+              </P>
+              <P>This section explains how Vaults work, how yield is generated, and how risk is controlled.</P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>🧰 What Is a Vault?</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/DDKHc4nH/fl8.png" alt="What is a Vault" className="w-full h-auto" loading="lazy" />
+          </div>
+          <P className="mt-4">A Vault is a smart contract that:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Accepts USDK deposits</Li>
+            <Li>Issues Vault Shares</Li>
+            <Li>Deploys capital into predefined strategies</Li>
+            <Li>Accrues yield automatically</Li>
+          </ul>
+          <P className="mt-4">Vaults abstract complexity while preserving:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Transparency</Li>
+            <Li>Non-custodial ownership</Li>
+            <Li>Risk discipline</Li>
+          </ul>
+          <P className="mt-4 text-slate-900 font-semibold">You deposit. The Vault does the rest.</P>
+
+          <SectionTitle>📊 Vault Shares &amp; NAV</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/vxs1spqY/fl9.png" alt="Vault Shares and NAV" className="w-full h-auto" loading="lazy" />
+          </div>
+          <P className="mt-4">When you deposit into a Vault:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>You receive Shares</Li>
+            <Li>Shares represent a pro-rata claim on the Vault’s assets</Li>
+            <Li>Yield increases the Net Asset Value (NAV) per share</Li>
+          </ul>
+          <P className="mt-4 text-slate-900 font-semibold">Key properties</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Shares appreciate over time</Li>
+            <Li>Shares are redeemable anytime</Li>
+            <Li>Fully ERC-4626–compatible (where applicable)</Li>
+          </ul>
+          <P className="mt-4">
+            You don’t earn yield via emissions.
+            <br />
+            You earn yield via asset appreciation.
+          </P>
+
+          <SectionTitle>🌾 Strategy Layer — How Yield Is Generated</SectionTitle>
+          <P>Vaults route capital into Strategies, each with a clear mandate.</P>
+          <P className="mt-4 text-slate-900 font-semibold">Common strategy categories</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Stable lending/farm (low volatility)</Li>
+            <Li>Liquidity provision (market-neutral)</Li>
+            <Li>Controlled leverage (strict LTV caps)</Li>
+            <Li>Structured DeFi positions</Li>
+          </ul>
+          <P className="mt-4 text-slate-900 font-semibold">Strategies are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Whitelisted by governance</Li>
+            <Li>Bounded by risk limits</Li>
+            <Li>Continuously monitored</Li>
+          </ul>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/4nm8Gbjd/fl10.png" alt="Strategy layer" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <SectionTitle>🛡️ Risk-Managed by Design</SectionTitle>
+          <P>Every Vault is supervised by the Risk Manager.</P>
+          <P className="mt-4 text-slate-900 font-semibold">What is monitored</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Loan-to-Value (LTV)</Li>
+            <Li>Utilization rates</Li>
+            <Li>Volatility metrics</Li>
+            <Li>Strategy exposure</Li>
+          </ul>
+          <P className="mt-4 text-slate-900 font-semibold">If risk increases</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Positions are scaled down</Li>
+            <Li>Capital is rebalanced</Li>
+            <Li>Emergency exits can be triggered</Li>
+          </ul>
+          <P>Risk is reduced before it becomes loss.</P>
+
+          <SectionTitle>🔁 The Stable Flow (End-to-End)</SectionTitle>
+          <P className="mt-4 text-slate-900 font-semibold">Step-by-step</P>
+          <ol className="mt-3 list-decimal list-inside">
+            <Li>User deposits USDK</Li>
+            <Li>Vault issues Shares</Li>
+            <Li>Capital is deployed into strategies</Li>
+            <Li>Yield accrues continuously</Li>
+            <Li>Performance fees are collected</Li>
+            <Li>User redeems Shares for USDK</Li>
+          </ol>
+          <P className="mt-4">All flows are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>On-chain</Li>
+            <Li>Deterministic</Li>
+            <Li>Fully transparent</Li>
+          </ul>
+
+          <SectionTitle>💸 Fees &amp; Value Distribution</SectionTitle>
+          <P>Vault fees are:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Performance-based</Li>
+            <Li>Transparent</Li>
+            <Li>DAO-governed</Li>
+          </ul>
+          <P className="mt-4 text-slate-900 font-semibold">Fee distribution</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Users retain net yield</Li>
+            <Li>DAO Treasury accrues value</Li>
+            <Li>Yield Reserve is strengthened</Li>
+          </ul>
+          <P className="mt-4">Fees align incentives — no yield, no fees.</P>
+
+          <SectionTitle>👤 Who Are Vaults For?</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Retail users → passive stable yield</Li>
+            <Li>DAOs → treasury optimization</Li>
+            <Li>Institutions → low-volatility yield exposure</Li>
+            <Li>Protocols → composable yield layer</Li>
+          </ul>
+
+          <SectionTitle>🧠 Design Principles</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Non-custodial</Li>
+            <Li>Modular strategies</Li>
+            <Li>Risk-first allocation</Li>
+            <Li>Full transparency</Li>
+            <Li>DAO-controlled evolution</Li>
+          </ul>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Now continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 5) $KTG Token — governance &amp; utility</Li>
+            <Li>➡️ 6) Kryptage DAO — decentralized control</Li>
+            <Li>➡️ 7) Developers — contracts &amp; integrations</Li>
+          </ul>
+        </div>
+      );
+
     default:
       return (
         <div>
