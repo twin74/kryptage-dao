@@ -1,7 +1,8 @@
+// NOTE: keep this file as a Server Component (no "use client")
 import { PageShell, Card, Badge } from "@/components/UI";
 import Link from "next/link";
 import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import DocsClient from "./DocsClient";
 
 type DocChapterId =
   | "get-started"
@@ -552,49 +553,16 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
   }
 }
 
-// Client wrapper to react to querystring changes (App Router doesn't provide searchParams to nested client state)
-function DocsClient() {
-  "use client";
-
-  const sp = useSearchParams();
-
-  const selectedRaw = sp?.get("ch");
+export default function DocsPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
+  const selectedRaw = typeof searchParams?.ch === "string" ? searchParams.ch : Array.isArray(searchParams?.ch) ? searchParams?.ch[0] : null;
   const selected = isValidId(selectedRaw) ? selectedRaw : CHAPTERS[0].id;
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:h-[calc(100vh-220px)]">
-      <Card className="md:col-span-1 bg-white border-slate-200 md:sticky md:top-6 md:self-start">
-        <div className="text-xs font-semibold text-slate-700">Table of Contents</div>
-        <div className="mt-3 space-y-1">
-          {CHAPTERS.map((c) => {
-            const active = c.id === selected;
-            return (
-              <Link
-                key={c.id}
-                href={`/docs?ch=${c.id}`}
-                className={`block rounded-md px-3 py-2 text-sm transition-colors ${
-                  active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
-                }`}
-              >
-                {c.title}
-              </Link>
-            );
-          })}
-        </div>
-      </Card>
-
-      <Card className="md:col-span-3 bg-white border-slate-200 md:overflow-y-auto md:h-full">
-        <DocContent chapter={selected} />
-      </Card>
-    </div>
-  );
-}
-
-export default function DocsPage() {
-  return (
     <PageShell title="Docs" subtitle="Learn how Kryptage works, step-by-step.">
       <Suspense fallback={<div className="text-sm text-slate-500">Loading…</div>}>
-        <DocsClient />
+        <DocsClient>
+          <DocContent chapter={selected} />
+        </DocsClient>
       </Suspense>
     </PageShell>
   );
