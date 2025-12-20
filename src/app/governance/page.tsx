@@ -52,8 +52,8 @@ export default function GovernancePage() {
         title: "Enable Stable Vault v1 incentives",
         summary: "Route a portion of protocol revenue to boost stable vault rewards for the next 30 days.",
         status: "Active",
-        start: "Dec 20",
-        end: "Dec 25",
+        start: "Dec 12",
+        end: "Dec 15",
         forPct: 71,
         againstPct: 29,
         quorumPct: 54,
@@ -64,8 +64,8 @@ export default function GovernancePage() {
         title: "Update KTG Points parameters",
         summary: "Adjust minimum update interval and bonus distribution rules to reduce friction for new users.",
         status: "Pending",
-        start: "Dec 26",
-        end: "Dec 31",
+        start: "Dec 16",
+        end: "Dec 18",
         forPct: 0,
         againstPct: 0,
         quorumPct: 0,
@@ -76,8 +76,8 @@ export default function GovernancePage() {
         title: "Add new collateral asset: XAUT",
         summary: "List XAUT collateral with conservative LTV/threshold settings and enable borrowing.",
         status: "Succeeded",
-        start: "Dec 11",
-        end: "Dec 14",
+        start: "Dec 01",
+        end: "Dec 04",
         forPct: 88,
         againstPct: 12,
         quorumPct: 67,
@@ -201,6 +201,31 @@ export default function GovernancePage() {
           </Card>
         )}
       </div>
+
+      <Card className="mt-6">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="text-sm font-semibold text-slate-100">Learn &amp; participate</div>
+            <div className="mt-1 text-sm text-slate-300">
+              Read how Kryptage governance works, then follow proposals as on-chain voting rolls out.
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href="/docs#dao"
+              className="inline-flex items-center justify-center rounded-md border border-slate-800 bg-slate-950/30 px-3 py-2 text-sm text-slate-200 hover:bg-slate-900"
+            >
+              Governance docs
+            </Link>
+            <Link
+              href="/proposals"
+              className="inline-flex items-center justify-center rounded-md border border-slate-800 bg-slate-950/30 px-3 py-2 text-sm text-slate-200 hover:bg-slate-900"
+            >
+              Proposal details
+            </Link>
+          </div>
+        </div>
+      </Card>
     </PageShell>
   );
 }
