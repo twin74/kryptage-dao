@@ -304,7 +304,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
             <Li>Monitored by Risk Manager</Li>
           </ul>
 
-          <P className="mt-4 text-slate-900 font-semibold">
+          <P className="mt-4 text-slate-900 font-semibold">Examples</P>
           <ul className="mt-2 list-disc list-inside">
             <Li>Stable lending adapters</Li>
             <Li>Liquidity provision modules</Li>
