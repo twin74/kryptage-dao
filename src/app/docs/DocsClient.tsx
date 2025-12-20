@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Badge, Card } from "@/components/UI";
 
 type DocChapterId =
@@ -38,6 +38,12 @@ const CHAPTERS: Chapter[] = [
 
 function isValidId(id: string | null): id is DocChapterId {
   return !!id && CHAPTERS.some((c) => c.id === id);
+}
+
+function getHashChapter(): DocChapterId {
+  if (typeof window === "undefined") return CHAPTERS[0].id;
+  const raw = (window.location.hash || "").replace(/^#/, "");
+  return isValidId(raw) ? raw : CHAPTERS[0].id;
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
@@ -90,7 +96,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <SectionTitle>👉 Continue</SectionTitle>
           <div className="mt-6">
             <Link
-              href="/docs?ch=ecosystem"
+              href="#ecosystem"
               className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100"
             >
               Next: 2) Ecosystem →
@@ -160,9 +166,14 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
 }
 
 export default function DocsClient() {
-  const sp = useSearchParams();
-  const selectedRaw = sp?.get("ch");
-  const selected = isValidId(selectedRaw) ? selectedRaw : CHAPTERS[0].id;
+  const [selected, setSelected] = useState<DocChapterId>(CHAPTERS[0].id);
+
+  useEffect(() => {
+    const update = () => setSelected(getHashChapter());
+    update();
+    window.addEventListener("hashchange", update);
+    return () => window.removeEventListener("hashchange", update);
+  }, []);
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:h-[calc(100vh-220px)]">
@@ -172,15 +183,15 @@ export default function DocsClient() {
           {CHAPTERS.map((c) => {
             const active = c.id === selected;
             return (
-              <Link
+              <a
                 key={c.id}
-                href={`/docs?ch=${c.id}`}
+                href={`#${c.id}`}
                 className={`block rounded-md px-3 py-2 text-sm transition-colors ${
                   active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
                 }`}
               >
                 {c.title}
-              </Link>
+              </a>
             );
           })}
         </div>
