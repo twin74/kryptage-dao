@@ -1036,10 +1036,25 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <h3 className="mt-6 text-lg font-semibold text-slate-900">🐦 Social &amp; Community</h3>
           <P className="mt-4 text-slate-900 font-semibold">Official Channels</P>
           <ul className="mt-2 list-disc list-inside">
-            <Li>X (Twitter): @DeFiforDummies</Li>
+            <Li>
+              X (Twitter):{" "}
+              <a
+                href="https://x.com/DeFiforDummies"
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono underline underline-offset-4 hover:text-slate-900"
+              >
+                @DeFiforDummies
+              </a>
+            </Li>
             <Li>Discord: Kryptage Community</Li>
             <Li>Telegram: Kryptage Announcements</Li>
-            <Li>Website: <a href="https://kryptage.com" target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-slate-900">kryptage.com</a></Li>
+            <Li>
+              Website:{" "}
+              <a href="https://kryptage.com" target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-slate-900">
+                kryptage.com
+              </a>
+            </Li>
           </ul>
           <P className="mt-4">Community channels are used for:</P>
           <ul className="mt-2 list-disc list-inside">
