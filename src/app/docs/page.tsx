@@ -265,55 +265,203 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
     case "ecosystem":
       return (
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Kryptage Ecosystem</h1>
-          <P>
-            The Kryptage Ecosystem is designed as a modular, risk-aware, real-yield infrastructure for decentralized finance. Instead of chasing unsustainable APYs,
-            Kryptage focuses on capital preservation, predictable yield, and DAO-aligned incentives.
-          </P>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">🌐 2) Kryptage Ecosystem</h1>
+              <P>
+                The Kryptage Ecosystem is designed as a modular, risk-aware, real-yield infrastructure for decentralized finance. Instead of chasing unsustainable APYs,
+                Kryptage focuses on capital preservation, predictable yield, and DAO-aligned incentives, making it suitable for both retail users and institutional
+                integrations.
+              </P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
 
-          <SectionTitle>The Real Yield Layer — Why Kryptage Exists</SectionTitle>
-          <P>
-            Many DeFi yields are driven by token emissions, speculative leverage, or reflexive algorithms. Kryptage is built as a Real Yield Layer: yield must exist
-            before it is distributed.
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/ccjySMyh/fl-2.png" alt="Kryptage ecosystem overview" className="w-full h-auto" loading="lazy" />
+          </div>
+
+          <SectionTitle>🧱 The Real Yield Layer — Why Kryptage Exists</SectionTitle>
+          <P>Most DeFi yields fall into one of these categories:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Token emissions (inflationary)</Li>
+            <Li>Speculative leverage</Li>
+            <Li>Reflexive algorithms</Li>
+          </ul>
+          <P className="mt-4">
+            Kryptage is different. It is built as a <b>Real Yield Layer</b>, meaning:
           </P>
           <ul className="mt-3 list-disc list-inside">
-            <Li>Stable farms</Li>
+            <Li>Yield comes from productive on-chain activity</Li>
+            <Li>Revenue is measurable and auditable</Li>
+            <Li>Returns are not dependent on new users</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Sources of real yield</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Stables Farm</Li>
             <Li>Stable lending markets</Li>
             <Li>Low-volatility arbitrage</Li>
             <Li>Controlled leverage strategies</Li>
             <Li>Structured DeFi positions</Li>
           </ul>
-
-          <SectionTitle>High-Level Architecture</SectionTitle>
-          <P>
-            Kryptage is composed of independent but interconnected modules. Each module has a single responsibility, improving transparency, security, and
-            upgradeability (via governance).
+          <P className="mt-4">
+            <b>Principle:</b> Yield must exist before it is distributed.
           </P>
 
-          <SectionTitle>Core Components</SectionTitle>
+          <SectionTitle>🧭 High-Level Architecture</SectionTitle>
+          <P>At a high level, Kryptage is composed of independent but interconnected modules.</P>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/TDdZBrPc/fl3.png" alt="High-level architecture" className="w-full h-auto" loading="lazy" />
+          </div>
+          <P>Each module has a single responsibility, improving:</P>
           <ul className="mt-3 list-disc list-inside">
-            <Li>
-              <b>USDK</b>: the monetary layer (1:1 minted and redeemable).
-            </Li>
-            <Li>
-              <b>Vaults</b>: the yield engine (shares, strategies, automatic accrual).
-            </Li>
-            <Li>
-              <b>Strategies</b>: capital deployment modules (whitelisted, bounded by risk parameters).
-            </Li>
-            <Li>
-              <b>Risk Manager</b>: monitors LTV, utilization, volatility thresholds; can trigger rebalancing and emergency actions.
-            </Li>
-            <Li>
-              <b>Treasury</b>: accumulates fees/revenues and funds audits, operations, growth, and stability mechanisms.
-            </Li>
+            <Li>Transparency</Li>
+            <Li>Security</Li>
+            <Li>Upgradeability (via governance)</Li>
           </ul>
 
-          <SectionTitle>B2C vs B2B (Yield-as-a-Service)</SectionTitle>
+          <SectionTitle>🧩 Core Components</SectionTitle>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🪙 USDK — The Monetary Layer</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>1:1 minted and redeemable</Li>
+            <Li>Backed by productive capital</Li>
+            <Li>Pegged via liquidity pools</Li>
+            <Li>Yield-resilient by design</Li>
+          </ul>
+          <P>USDK acts as the unit of account for the entire ecosystem.</P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🏦 Vaults — The Yield Engine</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Accept USDK deposits</Li>
+            <Li>Issue Vault Shares</Li>
+            <Li>Deploy funds into strategies</Li>
+            <Li>Accrue yield automatically</Li>
+          </ul>
+          <P className="mt-4 text-slate-900 font-semibold">Each Vault:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Has a defined risk profile</Li>
+            <Li>Is monitored continuously</Li>
+            <Li>Can be paused or rebalanced if needed</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🌾 Strategies — Capital Deployment</h3>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/XrtsH4kB/fl4.png" alt="Strategies flow" className="w-full h-auto" loading="lazy" />
+          </div>
+          <P className="mt-4">Vaults route capital into Strategies, which define:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Where funds go</Li>
+            <Li>How yield is generated</Li>
+            <Li>When to rebalance or exit</Li>
+          </ul>
+          <P className="mt-4">Strategies are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Modular</Li>
+            <Li>Whitelisted by governance</Li>
+            <Li>Bound by strict risk parameters</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🛡️ Risk Manager — The Safety Layer</h3>
           <P>
-            The same protocol serves both retail users (simple UX, one-click deposits) and partners/integrators (treasury optimization, white-label yield products,
-            standardized interfaces).
+            The Risk Manager is a core differentiator of Kryptage. It continuously monitors: 📉 Loan-to-Value (LTV), utilization ratios, volatility thresholds, exposure per
+            strategy.
           </P>
+          <P className="mt-4">If risk increases:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Positions are reduced</Li>
+            <Li>Capital is rebalanced</Li>
+            <Li>Emergency actions can be triggered</Li>
+          </ul>
+          <P>Risk is managed on-chain, not by discretion.</P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🏦 DAO Treasury — Value Accumulation</h3>
+          <P>The Treasury collects:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Vault performance fees</Li>
+            <Li>Strategy revenues</Li>
+            <Li>Protocol-level fees</Li>
+          </ul>
+          <P className="mt-4">Treasury funds are used for:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Contributors</Li>
+            <Li>Security & audits</Li>
+            <Li>Ecosystem growth</Li>
+            <Li>USDK stability mechanisms</Li>
+          </ul>
+          <P className="mt-4">All treasury movements are:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>On-chain</Li>
+            <Li>Transparent</Li>
+            <Li>Governed by the DAO</Li>
+          </ul>
+
+          <SectionTitle>🤝 B2C vs B2B — One Protocol, Two Faces</SectionTitle>
+          <h3 className="mt-4 text-lg font-semibold text-slate-900">👤 B2C (Retail Users)</h3>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Simple UX</Li>
+            <Li>One-click Vault deposits</Li>
+            <Li>Passive yield</Li>
+            <Li>Non-custodial ownership</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">🏢 B2B (Yield-as-a-Service)</h3>
+          <P>Kryptage can be integrated by:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Fintech platforms</Li>
+            <Li>DAOs</Li>
+            <Li>Neobanks</Li>
+            <Li>On-chain funds</Li>
+          </ul>
+          <P className="mt-4">Providing:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Stable yield infrastructure</Li>
+            <Li>Treasury management</Li>
+            <Li>White-label yield products</Li>
+          </ul>
+          <P>Same protocol. Different interfaces.</P>
+
+          <SectionTitle>🔁 How Value Flows Through the Ecosystem</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Users deposit stablecoins</Li>
+            <Li>USDK is minted</Li>
+            <Li>Capital is deployed</Li>
+            <Li>Yield is generated</Li>
+            <Li>
+              Yield is split between:
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Users</Li>
+                <Li>Treasury</Li>
+              </ul>
+            </Li>
+            <Li>DAO reinvests or redistributes value</Li>
+          </ul>
+          <P>This creates a closed, sustainable loop.</P>
+
+          <SectionTitle>🧠 Design Principles</SectionTitle>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://i.ibb.co/xKGrGPcJ/fl5.png" alt="Design principles" className="w-full h-auto" loading="lazy" />
+          </div>
+          <ul className="mt-4 list-disc list-inside">
+            <Li>Non-custodial by default</Li>
+            <Li>Modular architecture</Li>
+            <Li>Risk-first design</Li>
+            <Li>Sustainable yield</Li>
+            <Li>Progressive decentralization</Li>
+          </ul>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Now that you understand the ecosystem, continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 3) USDK Stablecoin — deep dive into mechanics</Li>
+            <Li>➡️ 4) Vaults & Strategies — how yield is generated</Li>
+            <Li>➡️ 5) $KTG Token — governance & incentives</Li>
+          </ul>
         </div>
       );
 
