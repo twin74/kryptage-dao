@@ -217,12 +217,6 @@ export default function GovernancePage() {
             >
               Governance docs
             </Link>
-            <Link
-              href="/proposals"
-              className="inline-flex items-center justify-center rounded-md border border-slate-800 bg-slate-950/30 px-3 py-2 text-sm text-slate-200 hover:bg-slate-900"
-            >
-              Proposal details
-            </Link>
           </div>
         </div>
       </Card>
