@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Card } from "@/components/UI";
 
 type DocChapterId =
@@ -42,8 +43,15 @@ function isValidId(id: string | null): id is DocChapterId {
 
 function DocsClient({ children }: { children?: React.ReactNode }) {
   const sp = useSearchParams();
+  const router = useRouter();
+
   const selectedRaw = sp?.get("ch");
   const selected = isValidId(selectedRaw) ? selectedRaw : CHAPTERS[0].id;
+
+  useEffect(() => {
+    // Ensure the server component tree re-renders when only the query string changes.
+    router.refresh();
+  }, [router, selected]);
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:h-[calc(100vh-220px)]">
