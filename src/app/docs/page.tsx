@@ -43,15 +43,15 @@ function isValidId(id: string | null): id is DocChapterId {
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h2 className="mt-8 text-xl font-semibold text-slate-100">{children}</h2>;
+  return <h2 className="mt-8 text-xl font-semibold text-slate-900">{children}</h2>;
 }
 
 function P({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <p className={`mt-3 text-sm leading-6 text-slate-300 ${className}`}>{children}</p>;
+  return <p className={`mt-3 text-sm leading-6 text-slate-700 ${className}`}>{children}</p>;
 }
 
 function Li({ children }: { children: React.ReactNode }) {
-  return <li className="mt-2 text-sm leading-6 text-slate-300">{children}</li>;
+  return <li className="mt-2 text-sm leading-6 text-slate-700">{children}</li>;
 }
 
 function DocContent({ chapter }: { chapter: DocChapterId }) {
@@ -61,8 +61,8 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         <div>
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-semibold tracking-tight">🚀 1) Get Started with Kryptage DAO</h1>
-              <p className="mt-2 text-sm text-slate-300">
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">🚀 1) Get Started with Kryptage DAO</h1>
+              <p className="mt-2 text-sm text-slate-700">
                 Welcome to Kryptage DAO, a real-yield DeFi protocol designed to generate sustainable returns from stable and crypto assets while preserving capital efficiency,
                 transparency, and decentralization. This section will guide you step by step, from understanding Kryptage in under a minute to making your first interaction on-chain.
               </p>
@@ -70,7 +70,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
             <Badge tone="green">EN</Badge>
           </div>
 
-          <div className="mt-4 overflow-hidden rounded-xl border border-slate-800 bg-slate-950/30">
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* Remote image hosted externally */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -101,34 +101,34 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
 
           <SectionTitle>🧠 Core Concepts You’ll See Everywhere</SectionTitle>
           <P>Before continuing, here are a few key terms you’ll encounter throughout the docs:</P>
-          <div className="mt-4 overflow-hidden rounded-xl border border-slate-800">
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
             <table className="w-full text-sm">
-              <thead className="bg-slate-950/40">
+              <thead className="bg-slate-50">
                 <tr>
-                  <th className="px-4 py-2 text-left text-slate-200">Concept</th>
-                  <th className="px-4 py-2 text-left text-slate-200">Meaning</th>
+                  <th className="px-4 py-2 text-left text-slate-900">Concept</th>
+                  <th className="px-4 py-2 text-left text-slate-900">Meaning</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-slate-200">
                 <tr>
-                  <td className="px-4 py-2 font-mono text-slate-200">USDK</td>
-                  <td className="px-4 py-2 text-slate-300">The core stablecoin of the ecosystem</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">USDK</td>
+                  <td className="px-4 py-2 text-slate-700">The core stablecoin of the ecosystem</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 font-mono text-slate-200">Vault</td>
-                  <td className="px-4 py-2 text-slate-300">Smart contract that deploys capital into yield strategies</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">Vault</td>
+                  <td className="px-4 py-2 text-slate-700">Smart contract that deploys capital into yield strategies</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 font-mono text-slate-200">Shares</td>
-                  <td className="px-4 py-2 text-slate-300">Your proportional ownership of a Vault</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">Shares</td>
+                  <td className="px-4 py-2 text-slate-700">Your proportional ownership of a Vault</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 font-mono text-slate-200">Peg Pool</td>
-                  <td className="px-4 py-2 text-slate-300">Liquidity pool that keeps USDK ≈ $1</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">Peg Pool</td>
+                  <td className="px-4 py-2 text-slate-700">Liquidity pool that keeps USDK ≈ $1</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 font-mono text-slate-200">KTG</td>
-                  <td className="px-4 py-2 text-slate-300">Governance & utility token of Kryptage DAO</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">KTG</td>
+                  <td className="px-4 py-2 text-slate-700">Governance & utility token of Kryptage DAO</td>
                 </tr>
               </tbody>
             </table>
@@ -168,7 +168,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <P>💡 Tip: USDK is always minted 1:1 from supported stablecoins.</P>
 
           <SectionTitle>🔗 Step 3 — Connect Your Wallet to Kryptage</SectionTitle>
-          <div className="mt-4 overflow-hidden rounded-xl border border-slate-800 bg-slate-950/30">
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png"
@@ -216,12 +216,12 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <P>Vaults are: Transparent, non-custodial, managed by a Risk Manager module.</P>
 
           <SectionTitle>🔁 Your First Complete Flow</SectionTitle>
-          <div className="mt-4 overflow-hidden rounded-xl border border-slate-800 bg-slate-950/30">
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://i.ibb.co/yLspZZ5/fl-1.png"
               alt="Deposit → Yield → Withdraw flow"
-              className="w-full h-auto"
+              className="h-auto w-1/2 max-w-full"
               loading="lazy"
             />
           </div>
@@ -541,19 +541,15 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
   }
 }
 
-export default async function DocsPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const sp = await searchParams;
+export default function DocsPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
+  const sp = searchParams;
   const selectedRaw = typeof sp?.ch === "string" ? sp.ch : Array.isArray(sp?.ch) ? sp.ch[0] : null;
   const selected = isValidId(selectedRaw) ? selectedRaw : CHAPTERS[0].id;
 
   return (
-    <PageShell title="Docs" subtitle={titleFor(selected)}>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-[260px_1fr]">
-        <Card className="md:sticky md:top-6 h-fit">
+    <PageShell title="Docs" subtitle="Learn how Kryptage works, step-by-step.">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <Card className="md:col-span-1 bg-white border-slate-200">
           <div className="text-xs font-semibold text-slate-200">Table of Contents</div>
           <div className="mt-3 space-y-1">
             {CHAPTERS.map((c) => {
@@ -575,7 +571,7 @@ export default async function DocsPage({
           </div>
         </Card>
 
-        <Card>
+        <Card className="md:col-span-3 bg-white border-slate-200">
           <DocContent chapter={selected} />
         </Card>
       </div>
