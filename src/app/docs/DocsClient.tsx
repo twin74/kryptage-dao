@@ -1906,6 +1906,185 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         </div>
       );
 
+    case "faq":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">❓ 10) FAQ — Frequently Asked Questions</h1>
+              <P>
+                This section answers the most common questions about Kryptage, USDK, Vaults, $KTG, and DAO governance.
+                <br />
+                If you’re new to DeFi or just want quick clarity, start here.
+              </P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>🔹 General</SectionTitle>
+
+          <P className="mt-4 text-slate-900 font-semibold">What is Kryptage in one sentence?</P>
+          <P>Kryptage is a real-yield DeFi protocol that turns stablecoins into sustainable, risk-managed yield through DAO-governed Vaults.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Is Kryptage a company?</P>
+          <P>
+            No. Kryptage is a decentralized protocol governed by Kryptage DAO.
+            <br />
+            There is no central issuer managing user funds.
+          </P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Is Kryptage custodial?</P>
+          <P>
+            No. Kryptage is fully non-custodial.
+            <br />
+            You always control your wallet and your assets.
+          </P>
+
+          <SectionTitle>💵 USDK — Stablecoin</SectionTitle>
+
+          <P className="mt-4 text-slate-900 font-semibold">What backs USDK?</P>
+          <P>USDK is backed 1:1 by stable assets deployed into productive on-chain strategies, with additional yield and liquidity buffers.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Is USDK algorithmic?</P>
+          <P>No. USDK is not algorithmic and does not rely on reflexive mechanisms or token emissions.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Can I always redeem USDK?</P>
+          <P>Yes. USDK can be burned 1:1 for supported stablecoins, subject only to normal on-chain liquidity conditions.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">How does USDK keep its peg?</P>
+          <P className="mt-2">Through:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>
+              <b>Hard 1:1 backing</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>For every USDK in circulation, there is exactly one USDC or USDT deployed and retrievable.</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>Controller-enforced mint &amp; burn</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>USDK is minted only when USDC/USDT is deposited and deployed.</Li>
+                <Li>USDK is burned only when the underlying USDC/USDT is withdrawn for redemption.</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>Swap as a redemption gate, not a peg defense</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>The swap exists solely to guarantee instant 1:1 conversion, not price discovery.</Li>
+              </ul>
+            </Li>
+            <Li className="mt-3">
+              <b>Yield is external to the peg</b>
+              <ul className="mt-2 list-disc list-inside ml-6">
+                <Li>Yield is surplus value used as a safety buffer and for protocol growth.</Li>
+                <Li>The peg remains intact even if yield goes to zero.</Li>
+              </ul>
+            </Li>
+          </ul>
+          <P className="mt-4">USDK stays at $1 because it cannot exist without $1 underneath it. Stability comes from enforcement, not incentives.</P>
+
+          <SectionTitle>🏦 Vaults &amp; Yield</SectionTitle>
+
+          <P className="mt-4 text-slate-900 font-semibold">How do Vaults generate yield?</P>
+          <P>Vaults deploy USDK into low-volatility, risk-bounded strategies such as:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Stable lending</Li>
+            <Li>Market-neutral liquidity provision</Li>
+            <Li>Structured DeFi positions</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Is yield guaranteed?</P>
+          <P>No. Yield is not guaranteed, but it is generated from real economic activity, not emissions.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Can I withdraw anytime?</P>
+          <P>Yes. Vaults are designed to allow continuous entry and exit, except during rare emergency situations.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">What happens if a strategy underperforms?</P>
+          <P>Exposure is reduced, capital is rebalanced, buffers absorb losses, and all actions are governed by the Risk Manager.</P>
+
+          <SectionTitle>🪙 $KTG Token</SectionTitle>
+
+          <P className="mt-4 text-slate-900 font-semibold">What is $KTG used for?</P>
+          <P>$KTG is used for:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>🗳️ Governance voting</Li>
+            <Li>⚙️ Protocol parameter control</Li>
+            <Li>🧩 Ecosystem alignment</Li>
+          </ul>
+          <P className="mt-4">It is not a profit-sharing token.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">What are KTG Points?</P>
+          <P>KTG Points are non-transferable participation credits earned by:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Using the protocol</Li>
+            <Li>Contributing</Li>
+            <Li>Participating in governance</Li>
+          </ul>
+          <P className="mt-4">They may convert into $KTG under DAO rules.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Is $KTG inflationary?</P>
+          <P>No. There are no perpetual emissions by default. Supply decisions are governed by the DAO.</P>
+
+          <SectionTitle>🏛️ DAO &amp; Governance</SectionTitle>
+
+          <P className="mt-4 text-slate-900 font-semibold">Who controls Kryptage?</P>
+          <P>Kryptage is controlled by Kryptage DAO, through on-chain governance and proposals (KIPs).</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">How are decisions made?</P>
+          <P>Via Kryptage Improvement Proposals (KIPs): Draft → Community review → Vote → Execution</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Can anyone submit a proposal?</P>
+          <P>Yes. Proposal rights are permissionless, subject to governance rules.</P>
+
+          <SectionTitle>🛡️ Safety &amp; Risk</SectionTitle>
+
+          <P className="mt-4 text-slate-900 font-semibold">Has Kryptage been audited?</P>
+          <P>Audits are planned and/or ongoing for all critical contracts. Reports will be published publicly.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">What happens in an emergency?</P>
+          <P>
+            Emergency tools can pause Vaults, exit strategies, and protect USDK stability.
+            <br />
+            All actions are time-bound and DAO-accountable.
+          </P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Is smart contract risk eliminated?</P>
+          <P>
+            No. Smart contract risk exists in all DeFi systems.
+            <br />
+            Kryptage mitigates it through modular design, audits, and conservative parameters.
+          </P>
+
+          <SectionTitle>⚖️ Legal &amp; Compliance</SectionTitle>
+
+          <P className="mt-4 text-slate-900 font-semibold">Does Kryptage do KYC?</P>
+          <P>No. The protocol is permissionless and does not onboard users.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Is this legal in my country?</P>
+          <P>
+            Users are responsible for understanding local regulations.
+            <br />
+            Kryptage provides infrastructure, not legal advice.
+          </P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Is this investment advice?</P>
+          <P>No. Nothing in these docs constitutes financial or investment advice.</P>
+
+          <SectionTitle>📬 Still Have Questions?</SectionTitle>
+          <P>If your question isn’t answered here:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Check the Docs sections above</Li>
+            <Li>Join community channels (when available)</Li>
+            <Li>Review on-chain data directly</Li>
+          </ul>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 11) Contacts &amp; Links — official resources &amp; channels</Li>
+          </ul>
+        </div>
+      );
+
     default:
       return (
         <div>
