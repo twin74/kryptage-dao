@@ -1725,6 +1725,187 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
         </div>
       );
 
+    case "compliance":
+      return (
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">⚖️ 9) Compliance &amp; Legal (High-Level)</h1>
+              <P>
+                Kryptage is designed to operate at the intersection of decentralized finance and regulatory awareness.
+                <br />
+                While remaining permissionless and non-custodial, the protocol adopts architectural choices that favor clarity, transparency, and regulatory resilience.
+              </P>
+              <P className="mt-4 text-slate-900 font-semibold">This section provides a high-level overview — not legal advice — of how Kryptage approaches compliance-related topics.</P>
+            </div>
+            <Badge tone="green">EN</Badge>
+          </div>
+
+          <SectionTitle>🧠 Design Philosophy: Compliance by Architecture</SectionTitle>
+          <P>
+            Kryptage does not rely on legal wrappers to appear compliant.
+            <br />
+            Instead, it embeds compliance-friendly principles directly into protocol design.
+          </P>
+          <P className="mt-4 text-slate-900 font-semibold">Core ideas:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Transparency over opacity</Li>
+            <Li>Modularity over discretion</Li>
+            <Li>Non-custodial by default</Li>
+            <Li>Clear separation of roles</Li>
+          </ul>
+          <P className="mt-4">The protocol is code. Governance defines rules, not outcomes.</P>
+
+          <SectionTitle>🔐 Non-Custodial Boundaries</SectionTitle>
+          <P>Kryptage never takes custody of user funds.</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">What this means:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Users control their wallets at all times</Li>
+            <Li>No pooled off-chain custody</Li>
+            <Li>No discretionary fund management</Li>
+            <Li>All interactions require user signatures</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">What Kryptage does not do:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>❌ Hold private keys</Li>
+            <Li>❌ Execute trades off-chain</Li>
+            <Li>❌ Freeze user balances</Li>
+            <Li>❌ Promise returns</Li>
+          </ul>
+          <P className="mt-4">Self-custody is a technical fact, not a disclaimer.</P>
+
+          <SectionTitle>🛡️ Data Protection &amp; GDPR Alignment (High-Level)</SectionTitle>
+          <P>
+            Kryptage is designed to minimize data processing by default, aligning structurally with GDPR principles.
+            <br />
+            The protocol does not collect, store, or process personal data.
+          </P>
+
+          <ul className="mt-4 list-disc list-inside">
+            <Li>No user accounts, profiles, or identifiers exist at protocol level</Li>
+            <Li>All interactions are pseudonymous and on-chain</Li>
+            <Li>No off-chain databases or user tracking mechanisms are used</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">As a result:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Kryptage acts as a data-minimizing infrastructure, not a data controller</Li>
+            <Li>GDPR obligations, where applicable, are shifted to interfaces or third-party frontends</Li>
+            <Li>The protocol itself is privacy-preserving by architecture</Li>
+          </ul>
+
+          <P className="mt-4">
+            Privacy is not enforced by policy —
+            <br />
+            it emerges from non-custodial, permissionless design.
+          </P>
+
+          <SectionTitle>🪙 USDK &amp; Regulatory Positioning (MiCA-Oriented)</SectionTitle>
+          <P>USDK is designed with MiCA-like principles in mind.</P>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">High-level positioning</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>USDK may resemble an Asset-Referenced Token (ART)</Li>
+            <Li>Fully backed by on-chain assets</Li>
+            <Li>No algorithmic stabilization</Li>
+            <Li>Clear mint &amp; burn mechanics</Li>
+          </ul>
+
+          <h3 className="mt-6 text-lg font-semibold text-slate-900">Key design choices</h3>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>1:1 redeemability</Li>
+            <Li>On-chain reserves</Li>
+            <Li>Transparent supply</Li>
+            <Li>Conservative risk exposure</Li>
+          </ul>
+          <P className="mt-4">USDK stability comes from structure, not discretion.</P>
+
+          <SectionTitle>🏦 DAO vs Centralized Issuer</SectionTitle>
+          <P>Kryptage is governed by a DAO, not a company acting as issuer.</P>
+          <P className="mt-4 text-slate-900 font-semibold">Implications:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>No single legal entity controls USDK</Li>
+            <Li>Decisions are collective and auditable</Li>
+            <Li>Treasury actions require governance approval</Li>
+            <Li>Progressive decentralization reduces key-person risk</Li>
+          </ul>
+          <P className="mt-4">Governance is distributed. Responsibility is shared.</P>
+
+          <SectionTitle>🧾 Disclosures &amp; Transparency Commitments</SectionTitle>
+          <P>Kryptage commits to radical transparency:</P>
+
+          <P className="mt-4 text-slate-900 font-semibold">Always public:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Smart contract code</Li>
+            <Li>Vault balances</Li>
+            <Li>Risk parameters</Li>
+            <Li>Treasury movements</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">Communicated clearly:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Protocol upgrades</Li>
+            <Li>Risk changes</Li>
+            <Li>Emergency actions</Li>
+            <Li>Governance outcomes</Li>
+          </ul>
+
+          <P className="mt-4">Transparency is treated as a core safety feature.</P>
+
+          <SectionTitle>🧯 Jurisdictional Neutrality</SectionTitle>
+          <P>
+            Kryptage is:
+          </P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Globally accessible</Li>
+            <Li>On-chain by default</Li>
+            <Li>Jurisdiction-agnostic</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">The protocol:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Does not onboard users</Li>
+            <Li>Does not perform KYC</Li>
+            <Li>Does not restrict geography at protocol level</Li>
+          </ul>
+
+          <P className="mt-4">Interfaces built on top may apply their own compliance layers.</P>
+
+          <SectionTitle>⚠️ User Responsibility &amp; Disclaimers</SectionTitle>
+          <P>By interacting with Kryptage:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>Users act autonomously</Li>
+            <Li>Users assess their own legal obligations</Li>
+            <Li>Users bear smart contract and market risks</Li>
+          </ul>
+          <P className="mt-4">DeFi is permissionless — participation implies responsibility.</P>
+
+          <SectionTitle>🧠 What This Section Is (and Is Not)</SectionTitle>
+          <P className="mt-4 text-slate-900 font-semibold">✅ This section is:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>A design overview</Li>
+            <Li>A transparency commitment</Li>
+            <Li>A regulatory-awareness statement</Li>
+          </ul>
+
+          <P className="mt-4 text-slate-900 font-semibold">❌ This section is not:</P>
+          <ul className="mt-2 list-disc list-inside">
+            <Li>Legal advice</Li>
+            <Li>A compliance guarantee</Li>
+            <Li>A jurisdiction-specific opinion</Li>
+          </ul>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 10) FAQ — common questions &amp; answers</Li>
+            <Li>➡️ 11) Contacts &amp; Links — official channels</Li>
+          </ul>
+        </div>
+      );
+
     default:
       return (
         <div>
