@@ -1,5 +1,7 @@
 import { PageShell, Card, Badge } from "@/components/UI";
 import Link from "next/link";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
 type DocChapterId =
   | "get-started"
@@ -554,8 +556,6 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
 function DocsClient() {
   "use client";
 
-  // eslint-disable-next-line @typescript-eslint/no-restricted-imports
-  const { useSearchParams } = require("next/navigation") as typeof import("next/navigation");
   const sp = useSearchParams();
 
   const selectedRaw = sp?.get("ch");
@@ -593,7 +593,9 @@ function DocsClient() {
 export default function DocsPage() {
   return (
     <PageShell title="Docs" subtitle="Learn how Kryptage works, step-by-step.">
-      <DocsClient />
+      <Suspense fallback={<div className="text-sm text-slate-500">Loading…</div>}>
+        <DocsClient />
+      </Suspense>
     </PageShell>
   );
 }
