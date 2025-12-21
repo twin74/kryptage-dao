@@ -32,13 +32,13 @@ export default function ZoomableImage({ src, alt, className = "", wrapperClassNa
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`group relative block w-full cursor-zoom-in ${wrapperClassName}`}
+        className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-xl ${wrapperClassName}`}
         aria-haspopup="dialog"
         aria-controls={dialogId}
         aria-label={`Open image: ${alt}`}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} className={`w-full h-auto ${className}`} loading={loading} />
+        <img src={src} alt={alt} className={className} loading={loading} />
 
         <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-slate-200" />
         <div className="pointer-events-none absolute inset-0 rounded-xl bg-black/0 transition-colors group-hover:bg-black/5" />
@@ -55,11 +55,7 @@ export default function ZoomableImage({ src, alt, className = "", wrapperClassNa
           aria-describedby={describedBy}
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
         >
-          <div
-            className="absolute inset-0 bg-black/70"
-            onClick={() => setOpen(false)}
-            aria-hidden="true"
-          />
+          <div className="absolute inset-0 bg-black/70" onClick={() => setOpen(false)} aria-hidden="true" />
 
           <div className="relative z-10 max-h-[90vh] w-full max-w-6xl">
             <p id={describedBy} className="sr-only">

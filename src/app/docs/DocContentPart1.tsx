@@ -127,8 +127,12 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🔗 Step 3 — Connect Your Wallet to Kryptage</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png" alt="Connect wallet to Kryptage" className="h-auto w-1/2 max-w-full" loading="lazy" />
+            <ZoomableImage
+              src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png"
+              alt="Connect wallet to Kryptage"
+              className="h-auto w-1/2 max-w-full"
+              loading="lazy"
+            />
           </div>
           <ol className="mt-4 list-decimal list-inside">
             <Li>Go to Kryptage.com</Li>
@@ -174,8 +178,12 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🔁 Your First Complete Flow</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/yLspZZ5/fl-1.png" alt="Deposit → Yield → Withdraw flow" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage
+              src="https://i.ibb.co/yLspZZ5/fl-1.png"
+              alt="Deposit → Yield → Withdraw flow"
+              className="w-full h-auto"
+              loading="lazy"
+            />
           </div>
 
           <P className="mt-4 text-slate-900 font-semibold">Deposit → Yield → Withdraw</P>
@@ -281,8 +289,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
           <P>At a high level, Kryptage is composed of independent but interconnected module</P>
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/TDdZBrPc/fl3.png" alt="Kryptage architecture" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/TDdZBrPc/fl3.png" alt="Kryptage architecture" className="w-full h-auto" loading="lazy" />
           </div>
 
           <P className="mt-4">Each module has a single responsibility, improving:</P>
@@ -319,8 +326,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <h3 className="mt-6 text-lg font-semibold text-slate-900">🌾 Strategies — Capital Deployment</h3>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/XrtsH4kB/fl4.png" alt="Strategies capital deployment" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/XrtsH4kB/fl4.png" alt="Strategies capital deployment" className="w-full h-auto" loading="lazy" />
           </div>
           <P className="mt-4">Vaults route capital into Strategies, which define:</P>
           <ul className="mt-2 list-disc list-inside">
@@ -417,8 +423,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🧠 Design Principles</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/xKGrGPcJ/fl5.png" alt="Design principles" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/xKGrGPcJ/fl5.png" alt="Design principles" className="w-full h-auto" loading="lazy" />
           </div>
           <ul className="mt-4 list-disc list-inside">
             <Li>Non-custodial by default</Li>
@@ -506,8 +511,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🧾 USDK Mint &amp; Burn Lifecycle</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/ns2GBnQs/fl6.png" alt="USDK mint and burn lifecycle" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/ns2GBnQs/fl6.png" alt="USDK mint and burn lifecycle" className="w-full h-auto" loading="lazy" />
           </div>
 
           <h3 className="mt-6 text-lg font-semibold text-slate-900">🔼 Minting USDK</h3>
@@ -534,8 +538,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🧷 USDK Mechanism — How USDK Really Works</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/jk9ZRV3X/fl7.png" alt="USDK mechanism" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/jk9ZRV3X/fl7.png" alt="USDK mechanism" className="w-full h-auto" loading="lazy" />
           </div>
 
           <P className="mt-4">
@@ -776,8 +779,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🧰 What Is a Vault?</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/DDKHc4nH/fl8.png" alt="What is a Vault" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/DDKHc4nH/fl8.png" alt="What is a Vault" className="w-full h-auto" loading="lazy" />
           </div>
           <P className="mt-4">A Vault is a smart contract that:</P>
           <ul className="mt-3 list-disc list-inside">
@@ -796,8 +798,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>📊 Vault Shares &amp; NAV</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/vxs1spqY/fl9.png" alt="Vault Shares and NAV" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/vxs1spqY/fl9.png" alt="Vault Shares and NAV" className="w-full h-auto" loading="lazy" />
           </div>
           <P className="mt-4">When you deposit into a Vault:</P>
           <ul className="mt-3 list-disc list-inside">
@@ -833,8 +834,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
             <Li>Continuously monitored</Li>
           </ul>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/4nm8Gbjd/fl10.png" alt="Strategy layer" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/4nm8Gbjd/fl10.png" alt="Strategy layer" className="w-full h-auto" loading="lazy" />
           </div>
 
           <SectionTitle>🛡️ Risk-Managed by Design</SectionTitle>
@@ -982,8 +982,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🧠 What $KTG Is Used For</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/Wj3mC2n/fl11.png" alt="$KTG utility overview" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/Wj3mC2n/fl11.png" alt="$KTG utility overview" className="w-full h-auto" loading="lazy" />
           </div>
 
           <h3 className="mt-6 text-lg font-semibold text-slate-900">🗳️ Governance</h3>
@@ -1055,7 +1054,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/MkwwC2x9/fl12.png" alt="Tokenomics allocation" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/MkwwC2x9/fl12.png" alt="Tokenomics allocation" className="w-full h-auto" loading="lazy" />
           </div>
 
           <SectionTitle>⏳ Vesting &amp; Unlock Logic</SectionTitle>

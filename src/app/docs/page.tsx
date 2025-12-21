@@ -2,6 +2,7 @@
 import { PageShell, Badge } from "@/components/UI";
 import Link from "next/link";
 import DocsClient from "./DocsClient";
+import ZoomableImage from "@/components/ZoomableImage";
 
 type DocChapterId =
   | "get-started"
@@ -278,7 +279,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/ccjySMyh/fl-2.png" alt="Kryptage ecosystem overview" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/ccjySMyh/fl-2.png" alt="Kryptage ecosystem overview" className="w-full h-auto" loading="lazy" />
           </div>
 
           <SectionTitle>🧱 The Real Yield Layer — Why Kryptage Exists</SectionTitle>
@@ -313,7 +314,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <P>At a high level, Kryptage is composed of independent but interconnected modules.</P>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/TDdZBrPc/fl3.png" alt="High-level architecture" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/TDdZBrPc/fl3.png" alt="High-level architecture" className="w-full h-auto" loading="lazy" />
           </div>
           <P>Each module has a single responsibility, improving:</P>
           <ul className="mt-3 list-disc list-inside">
@@ -350,7 +351,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <h3 className="mt-6 text-lg font-semibold text-slate-900">🌾 Strategies — Capital Deployment</h3>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/XrtsH4kB/fl4.png" alt="Strategies flow" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/XrtsH4kB/fl4.png" alt="Strategies flow" className="w-full h-auto" loading="lazy" />
           </div>
           <P className="mt-4">Vaults route capital into Strategies, which define:</P>
           <ul className="mt-2 list-disc list-inside">
@@ -444,7 +445,7 @@ function DocContent({ chapter }: { chapter: DocChapterId }) {
           <SectionTitle>🧠 Design Principles</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/xKGrGPcJ/fl5.png" alt="Design principles" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/xKGrGPcJ/fl5.png" alt="Design principles" className="w-full h-auto" loading="lazy" />
           </div>
           <ul className="mt-4 list-disc list-inside">
             <Li>Non-custodial by default</Li>
