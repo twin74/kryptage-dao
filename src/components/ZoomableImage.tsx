@@ -32,7 +32,8 @@ export default function ZoomableImage({ src, alt, className = "", wrapperClassNa
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`group relative inline-block w-fit max-w-full cursor-zoom-in overflow-hidden rounded-xl ${wrapperClassName}`}
+        className={`group relative inline-flex w-fit max-w-full cursor-zoom-in overflow-hidden rounded-xl p-0 text-left align-top ${wrapperClassName}`}
+        style={{ justifySelf: "start", alignSelf: "start" }}
         aria-haspopup="dialog"
         aria-controls={dialogId}
         aria-label={`Open image: ${alt}`}
