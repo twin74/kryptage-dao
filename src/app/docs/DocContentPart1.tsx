@@ -127,12 +127,14 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🔗 Step 3 — Connect Your Wallet to Kryptage</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            <ZoomableImage
-              src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png"
-              alt="Connect wallet to Kryptage"
-              className="h-auto w-1/2 max-w-full"
-              loading="lazy"
-            />
+            <div className="w-fit max-w-full">
+              <ZoomableImage
+                src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png"
+                alt="Connect wallet to Kryptage"
+                className="h-auto w-1/2 max-w-full"
+                loading="lazy"
+              />
+            </div>
           </div>
           <ol className="mt-4 list-decimal list-inside">
             <Li>Go to Kryptage.com</Li>
