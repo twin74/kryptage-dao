@@ -435,6 +435,21 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
             <Li>➡️ 4) Vaults & Strategies — how yield is generated</Li>
             <Li>➡️ 5) $KTG Token — governance & incentives</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 3) USDK Stablecoin</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Understand USDK mechanics: mint, burn, redemption and why the 1:1 is structural.</p>
+            <div className="mt-4">
+              <a
+                href="#usdk"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 3
+              </a>
+            </div>
+          </div>
         </div>
       );
 
@@ -725,6 +740,21 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
             <Li>➡️ 5) $KTG Token — governance &amp; incentives</Li>
             <Li>➡️ 6) Kryptage DAO — decentralization in practice</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 4) Products — Vaults &amp; Yield Strategies</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Learn how Vaults work, how yield is generated, and how risk is managed.</p>
+            <div className="mt-4">
+              <a
+                href="#products"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 4
+              </a>
+            </div>
+          </div>
         </div>
       );
 
@@ -880,6 +910,21 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
             <Li>➡️ 6) Kryptage DAO — decentralized control</Li>
             <Li>➡️ 7) Developers — contracts &amp; integrations</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 5) $KTG Token</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Explore governance, utility, and how participation is designed and measured.</p>
+            <div className="mt-4">
+              <a
+                href="#ktg"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 5
+              </a>
+            </div>
+          </div>
         </div>
       );
 
@@ -1068,6 +1113,21 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
             <Li>➡️ 7) Developers — contracts &amp; integrations</Li>
             <Li>➡️ 8) Safety &amp; Risk — audits &amp; safeguards</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 6) Kryptage DAO</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">See how governance works, how proposals are made, and how upgrades are decided.</p>
+            <div className="mt-4">
+              <a
+                href="#dao"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 6
+              </a>
+            </div>
+          </div>
         </div>
       );
 
