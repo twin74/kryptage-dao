@@ -126,15 +126,13 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
           <P>💡 Tip: USDK is always minted 1:1 from supported stablecoins.</P>
 
           <SectionTitle>🔗 Step 3 — Connect Your Wallet to Kryptage</SectionTitle>
-          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            <div className="w-fit max-w-full">
-              <ZoomableImage
-                src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png"
-                alt="Connect wallet to Kryptage"
-                className="h-auto w-1/2 max-w-full"
-                loading="lazy"
-              />
-            </div>
+          <div className="mt-4 flex justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-4">
+            <ZoomableImage
+              src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png"
+              alt="Connect wallet to Kryptage"
+              className="h-auto w-full max-w-md"
+              loading="lazy"
+            />
           </div>
           <ol className="mt-4 list-decimal list-inside">
             <Li>Go to Kryptage.com</Li>
