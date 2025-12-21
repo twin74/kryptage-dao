@@ -212,6 +212,21 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
             <Li>➡️ 8) Safety &amp; Risk — audits &amp; safeguards</Li>
             <Li>➡️ 9) Compliance &amp; Legal — high-level framework</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 7) Developers</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Dive into smart contracts, integrations, and the building blocks for developers.</p>
+            <div className="mt-4">
+              <a
+                href="#developers"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 7
+              </a>
+            </div>
+          </div>
         </div>
       );
 
@@ -432,6 +447,21 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
             <Li>➡️ 9) Compliance &amp; Legal — high-level framework</Li>
             <Li>➡️ 10) FAQ — common questions</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 8) Safety &amp; Risk</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Review audits, safeguards, risk controls and how the protocol handles extreme scenarios.</p>
+            <div className="mt-4">
+              <a
+                href="#safety"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 8
+              </a>
+            </div>
+          </div>
         </div>
       );
 
@@ -636,6 +666,21 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
             <Li>➡️ 10) FAQ</Li>
             <Li>➡️ 11) Contacts &amp; Links</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 9) Compliance &amp; Legal</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Understand legal and compliance considerations and the protocol’s approach to transparency.</p>
+            <div className="mt-4">
+              <a
+                href="#compliance"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 9
+              </a>
+            </div>
+          </div>
         </div>
       );
 
@@ -817,6 +862,21 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
             <Li>➡️ 10) FAQ — common questions &amp; answers</Li>
             <Li>➡️ 11) Contacts &amp; Links — official channels</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 10) FAQ</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Quick answers to common questions about USDK, Vaults, and governance.</p>
+            <div className="mt-4">
+              <a
+                href="#faq"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 10
+              </a>
+            </div>
+          </div>
         </div>
       );
 
@@ -996,6 +1056,21 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <ul className="mt-3 list-disc list-inside">
             <Li>➡️ 11) Contacts &amp; Links — official resources &amp; channels</Li>
           </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 11) Contacts &amp; Links</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Find official links, community channels, and resources.</p>
+            <div className="mt-4">
+              <a
+                href="#contacts"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 11
+              </a>
+            </div>
+          </div>
         </div>
       );
 
