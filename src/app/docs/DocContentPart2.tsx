@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Badge } from "@/components/UI";
+import ZoomableImage from "@/components/ZoomableImage";
 
 export type DocChapterIdPart2 = "dao" | "developers" | "safety" | "compliance" | "faq" | "contacts";
 
@@ -51,8 +52,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           </ul>
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/spL1PT5H/fl13.png" alt="DAO core principles" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/spL1PT5H/fl13.png" alt="DAO core principles" className="w-full h-auto" loading="lazy" />
           </div>
 
           <SectionTitle>🗳️ Governance Scope — What the DAO Controls</SectionTitle>
@@ -148,8 +148,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>🧯 Emergency Powers &amp; Safeguards</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/spQTrWkp/fl14.png" alt="Emergency powers and safeguards" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/spQTrWkp/fl14.png" alt="Emergency powers and safeguards" className="w-full h-auto" loading="lazy" />
           </div>
 
           <P className="mt-4">While decentralization is the goal, safety comes first.</P>
@@ -172,8 +171,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
 
           <SectionTitle>⏳ Progressive Decentralization Roadmap</SectionTitle>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/39tnk4Wh/fl15.png" alt="Progressive decentralization roadmap" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/39tnk4Wh/fl15.png" alt="Progressive decentralization roadmap" className="w-full h-auto" loading="lazy" />
           </div>
 
           <h3 className="mt-6 text-lg font-semibold text-slate-900">Phase 1 — Bootstrap</h3>
@@ -255,8 +253,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <SectionTitle>🧩 Smart Contract Architecture (High-Level)</SectionTitle>
           <P>Kryptage follows a layered and modular architecture:</P>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/Kxbh4b3H/fl16.png" alt="Smart contract architecture" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/Kxbh4b3H/fl16.png" alt="Smart contract architecture" className="w-full h-auto" loading="lazy" />
           </div>
           <P className="mt-4">Each contract has:</P>
           <ul className="mt-2 list-disc list-inside">
@@ -284,8 +281,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <P className="mt-4">USDK acts as the base settlement layer for the entire protocol.</P>
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/PZDGxS4Y/fl17.png" alt="USDK monetary primitive" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/PZDGxS4Y/fl17.png" alt="USDK monetary primitive" className="w-full h-auto" loading="lazy" />
           </div>
 
           <SectionTitle>🏦 Vault Contracts — ERC-4626 Compatible</SectionTitle>
@@ -494,8 +490,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <SectionTitle>🔍 Risk Categories</SectionTitle>
           <P>Kryptage models and mitigates several risk classes:</P>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/1fz5s3v5/fl18.png" alt="Risk categories" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/1fz5s3v5/fl18.png" alt="Risk categories" className="w-full h-auto" loading="lazy" />
           </div>
 
           <ol className="mt-4 list-decimal list-inside">
@@ -555,8 +550,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <SectionTitle>🛡️ On-Chain Risk Controls</SectionTitle>
           <P>The Risk Manager enforces constraints in real time:</P>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/bjHZ3Ygh/fl19.png" alt="On-chain risk controls" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/bjHZ3Ygh/fl19.png" alt="On-chain risk controls" className="w-full h-auto" loading="lazy" />
           </div>
 
           <ul className="mt-4 list-disc list-inside">
@@ -576,8 +570,7 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <SectionTitle>🧯 Emergency Controls &amp; Incident Response</SectionTitle>
           <P>Emergency actions (last resort)</P>
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/xSnNZpfY/fl20.png" alt="Emergency controls" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/xSnNZpfY/fl20.png" alt="Emergency controls" className="w-full h-auto" loading="lazy" />
           </div>
 
           <ul className="mt-4 list-disc list-inside">

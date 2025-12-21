@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Badge } from "@/components/UI";
+import ZoomableImage from "@/components/ZoomableImage";
 
 export type DocChapterIdPart1 = "get-started" | "ecosystem" | "usdk" | "products" | "ktg";
 
@@ -31,8 +32,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
           </div>
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <ZoomableImage
               src="https://i.ibb.co/VYFWpCb6/Screenshot-2025-12-20-alle-10-33-41.png"
               alt="Kryptage DAO docs - Get Started"
               className="w-full h-auto"
@@ -245,7 +245,7 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://i.ibb.co/ccjySMyh/fl-2.png" alt="Kryptage ecosystem" className="w-full h-auto" loading="lazy" />
+            <ZoomableImage src="https://i.ibb.co/ccjySMyh/fl-2.png" alt="Kryptage ecosystem" className="w-full h-auto" loading="lazy" />
           </div>
 
           <SectionTitle>🧱 The Real Yield Layer — Why Kryptage Exists</SectionTitle>
