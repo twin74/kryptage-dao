@@ -76,10 +76,19 @@ export default function DocsClient() {
     // Ensure that changing chapter always starts from the top (desktop + mobile).
     // Desktop: scroll the content panel; Mobile: scroll the page.
     contentRef.current?.scrollTo({ top: 0, behavior: "auto" });
-    if (!contentRef.current) {
-      window.scrollTo({ top: 0, behavior: "auto" });
-    }
+    window.scrollTo({ top: 0, behavior: "auto" });
   }, [selected]);
+
+  useEffect(() => {
+    // When navigating via in-content anchors (e.g. end-of-chapter CTA), browsers may try
+    // to preserve scroll position. Force a top reset on hash changes as well.
+    const onHash = () => {
+      contentRef.current?.scrollTo({ top: 0, behavior: "auto" });
+      window.scrollTo({ top: 0, behavior: "auto" });
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:h-[calc(100vh-220px)]">
