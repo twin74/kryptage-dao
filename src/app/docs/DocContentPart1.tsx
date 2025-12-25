@@ -32,13 +32,15 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
           </div>
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://i.ibb.co/tpN2fG4g/Screenshot-2025-12-25-alle-12-11-13.png"
-              alt="Kryptage DAO docs - Get Started"
-              className="w-full h-auto"
-              loading="lazy"
-            />
+            <div className="flex justify-center p-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://i.ibb.co/tpN2fG4g/Screenshot-2025-12-25-alle-12-11-13.png"
+                alt="Kryptage DAO docs - Get Started"
+                className="h-auto w-full md:w-1/2"
+                loading="lazy"
+              />
+            </div>
           </div>
 
           <SectionTitle>🧩 What is Kryptage (in 60 seconds)</SectionTitle>
