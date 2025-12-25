@@ -44,7 +44,7 @@ export function KtgIcon({ className = "" }: { className?: string }) {
   const gid = "ktg-g";
   return (
     <svg viewBox="0 0 120 120" className={className} xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KTG">
-      {kGradient(gid, "#ffffff", "#cbd5e1")}
+      {kGradient(gid, "#38bdf8", "#1d4ed8")}
       {/* slightly wider mark so it doesn't look smaller than other token icons */}
       <polygon points="60,6 109,35 109,85 60,114 11,85 11,35" fill="#0f172a" stroke={`url(#${gid})`} strokeWidth="8" />
       <path d="M40 30 v60 M40 60 l42 -30 M40 60 l42 30" stroke={`url(#${gid})`} strokeWidth="11" strokeLinecap="round" fill="none" />
