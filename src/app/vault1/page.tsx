@@ -509,7 +509,7 @@ export default function Vault1Page() {
         </Card>
 
         <Card className="flex flex-col items-center">
-          <img src="/ktg.svg" alt="KTG" className="h-8 w-8 mb-2" />
+          <img src="/kryptagefi.png" alt="KTG" className="h-8 w-8 mb-2" />
           <div className="text-xs text-slate-400 font-semibold">KTG Airdrop Points</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{ktgPoints}</div>
         </Card>

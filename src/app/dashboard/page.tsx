@@ -279,7 +279,7 @@ export default function DashboardPage() {
 
         <Card className="flex flex-col items-center">
           <div className="flex items-center gap-2">
-            <img src="/ktg.svg" alt="KTG" className="h-5 w-5" />
+            <img src="/kryptagefi.png" alt="KTG" className="h-5 w-5" />
             <div className="text-xs text-slate-400 font-semibold">KTG points</div>
           </div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? ktgPoints : "-"}</div>

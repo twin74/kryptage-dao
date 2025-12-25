@@ -19,20 +19,20 @@ export const metadata: Metadata = {
   title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
   description: "Kryptage DAO frontend",
   icons: {
-    icon: [{ url: "/favicon.ico" }],
-    apple: [{ url: "/apple-touch-icon.png" }],
+    icon: [{ url: "/kryptagefi.png" }],
+    apple: [{ url: "/kryptagefi.png" }],
   },
   openGraph: {
     title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
     description: "Kryptage DAO frontend",
-    images: [{ url: "/og.png" }],
+    images: [{ url: "/kryptagefi.png" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
     description: "Kryptage DAO frontend",
-    images: ["/og.png"],
+    images: ["/kryptagefi.png"],
   },
 };
 

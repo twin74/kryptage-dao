@@ -301,7 +301,7 @@ export default function FaucetPage() {
 
         <Card>
           <div className="flex items-center gap-2">
-            <img src="/ktg.svg" alt="KTG" className="h-5 w-5" />
+            <img src="/kryptagefi.png" alt="KTG" className="h-5 w-5" />
             <div className="font-semibold">KTG Points</div>
           </div>
           <div className="mt-1">

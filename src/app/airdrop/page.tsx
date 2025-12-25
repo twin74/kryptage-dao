@@ -231,7 +231,7 @@ export default function AirdropPage() {
             <div className="md:col-span-1">
               <div className="h-full rounded-md border border-slate-800 bg-slate-900/30 p-3">
                 <div className="flex items-center gap-2">
-                  <img src="/ktg.svg" alt="KTG" className="h-5 w-5" />
+                  <img src="/kryptagefi.png" alt="KTG" className="h-5 w-5" />
                   <div className="text-sm font-semibold text-slate-100">KTG Points</div>
                 </div>
                 <div className="mt-1 text-sm text-slate-300">
