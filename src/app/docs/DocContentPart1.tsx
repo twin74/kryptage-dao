@@ -32,7 +32,8 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
           </div>
 
           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            <ZoomableImage
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="https://i.ibb.co/tpN2fG4g/Screenshot-2025-12-25-alle-12-11-13.png"
               alt="Kryptage DAO docs - Get Started"
               className="w-full h-auto"
@@ -126,30 +127,6 @@ export function DocContentPart1({ chapter, SectionTitle, P, Li }: Props) {
           <P>💡 Tip: USDK is always minted 1:1 from supported stablecoins.</P>
 
           <SectionTitle>🔗 Step 3 — Connect Your Wallet to Kryptage</SectionTitle>
-          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {/* Mobile: zoomable */}
-            <div className="md:hidden flex justify-center">
-              <div className="w-full max-w-md">
-                <ZoomableImage
-                  src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png"
-                  alt="Connect wallet to Kryptage"
-                  className="h-auto w-full"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-
-            {/* Desktop: centered, not zoomable */}
-            <div className="hidden md:flex justify-center p-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://i.ibb.co/M5sgnB8X/ktg-MM-2.png"
-                alt="Connect wallet to Kryptage"
-                className="h-auto w-1/2 max-w-md"
-                loading="lazy"
-              />
-            </div>
-          </div>
           <ol className="mt-4 list-decimal list-inside">
             <Li>Go to Kryptage.com</Li>
             <Li>Click “Connect Wallet”</Li>
