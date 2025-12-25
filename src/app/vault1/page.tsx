@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { Card, PageShell } from "@/components/UI";
 import { useVaultClaimableAssetsEthers } from "@/hooks/useVaultClaimableAssetsEthers";
+import { SusdkIcon, UsdkIcon } from "@/components/TokenIcons";
 
 export default function Vault1Page() {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
@@ -497,13 +498,13 @@ export default function Vault1Page() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="flex flex-col items-center">
-          <img src="/sUSDK.svg" alt="sUSDK" className="h-8 w-8 rounded mb-2" />
+          <SusdkIcon className="h-8 w-8 rounded mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Your Shares (sUSDK)</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{susdkBalance}</div>
         </Card>
 
         <Card className="flex flex-col items-center">
-          <img src="/USDK.svg" alt="USDK" className="h-8 w-8 mb-2" />
+          <UsdkIcon className="h-8 w-8 mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Claimable USDK</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{claimableUsdKDisplay}</div>
         </Card>
@@ -517,7 +518,7 @@ export default function Vault1Page() {
 
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card className="md:col-span-2 flex flex-col items-center">
-          <img src="/USDK.svg" alt="USDK" className="h-8 w-8 mb-2" />
+          <UsdkIcon className="h-8 w-8 mb-2" />
           <div className="text-xs text-slate-400 font-semibold">Total USDK in Vault</div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{usdkInVault}</div>
         </Card>

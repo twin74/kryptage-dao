@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { Badge, Card, PageShell, PrimaryButton, SecondaryButton } from "@/components/UI";
 import { useVaultClaimableAssetsEthers } from "@/hooks/useVaultClaimableAssetsEthers";
+import { SusdkIcon, UsdkIcon } from "@/components/TokenIcons";
 
 type VaultRow = {
   id: 1 | 2 | 3 | 4;
@@ -261,7 +262,7 @@ export default function DashboardPage() {
 
         <Card className="flex flex-col items-center">
           <div className="flex items-center gap-2">
-            <img src="/sUSDK.svg" alt="sUSDK" className="h-5 w-5" />
+            <SusdkIcon className="h-5 w-5" />
             <div className="text-xs text-slate-400 font-semibold">Your Shares (sUSDK)</div>
           </div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.deposited : "-"}</div>
@@ -270,7 +271,7 @@ export default function DashboardPage() {
 
         <Card className="flex flex-col items-center">
           <div className="flex items-center gap-2">
-            <img src="/USDK.svg" alt="USDK" className="h-5 w-5" />
+            <UsdkIcon className="h-5 w-5" />
             <div className="text-xs text-slate-400 font-semibold">Claimable USDK</div>
           </div>
           <div className="mt-1 text-2xl font-semibold text-slate-100">{address ? totals.pending : "-"}</div>
