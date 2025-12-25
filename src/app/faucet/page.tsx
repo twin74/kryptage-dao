@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { Card, PageShell, PrimaryButton, SecondaryButton } from "@/components/UI";
+import { KtgIcon } from "@/components/TokenIcons";
 
 export default function FaucetPage() {
   const [address, setAddress] = useState<string | null>(null);
@@ -301,7 +302,7 @@ export default function FaucetPage() {
 
         <Card>
           <div className="flex items-center gap-2">
-            <img src="/kryptagefi.png" alt="KTG" className="h-5 w-5" />
+            <KtgIcon className="h-5 w-5" />
             <div className="font-semibold">KTG Points</div>
           </div>
           <div className="mt-1">

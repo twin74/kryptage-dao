@@ -1,8 +1,8 @@
 "use client";
 import Link from 'next/link';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { BrowserProvider, getAddress } from 'ethers';
+import { KtgIcon } from "@/components/TokenIcons";
 
 type Ethereumish = {
   isMetaMask?: boolean;
@@ -16,14 +16,7 @@ type EthWindow = Window & { ethereum?: Ethereumish };
 // Back-compat named export: some pages import { KLogo } from "@/components/Header".
 export function KLogo({ className = '' }: { className?: string }) {
   return (
-    <Image
-      src="/kryptagefi.png"
-      alt="Kryptage DAO"
-      width={32}
-      height={32}
-      className={className}
-      priority
-    />
+    <KtgIcon className="h-8 w-8" />
   );
 }
 
