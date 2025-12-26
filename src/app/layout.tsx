@@ -16,29 +16,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
-  description: "Kryptage DAO frontend",
+  title: "Kryptage DAO",
+  description:
+    "Kryptage DAO is a real-yield DeFi protocol designed to generate sustainable returns from stable and crypto assets while preserving capital efficiency, transparency, and decentralization.",
   icons: {
-    icon: [{ url: "/kryptagefi.png" }],
-    apple: [{ url: "/kryptagefi.png" }],
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
-  openGraph: {
-    title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
-    description: "Kryptage DAO frontend",
-    images: [{ url: "/kryptagefi.png" }],
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: process.env.NEXT_PUBLIC_APP_NAME || "Kryptage DAO",
-    description: "Kryptage DAO frontend",
-    images: ["/kryptagefi.png"],
+  robots: {
+    index: true,
+    follow: true,
+    // Hint crawlers to avoid generating rich previews/cards.
+    // Not all platforms strictly follow this, but it's the strongest standards-based signal.
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": 0,
+      "max-image-preview": "none",
+      "max-video-preview": 0,
+    },
   },
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{ children: React.ReactNode }>) => {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-white`}>
@@ -51,3 +53,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+export default RootLayout;
