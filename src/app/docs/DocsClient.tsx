@@ -124,8 +124,8 @@ export default function DocsClient() {
         </div>
       </Card>
 
-      {/* Desktop TOC (unchanged) */}
-      <Card className="hidden md:block md:col-span-1 bg-white border-slate-200 md:sticky md:top-6 md:self-start">
+      {/* Desktop TOC (narrower) */}
+      <Card className="hidden md:block md:col-span-1 bg-white border-slate-200 md:sticky md:top-6 md:self-start md:max-w-[220px]">
         <div className="text-xs font-semibold text-slate-700">Table of Contents</div>
         <div className="mt-3 space-y-1">
           {CHAPTERS.map((c) => {
