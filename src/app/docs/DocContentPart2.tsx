@@ -458,6 +458,90 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
               </a>
             </div>
           </div>
+
+          <SectionTitle>🧾 Public Contract Addresses (Sepolia)</SectionTitle>
+          <P className="mt-2">
+            Below are the currently published <b>Sepolia</b> testnet addresses for the public contracts used by the app. Always verify the address and ABI before integrating.
+          </P>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50">
+                <tr>
+                  <th className="px-4 py-2 text-left text-slate-900">Contract</th>
+                  <th className="px-4 py-2 text-left text-slate-900">Address</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">USDC (test token)</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0xe348F9b576DDf00489eD7E69f1Be89558Eca5fAb</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">WBTC (test token)</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0x67989EDC2c639c7F005e0a1A0F118B0F20Dfe4Ea</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">XAUT (test token)</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0x4b137335a68529f15d4beBDB511f150bb284CF01</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">SPYON (test token)</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0xb495E97c321682d5f6082F2e096375eedb84a50A</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">USDK</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0x1dbE838274D601B6908b6f0a61f0fc4A6b6923B5</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">sUSDK</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0xd17A198D51359a6979061D410d8ca72F6ad3B909</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Stable Vault</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0xd17A198D51359a6979061D410d8ca72F6ad3B909</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Stable Controller</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0x385423d45202e63EceBa15cBa45AFd78ed2f1158</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">KTG Points</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0xb35552EE5D34b259191ca1af0A27204585A8eF5B</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Stable Farm</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0x41b5266665137e69BfCb38f101b8E8a5004d0DE5</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 text-slate-900">Faucet Address</td>
+                  <td className="px-4 py-2 font-mono text-slate-900">0x1C237015c927ca302F3A759b09C7b26c0d6DB07f</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <SectionTitle>👉 What’s Next</SectionTitle>
+          <P>Continue with:</P>
+          <ul className="mt-3 list-disc list-inside">
+            <Li>➡️ 8) Safety &amp; Risk — audits, controls &amp; safeguards</Li>
+            <Li>➡️ 9) Compliance &amp; Legal — high-level framework</Li>
+            <Li>➡️ 10) FAQ — common questions</Li>
+          </ul>
+
+          {/* Next chapter CTA */}
+          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="text-xs font-semibold text-slate-700">Next</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 8) Safety &amp; Risk</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">Review audits, safeguards, risk controls and how the protocol handles extreme scenarios.</p>
+            <div className="mt-4">
+              <a
+                href="#safety"
+                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Go to Chapter 8
+              </a>
+            </div>
+          </div>
         </div>
       );
 
