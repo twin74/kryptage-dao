@@ -436,29 +436,6 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
             <Li>🗳️ Governance-controlled evolution</Li>
           </ul>
 
-          <SectionTitle>👉 What’s Next</SectionTitle>
-          <P>Continue with:</P>
-          <ul className="mt-3 list-disc list-inside">
-            <Li>➡️ 8) Safety &amp; Risk — audits, controls &amp; safeguards</Li>
-            <Li>➡️ 9) Compliance &amp; Legal — high-level framework</Li>
-            <Li>➡️ 10) FAQ — common questions</Li>
-          </ul>
-
-          {/* Next chapter CTA */}
-          <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <div className="text-xs font-semibold text-slate-700">Next</div>
-            <div className="mt-1 text-sm font-semibold text-slate-900">Continue to 8) Safety &amp; Risk</div>
-            <p className="mt-2 text-sm leading-6 text-slate-700">Review audits, safeguards, risk controls and how the protocol handles extreme scenarios.</p>
-            <div className="mt-4">
-              <a
-                href="#safety"
-                className="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
-              >
-                Go to Chapter 8
-              </a>
-            </div>
-          </div>
-
           <SectionTitle>🧾 Public Contract Addresses (Sepolia)</SectionTitle>
           <P className="mt-2">
             Below are the currently published <b>Sepolia</b> testnet addresses for the public contracts used by the app. Always verify the address and ABI before integrating.
