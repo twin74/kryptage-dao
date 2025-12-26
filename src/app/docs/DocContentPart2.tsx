@@ -1151,13 +1151,22 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <h3 className="mt-6 text-lg font-semibold text-slate-900">🧠 Documentation</h3>
           <ul className="mt-3 list-disc list-inside">
             <Li>
-              Docs: <a href="https://kryptage.com/docs" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">kryptage.com/docs</a>
+              Docs:{" "}
+              <a href="https://kryptage.com/docs" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">
+                kryptage.com/docs
+              </a>
             </Li>
             <Li>
-              Protocol Dashboard: <a href="https://kryptage.com" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">kryptage.com</a>
+              Protocol Dashboard:{" "}
+              <a href="https://kryptage.com" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">
+                kryptage.com
+              </a>
             </Li>
             <Li>
-              Governance (KIPs): <a href="https://kryptage.com/governance" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">kryptage.com/governance</a>
+              Governance (KIPs):{" "}
+              <a href="https://kryptage.com/governance" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">
+                kryptage.com/governance
+              </a>
             </Li>
           </ul>
           <P className="mt-4">Always check URLs carefully to avoid phishing.</P>
@@ -1167,16 +1176,16 @@ export function DocContentPart2({ chapter, SectionTitle, P, Li }: Props) {
           <ul className="mt-2 list-disc list-inside">
             <Li>
               X (Twitter):{" "}
-              <a
-                href="https://x.com/DeFiforDummies"
-                target="_blank"
-                rel="noreferrer"
-                className="font-mono underline underline-offset-4 hover:text-slate-900"
-              >
-                @DeFiforDummies
+              <a href="https://x.com/kryptagefi" target="_blank" rel="noreferrer" className="font-mono underline underline-offset-4 hover:text-slate-900">
+                @kryptagefi
               </a>
             </Li>
-            <Li>Discord: Kryptage Community</Li>
+            <Li>
+              Email:{" "}
+              <a href="mailto:info@kryptage.com" className="font-mono underline underline-offset-4 hover:text-slate-900">
+                info@kryptage.com
+              </a>
+            </Li>
             <Li>Telegram: Kryptage Announcements</Li>
             <Li>
               Website:{" "}
