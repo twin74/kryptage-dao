@@ -16,9 +16,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kryptage DAO",
+  metadataBase: new URL("https://kryptage.com"),
+  title: {
+    default: "Kryptage DAO",
+    template: "%s | Kryptage DAO",
+  },
   description:
-    "Kryptage DAO is a real-yield DeFi protocol designed to generate sustainable returns from stable and crypto assets while preserving capital efficiency, transparency, and decentralization.",
+    "Kryptage is a non-custodial DeFi protocol built around USDK (a 1:1 stablecoin, non-algorithmic) and real yield vaults, governed by a DAO.",
+  applicationName: "Kryptage DAO",
+  keywords: [
+    "Kryptage",
+    "USDK",
+    "stablecoin 1:1",
+    "non-algorithmic stablecoin",
+    "real yield",
+    "DeFi vaults",
+    "ERC-4626",
+    "non-custodial",
+    "DAO governance",
+  ],
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
@@ -26,14 +45,12 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    // Hint crawlers to avoid generating rich previews/cards.
-    // Not all platforms strictly follow this, but it's the strongest standards-based signal.
     googleBot: {
       index: true,
       follow: true,
-      "max-snippet": 0,
-      "max-image-preview": "none",
-      "max-video-preview": 0,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
     },
   },
 };
