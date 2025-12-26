@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { Card, PageShell, PrimaryButton, SecondaryButton } from "@/components/UI";
-import { KtgIcon } from "@/components/TokenIcons";
+import { KtgIcon, UsdkIcon, SusdkIcon } from "@/components/TokenIcons";
 
 export default function FaucetPage() {
   const [address, setAddress] = useState<string | null>(null);
@@ -42,19 +42,19 @@ export default function FaucetPage() {
     const iconFor = (symbol: string) => {
       switch (symbol) {
         case "USDC":
-          return "/usdc.svg"; // local SVG
+          return { kind: "img" as const, src: "/usdc.svg" };
         case "USDK":
-          return "/USDK.svg";
+          return { kind: "component" as const, Component: UsdkIcon };
         case "sUSDK":
-          return "/sUSDK.svg";
+          return { kind: "component" as const, Component: SusdkIcon };
         case "WBTC":
-          return "https://cdn.simpleicons.org/bitcoin"; // BTC icon for WBTC
+          return { kind: "img" as const, src: "https://cdn.simpleicons.org/bitcoin" };
         case "XAUT":
-          return "/xaut.svg"; // local SVG
+          return { kind: "img" as const, src: "/xaut.svg" };
         case "SPYON":
-          return "/SPY.svg"; // local SVG for S&P 500 ETF
+          return { kind: "img" as const, src: "/SPY.svg" };
         default:
-          return "https://cdn.simpleicons.org/circle";
+          return { kind: "img" as const, src: "https://cdn.simpleicons.org/circle" };
       }
     };
 
@@ -370,7 +370,11 @@ export default function FaucetPage() {
               className="flex items-center justify-between rounded-md border border-slate-800 bg-slate-950/30 p-3"
             >
               <div className="flex items-center gap-3">
-                <img src={t.icon} alt={t.symbol} className="h-6 w-6 rounded" />
+                {t.icon.kind === "component" ? (
+                  <t.icon.Component className="h-6 w-6" />
+                ) : (
+                  <img src={t.icon.src} alt={t.symbol} className="h-6 w-6 rounded" />
+                )}
                 <div>
                   <div className="text-sm font-semibold">{t.symbol}</div>
                   <div className="text-xs text-slate-400">Import to MetaMask</div>
